@@ -1,0 +1,7 @@
+﻿  Asian.cpp
+  MonteCarlo.cpp
+  Testeur.cpp
+c:\users\ensimag\downloads\pricer-skel\pricer-skel\src\testeur.cpp(22): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned long', perte possible de données
+  Génération de code en cours...
+     CrÚation de la bibliothÞque C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.lib et de l'objet C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.exp
+  NativeProject.vcxproj -> C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.dll
