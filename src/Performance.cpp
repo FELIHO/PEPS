@@ -2,23 +2,24 @@
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
 #include "Performance.hpp"
+using namespace Computations;
 
-Computations::Performance::Performance():Option(){
+Performance::Performance():Option(){
   PayOff_coefficient = pnl_vect_new ();
 }
 
-Computations::Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
+Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
   PayOff_coefficient = pnl_vect_copy(payOff_coefficient);
 }
 
-Computations::Performance::Performance(const Performance &P) {
+Performance::Performance(const Performance &P) {
   T_ = P.T_ ;
   nbTimeSteps_ = P.nbTimeSteps_;
   size_ = P.size_;
   PayOff_coefficient = pnl_vect_copy(P.PayOff_coefficient);
 }
 
-Computations::Performance& Computations::Performance::operator=(const Performance &P) {
+Performance& Performance::operator=(const Performance &P) {
   T_ = P.T_ ;
   nbTimeSteps_ = P.nbTimeSteps_;
   size_ = P.size_;
@@ -26,12 +27,12 @@ Computations::Performance& Computations::Performance::operator=(const Performanc
   return *this ;
 }
 
-Computations::Performance::~Performance() {
+Performance::~Performance() {
   pnl_vect_free(&PayOff_coefficient);
 }
 
 
-double Computations::Performance::payoff(const PnlMat *path){
+double Performance::payoff(const PnlMat *path){
   double result = 1.0;
   double currentResult;
   double nominateurResult = 0.0;

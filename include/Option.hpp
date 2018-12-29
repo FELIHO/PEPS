@@ -11,8 +11,8 @@ namespace Computations {
 		int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
 		Option();
 		Option(double T, int nbTimeSteps, int size);
-		/*Option(const Option &O);
-		Option& operator=(const Option &O);*/
+		Option(const Option &O);
+		Option& operator=(const Option &O);
 		~Option();
 		/**
 		 * Calcule la valeur du payoff sur la trajectoire

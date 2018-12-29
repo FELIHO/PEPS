@@ -2,31 +2,21 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "AssetModel.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
-	class BlackScholesModel
+	class BlackScholesModel : public AssetModel
 	{
 	public:
-		int size_; /// nombre d'actifs du modèle
-		double r_; /// taux d'intérêt
-		double rho_; /// paramètre de corrélation
-		PnlVect *sigma_; /// vecteur de volatilités
-		PnlVect *spot_; /// valeurs initiales des sous-jacents
 		PnlVect *trend_;
-		PnlMat *chol_;
 		BlackScholesModel(); /// Constructeur par défaut
-		BlackScholesModel(int size, double r_, double rho_, PnlVect *sigma_, PnlVect *spot_); /// Constructeur complet
-		BlackScholesModel(int size, double r_, double rho_, PnlVect *sigma_, PnlVect *spot_, PnlVect *trend_); /// Constructeur complet avec trend
-		BlackScholesModel(const BlackScholesModel &BSM); /// Constructeur par recopie
-		DLLEXP void simul_market(PnlMat *path, double T, int H, PnlRng *rng);
+		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur complet
+		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend); /// Constructeur complet avec trendd
 		~BlackScholesModel(); /// Destructeur
 		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
 
-		/**
-		 * permet d'inialiser la matrice de cholesky
-		 */
-		DLLEXP void initalizeChol();
+
 		/**
 		 * Génère une trajectoire du modèle et la stocke dans path
 		 *
@@ -52,19 +42,25 @@ namespace Computations {
 		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
 
 		/**
-		 * Shift d'une trajectoire du sous-jacent
+		 * Calcule une trajectoire du sous-jacent connaissant le
+		 * passé jusqu' à la date t
 		 *
-		 * @param[in]  path contient en input la trajectoire
-		 * du sous-jacent
-		 * @param[out] shift_path contient la trajectoire path
-		 * dont la composante d a été shiftée par (1+h)
-		 * à partir de la date t.
-		 * @param[in] t date à partir de laquelle on shift
-		 * @param[in] h pas de différences finies
-		 * @param[in] d indice du sous-jacent à shifter
-		 * @param[in] timestep pas de constatation du sous-jacent
+		 * @param[out] path  contient une trajectoire du sous-jacent
+		 * donnée jusqu'à l'instant t par la matrice past
+		 * @param[in] t date jusqu'à laquelle on connait la trajectoire.
+		 * t n'est pas forcément une date de discrétisation
+		 * @param[in] nbTimeSteps nombre de pas de constatation
+		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
+		 * @param[in] past trajectoire réalisée jusqu'a la date t
 		 */
-		DLLEXP void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
 
+
+	private :
+		PnlMat *chol_;
+		/**
+		* permet d'inialiser la matrice de cholesky
+		*/
+		void initalizeChol();
 	};
 }

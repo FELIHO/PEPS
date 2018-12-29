@@ -3,7 +3,7 @@
 #include "pnl/pnl_matrix.h"
 #include "Option.hpp"
 
-#define DLLEXP   __declspec( dllexport )
+#define DLLEXP  __declspec( dllexport )
 namespace Computations {
 	class Basket : public Option {
 	public:

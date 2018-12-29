@@ -1,37 +1,38 @@
 #include "MonteCarlo.hpp"
-#include "BlackScholesModel.hpp"
-#include "Option.hpp"
 #include "Asian.hpp"
+#include "BlackScholesModel.hpp"
 #include <math.h>
 using namespace std;
+using namespace Computations;
 
 /* Constructeur par défault */
-Computations::MonteCarlo::MonteCarlo(){
+MonteCarlo::MonteCarlo(){
    mod_ = new BlackScholesModel();
    opt_ = new Asian();
    rng_ = pnl_rng_create(PNL_RNG_MERSENNE);
+   r_ = 0;
    fdStep_ = 0;
    nbSamples_= 0;
  }
 
-/** Constructeur complet du MonteCarlo */
-Computations::MonteCarlo::MonteCarlo(BlackScholesModel *mod,Option *opt,int nbSamples, PnlRng *rng, double fdStep){
+MonteCarlo::MonteCarlo(AssetModel *mod,Option *opt,int nbSamples, PnlRng *rng, double fdStep, double r){
    mod_ = mod;
    opt_ = opt;
    rng_ = pnl_rng_copy(rng);
    fdStep_= fdStep;
    nbSamples_ = nbSamples;
+   r_ = r;
  }
 
 /* Destrcuteur de MonteCarlo */
-Computations::MonteCarlo::~MonteCarlo(){
+MonteCarlo::~MonteCarlo(){
    opt_->~Option();
-   mod_->~BlackScholesModel();
+   mod_->~AssetModel();
    pnl_rng_free(&rng_);
  }
 
 /** Calcul du prix */
-void Computations::MonteCarlo::price(double &prix, double &ic){
+void MonteCarlo::price(double &prix, double &ic){
    PnlMat *path = pnl_mat_create ( opt_->nbTimeSteps_+1,opt_->size_);
    double results = 0;
    double esp_carre = 0;
@@ -44,15 +45,15 @@ void Computations::MonteCarlo::price(double &prix, double &ic){
    results = (results/nbSamples_);
    esp_carre = (esp_carre/nbSamples_);
    double esp = results;
-   prix = exp(-mod_->r_*(opt_->T_))*results;
+   prix = exp(-r_*(opt_->T_))*results;
 
-   double estim_carre = exp(-2*mod_->r_*(opt_->T_))*(esp_carre-esp*esp);
+   double estim_carre = exp(-2*r_*(opt_->T_))*(esp_carre-esp*esp);
    ic = 2*1.96*sqrt(estim_carre/nbSamples_);
    pnl_mat_free(&path);
  }
 
  /** Calcul du Delta */
- void Computations::MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic){
+ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic){
 
    //initialisation de la matrice path.
    PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1,opt_->size_);
@@ -77,7 +78,7 @@ void Computations::MonteCarlo::price(double &prix, double &ic){
      double var = 0;
      Delta = 0;
      double diff = 0.0;
-     param_actualisation = (exp(-mod_->r_*(opt_->T_ - t)))/(nbSamples_*2*h);
+     param_actualisation = (exp(-r_*(opt_->T_ - t)))/(nbSamples_*2*h);
      for (size_t i__ = 0; i__ <nbSamples_; i__++) {
        //chargement de la matrice path par la trajectoire.
        mod_->asset(path,t,opt_->T_,opt_->nbTimeSteps_,rng_,past);
@@ -110,7 +111,7 @@ void Computations::MonteCarlo::price(double &prix, double &ic){
 
 //fonction qui permet de calculer le prix d'une option à n'importe quelle instant t
 
- void Computations::MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
+ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
    PnlMat *path = pnl_mat_create ( opt_->nbTimeSteps_+1,opt_->size_);
    double results = 0;
    double esp_carre=0;
@@ -123,16 +124,16 @@ void Computations::MonteCarlo::price(double &prix, double &ic){
    results = (results/nbSamples_);
    esp_carre = (esp_carre/nbSamples_);
    double esp = results;
-   prix = exp(-mod_->r_*((opt_->T_)-t))*results;
+   prix = exp(-r_*((opt_->T_)-t))*results;
 
    //calcul du ic
-   double estim_carre = exp(-2*mod_->r_*((opt_->T_)-t))*(esp_carre-esp*esp);
+   double estim_carre = exp(-2*r_*((opt_->T_)-t))*(esp_carre-esp*esp);
    ic = 2*1.96*sqrt(estim_carre/nbSamples_);
    pnl_mat_free(&path);
 
  }
 
-void Computations::MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,const int H ){
+void MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,const int H ){
 
   PnlMat *past =  pnl_mat_create_from_scalar(1,opt_->size_,0);
   PnlVect *extracted_vec = pnl_vect_create(opt_->size_);
@@ -173,7 +174,7 @@ void Computations::MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,
     vect_diff = pnl_vect_copy(delta_act);
     pnl_vect_minus_vect (vect_diff, delta_pres);
     pnl_mat_get_row(S_i,marche,i);
-    v_i =pnl_vect_get (V,i-1)*exp(mod_->r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i);
+    v_i =pnl_vect_get (V,i-1)*exp(r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i);
     pnl_vect_set (V, i, v_i);
     delta_pres =pnl_vect_copy(delta_act) ;
 

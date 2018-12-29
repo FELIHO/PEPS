@@ -1,30 +1,27 @@
-#pragma once
-
-
 #include <algorithm>
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-
-/// \brief Classe Option abstraite
 #include "Option.hpp"
 #include "Kozei.hpp"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+using namespace Computations;
 
-Computations::Kozei::Kozei() :Option() {
+
+Kozei::Kozei() :Option() {
  	inv_init_ = 0.0;
 }
 
-Computations::Kozei::Kozei( double inv_init) : Option(T, nbTimeSteps, size) {
+Kozei::Kozei( double inv_init) : Option(T, nbTimeSteps, size) {
 	inv_init_ = inv_init;	
 }
 
-Computations::Kozei::Kozei(const Kozei &K) {
+Kozei::Kozei(const Kozei &K) {
 	T_ = K.T_;
 	nbTimeSteps_ = K.nbTimeSteps_;
 	size_ = K.size_;
 	inv_init_ = K.inv_init_;
 }
 
-Computations::Kozei& Computations::Kozei::operator=(const Kozei&K) {
+Kozei& Kozei::operator=(const Kozei&K) {
 	T_ = K.T_;
 	nbTimeSteps_ = K.nbTimeSteps_;
 	size_ = K.size_;
@@ -32,10 +29,14 @@ Computations::Kozei& Computations::Kozei::operator=(const Kozei&K) {
 	return *this;
 }
 
-Computations::Kozei::~Kozei() {
+Kozei::~Kozei() {
 }
 
-double Computations::Kozei::payoff(const PnlMat *path) {
+double Kozei::payoff(const PnlMat *path) {
+	/* A revoir certains entier sont pris comme des double par rapport au temps.
+	* Il faut convertir la valeur temporelle en double à l'entier qui lui correponds dans la matrice
+	* en gros, t est entre tk et tk+1, il faut l'opération qui pour t donne le k.
+	*/
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
 	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);

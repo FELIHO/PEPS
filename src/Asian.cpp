@@ -1,6 +1,3 @@
-#pragma once
-
-
 #include <algorithm>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
@@ -8,18 +5,19 @@
 /// \brief Classe Option abstraite
 #include "Option.hpp"
 #include "Asian.hpp"
+using namespace Computations;
 
-Computations::Asian::Asian():Option(){
+Asian::Asian():Option(){
   PayOff_coefficient = pnl_vect_new();
   strike_ = 0.0;
 }
 
-Computations::Asian::Asian(double T, int nbTimeSteps, int size, double strike, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
+Asian::Asian(double T, int nbTimeSteps, int size, double strike, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
   PayOff_coefficient = pnl_vect_copy(payOff_coefficient);
   strike_ = strike;
 }
 
-Computations::Asian::Asian(const Asian &A) {
+Asian::Asian(const Asian &A) {
   T_ = A.T_ ;
   nbTimeSteps_ = A.nbTimeSteps_;
   size_ = A.size_;
@@ -27,7 +25,7 @@ Computations::Asian::Asian(const Asian &A) {
   strike_ = A.strike_;
 }
 
-Computations::Asian& Computations::Asian::operator=(const Asian &A) {
+Asian& Asian::operator=(const Asian &A) {
   T_ = A.T_ ;
   nbTimeSteps_ = A.nbTimeSteps_;
   size_ = A.size_;
@@ -36,11 +34,11 @@ Computations::Asian& Computations::Asian::operator=(const Asian &A) {
   return *this ;
 }
 
-Computations::Asian::~Asian() {
+Asian::~Asian() {
   pnl_vect_free(&PayOff_coefficient);
 }
 
-double Computations::Asian :: payoff(const PnlMat *path){
+double Asian :: payoff(const PnlMat *path){
   PnlVect *vectAverage = pnl_vect_create(size_);
   PnlVect *currentCol = pnl_vect_create(path->m);
   for (int i = 0; i < size_; i++){
