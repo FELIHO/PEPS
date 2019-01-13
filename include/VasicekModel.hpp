@@ -9,14 +9,14 @@ namespace Computations {
 	class VasicekModel : public InterestRateModel
 	{
 	public:
-		int size_; /// nombre de taux d'intérêt différent à prendre en compte
+		PnlVect *size_; /// nombre de taux d'intérêt différent à prendre en compte
 		PnlVect *speedReversion_;
 		PnlVect *longTermMean_;
 		PnlVect *volatilities_;
 		PnlMat *corr_;
 		VasicekModel(); /// Constructeur par défaut
 		VasicekModel(int size, double r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur taux identiques
-		VasicekModel(int size, PnlVect *rSpot, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur complet
+		VasicekModel(PnlVect *size, PnlVect *rSpot, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur complet
 		VasicekModel(const VasicekModel &VCM); /// Constructeur par recopie
 		~VasicekModel(); /// Destructeur
 		void initalizeChol(); /// Initialisateur de la matrice de cholesky

@@ -31,7 +31,7 @@ VasicekModel::VasicekModel(int size, double r, PnlVect *speedReversion, PnlVect 
 	initalizeChol();
 }
 
-VasicekModel::VasicekModel(int size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr) : InterestRateModel(size, r)
+VasicekModel::VasicekModel(PnlVect *size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr) : InterestRateModel(size, r)
 {
 	speedReversion_ = pnl_vect_copy(speedReversion);
 	longTermMean_ = pnl_vect_copy(longTermMean);
@@ -52,6 +52,7 @@ VasicekModel::VasicekModel(const VasicekModel &VCM) : InterestRateModel(VCM)
 VasicekModel::~VasicekModel()
 {
 	pnl_vect_free(&rSpot_);
+	pnl_vect_free(&size_);
 	pnl_vect_free(&speedReversion_);
 	pnl_vect_free(&longTermMean_);
 	pnl_vect_free(&volatilities_);
@@ -72,12 +73,12 @@ VasicekModel& VasicekModel::operator = (const VasicekModel &VCM)
 void VasicekModel::initalizeChol() {
 	
 	/** Validation de la matrice de corrélation */
-	PnlVect *eigenValues = pnl_vect_create(size_);
-	PnlMat *eigenVectors = pnl_mat_create(size_, size_);
+	PnlVect *eigenValues = pnl_vect_create(rSpot_->size);
+	PnlMat *eigenVectors = pnl_mat_create(rSpot_->size, rSpot_->size);
 	bool validatedRho = false;
 
 	pnl_mat_eigen(eigenValues, eigenVectors, corr_, 1);
-	for (int i = 0; i < size_; i++) {
+	for (int i = 0; i < rSpot_->size; i++) {
 		if (GET(eigenValues, i) <= 0) {
 			validatedRho = true;
 			break;
@@ -98,7 +99,7 @@ void VasicekModel::initalizeChol() {
 
 void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng)
 {
-	pnl_mat_resize(path, nbTimeSteps + 1, size_);
+	pnl_mat_resize(path, nbTimeSteps + 1, rSpot_->size);
 	PnlVect *V = pnl_vect_new();
 	PnlVect *U = pnl_vect_new();
 	PnlVect *G = pnl_vect_new();
@@ -111,7 +112,7 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 	pnl_vect_map_inplace(doubledrift_, &oneUnaryMinus); //  1 - exp(-2*speedRversion * (ti - ti-1)
 	
 	for (int i = 1; i < nbTimeSteps + 1; i++) {
-		pnl_vect_rng_normal(G, size_, rng);
+		pnl_vect_rng_normal(G, rSpot_->size, rng);
 
 		pnl_mat_set_row(path, rSpot_, i);
 		pnl_mat_get_row(V, path, i - 1);
@@ -130,6 +131,8 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 		pnl_mat_set_row(path, V, i);
 	}
 
+	makeCompletePathInterest(path);
+
 	pnl_vect_free(&drift_);
 	pnl_vect_free(&doubledrift_);
 	pnl_vect_free(&G);
@@ -140,7 +143,7 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 
 void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past)
 {	
-	pnl_mat_resize(path, nbTimeSteps + 1, size_);
+	pnl_mat_resize(path, nbTimeSteps + 1, rSpot_->size);
 	pnl_mat_set_subblock(path, past, 0, 0);
 	VCMFirstTimeSteps  = computeFirstTimeSteps(T / nbTimeSteps, t);
 	
@@ -160,7 +163,7 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		pnl_vect_map_inplace(firstdoubledrift_, &oneUnaryMinus); //  1 - exp(-2*speedRversion * (ti - t)
 
 		// Compute first path
-		pnl_vect_rng_normal(G, size_, rng);
+		pnl_vect_rng_normal(G, rSpot_->size, rng);
 		pnl_mat_get_row(V, past, past->m - 1);
 		pnl_vect_minus_vect(V, longTermMean_); // rt - V
 		pnl_vect_mult_vect_term(V, firstdrift_);  // (rt - 1 - V) * exp(-speedRversion * (ti+1 - t)
@@ -177,6 +180,7 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		
 		pnl_mat_set_row(path, rSpot_, past->m - 1);
 
+
 		pnl_vect_free(&firstdrift_);
 		pnl_vect_free(&firstdoubledrift_);
 	}
@@ -191,7 +195,7 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 	pnl_vect_map_inplace(doubledrift_, &oneUnaryMinus); //  1 - exp(-2*speedRversion * (ti - ti-1)
 
 	for (int i = past->m; i < nbTimeSteps + 1; i++) {
-		pnl_vect_rng_normal(G, size_, rng);
+		pnl_vect_rng_normal(G, rSpot_->size, rng);
 		pnl_mat_get_row(V, path, i - 1); // rti-1
 		pnl_vect_minus_vect(V, longTermMean_); // rti-1 - V
 		pnl_vect_mult_vect_term(V, drift_);  // (rti - 1 - V) * exp(-speedRversion * (ti - ti-1)
@@ -207,6 +211,8 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1) + epsilon * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
 		pnl_mat_set_row(path, V, i);
 	}
+
+	makeCompletePathInterest(path);
 
 	pnl_vect_free(&drift_);
 	pnl_vect_free(&doubledrift_);

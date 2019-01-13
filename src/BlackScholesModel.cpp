@@ -11,7 +11,6 @@ Constructeur par défaut
 BlackScholesModel::BlackScholesModel() : AssetModel()
 {
 
-	trend_ = pnl_vect_new();
 }
 
 
@@ -21,17 +20,7 @@ Constructeur complet
 */
 BlackScholesModel::BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot) : AssetModel(size, interest, corr, sigma, spot)
 {
-	trend_ = pnl_vect_create_from_zero(size);
-	initalizeChol();
-}
 
-/**
-Constructeur complet avec trend
-*/
-BlackScholesModel::BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend) : AssetModel(size, interest, corr, sigma, spot)
-{
-	trend_ = pnl_vect_copy(trend);
-	initalizeChol();
 }
 
 
@@ -112,6 +101,7 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	updateTrend(pathInterest);
 
 	// Première ligne
 	pnl_mat_set_row(path, spot_, 0);
@@ -164,6 +154,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	updateTrend(pathInterest);
 
 
 	/** Initialisation des paramètres */
@@ -241,6 +232,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
+	updateTrend(pathInterest);
 
 	/** Initialisation des paramètres */
 	double timeSpend = 0;

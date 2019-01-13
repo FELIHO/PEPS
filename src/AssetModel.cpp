@@ -15,6 +15,7 @@ AssetModel::AssetModel()
     sigma_ = pnl_vect_new (); /// vecteur de volatilités
     spot_ = pnl_vect_new (); /// valeurs initiales des sous-jacents
 	corr_ = pnl_mat_new();
+	trend_ = pnl_vect_new();
 	interest_ = new SimpleRateModel(size_, 0.0);
 }
 
@@ -24,12 +25,13 @@ AssetModel::AssetModel()
 Constructeur complet
 */
 AssetModel::AssetModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot)
-{
+{ 
   size_ = size; /// nombre d'actifs du modèle
   interest_ = interest; /// taux d'intérêt
   corr_ = pnl_mat_copy(corr); /// paramètre de corrélation
   sigma_ = pnl_vect_copy(sigma); /// vecteur de volatilités
   spot_ = pnl_vect_copy(spot);
+  trend_ = pnl_vect_new();
   initalizeChol();
 }
 
@@ -44,6 +46,7 @@ AssetModel::AssetModel(const AssetModel &ASM)
   spot_ = pnl_vect_copy(ASM.spot_);
   corr_ = pnl_mat_copy(ASM.corr_); /// paramètre de corrélation
   chol_ = pnl_mat_copy(ASM.chol_);
+  trend_ = pnl_vect_copy(ASM.trend_);
 }
 
 /**
@@ -54,6 +57,7 @@ AssetModel::~AssetModel()
 {
   interest_->~InterestRateModel();
   pnl_vect_free(&sigma_);
+  pnl_vect_free(&trend_);
   pnl_vect_free(&spot_);
   pnl_mat_free(&corr_);
   pnl_mat_free(&chol_);
@@ -70,7 +74,8 @@ AssetModel& AssetModel::operator = (const AssetModel &ASM) //le const c'est pour
 	interest_ = ASM.interest_;
 	spot_ = ASM.spot_;
 	corr_ = ASM.corr_; /// paramètre de corrélation
-	chol_ = pnl_mat_copy(ASM.chol_);
+	chol_ = ASM.chol_;
+	trend_ = ASM.trend_;
 	return *this;
 }
 
@@ -137,4 +142,10 @@ void AssetModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, doubl
 		}
 	}
 	pnl_vect_free(&U);
+}
+
+
+void AssetModel::updateTrend(PnlMat *pathInterest) {
+	// PAR CONVENTION LE TAUX D'INTERET EUROPEEN EST LE PREMIER DANS LA MATRICE PATHINTEREST
+	 pnl_mat_get_col(trend_, pathInterest, 0);
 }

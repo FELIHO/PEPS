@@ -9,11 +9,9 @@ namespace Computations {
 	class BlackScholesMertonModel : public AssetModel
 	{
 	public:
-		PnlVect *trend_;
 		PnlVect *dividend_;
 		BlackScholesMertonModel(); /// Constructeur par défaut
 		BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *dividend_); /// Constructeur complet
-		BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend, PnlVect *dividend_); /// Constructeur complet avec trend
 		~BlackScholesMertonModel(); /// Destructeur
 		BlackScholesMertonModel& operator = (const BlackScholesMertonModel &BSM); /// Opérateur d'affectation =
 
@@ -55,8 +53,6 @@ namespace Computations {
 		 * @param[in] past trajectoire réalisée jusqu'a la date t
 		 */
 		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
-
-
 
 	private:
 		PnlMat *chol_;

@@ -9,10 +9,8 @@ namespace Computations {
 	class BlackScholesModel : public AssetModel
 	{
 	public:
-		PnlVect *trend_;
 		BlackScholesModel(); /// Constructeur par défaut
 		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur complet
-		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend); /// Constructeur complet avec trendd
 		~BlackScholesModel(); /// Destructeur
 		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
 
