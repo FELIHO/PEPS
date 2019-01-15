@@ -10,8 +10,6 @@ Constructeur par défaut
 */
 BlackScholesMertonModel::BlackScholesMertonModel() : AssetModel()
 {	
-
-	trend_ = pnl_vect_new();
 	dividend_ = pnl_vect_new();
 }
 
@@ -22,19 +20,7 @@ Constructeur complet
 */
 BlackScholesMertonModel::BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *dividend) : AssetModel(size, interest, corr, sigma, spot)
 {
-	trend_ = pnl_vect_create_from_zero(size);
 	dividend_ = pnl_vect_copy(dividend);
-	initalizeChol();
-}
-
-/**
-Constructeur complet avec trend
-*/
-BlackScholesMertonModel::BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend, PnlVect *dividend) : AssetModel(size, interest, corr, sigma, spot)
-{
-	trend_ = pnl_vect_copy(trend);
-	dividend_ = pnl_vect_copy(dividend);
-	initalizeChol();
 }
 
 
@@ -117,6 +103,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, Pnl
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	updateTrend(pathInterest);
 
 	// Première ligne
 	pnl_mat_set_row(path, spot_, 0);
@@ -169,7 +156,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, T, nbTimeSteps, rng);
-
+	updateTrend(pathInterest);
 
 	/** Initialisation des paramètres */
 	double timeSpend = 0;
@@ -246,7 +233,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
-
+	updateTrend(pathInterest);
 	/** Initialisation des paramètres */
 	double timeSpend = 0;
 	int counter = 0;
@@ -286,3 +273,5 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	pnl_vect_free(&V);
 
 }
+
+

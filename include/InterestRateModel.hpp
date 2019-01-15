@@ -8,11 +8,11 @@ namespace Computations {
 	class InterestRateModel
 	{
 	public:
-		int size_; /// nombre de taux d'intérêt différent à prendre en compte
+		PnlVect *size_; /// nombre de taux d'intérêt différent à prendre en compte
 		PnlVect *rSpot_; /// taux d'intérêt
 		InterestRateModel(); /// Constructeur par défaut
 		InterestRateModel(int size, double r); /// Constructeur taux identiques
-		InterestRateModel(int size, PnlVect *r_); /// Constructeur complet
+		InterestRateModel(PnlVect *size, PnlVect *r); /// Constructeur complet
 		InterestRateModel(const InterestRateModel &IRM); /// Constructeur par recopie
 		~InterestRateModel(); /// Destructeur
 		InterestRateModel& operator = (const InterestRateModel &IRM); /// Opérateur d'affectation =
@@ -41,6 +41,13 @@ namespace Computations {
 		 */
 		virtual void interest(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) = 0;
 
+		/* 
+		* Permet de ressortir la matrice des taux d'intérêt pour chaque sous-jacent, la première colonne est toujours celle des taux d'intérêt européen,
+		* chaque taux d'intérêt est répliqué size_[i] fois dans la matrice pour le taux d'intérêt i
+		@param[in] path contenant de façon unique chaque taux d'intérêt simulé
+		@param[out] path contenant de façon multiples les taux d'intérêt, la matrice a donc une taille de somme sur i de size_[i]
+		*/
+		void makeCompletePathInterest(PnlMat *pathInterest);
 
 	};
 }

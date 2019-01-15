@@ -7,6 +7,7 @@ using namespace Computations;
 
 BlackScholesModel::BlackScholesModel()
 {
+<<<<<<< HEAD
 	trend_ = pnl_vect_new();
 }
 
@@ -26,6 +27,19 @@ BlackScholesModel::~BlackScholesModel() {
     pnl_vect_free(&spot_);
     pnl_mat_free(&choleskyFactor);
     pnl_vect_free(&trend_);
+=======
+
+}
+
+
+
+/**
+Constructeur complet
+*/
+BlackScholesModel::BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot) : AssetModel(size, interest, corr, sigma, spot)
+{
+
+>>>>>>> 5301f16b89658ea4e9e81af55a902e64b08f24fa
 }
 
 
@@ -145,7 +159,22 @@ void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeS
 }
 
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
+<<<<<<< HEAD
 	assert(path->m == nbTimeSteps+1 && path->n == size_);
+=======
+
+	/** Initialisation des vecteurs de calcul */
+	PnlVect *G = pnl_vect_new();
+	PnlVect *V = pnl_vect_new();
+	double timestep = T / nbTimeSteps;
+	double sqrtTimestep = sqrt(timestep);
+	double sigmaJ = 0.0;
+	PnlMat *pathInterest = pnl_mat_new();
+	interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	updateTrend(pathInterest);
+
+	// Première ligne
+>>>>>>> 5301f16b89658ea4e9e81af55a902e64b08f24fa
 	pnl_mat_set_row(path, spot_, 0);
 	double timestep = T/nbTimeSteps;
 	PnlVect* r = pnl_vect_create_from_scalar(size_, r_);
@@ -169,6 +198,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 	if (nbRowsPast-1 == t/timestep){
 		pnl_mat_set_row(future, s_t, 0);
 	}
+<<<<<<< HEAD
 	else{
 		double delta = (nbRowsPast - 1)*timestep -t;
 		PnlMat* temp = pnl_mat_create(2, size_);
@@ -180,6 +210,32 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 
 		pnl_mat_free(&temp);
 		pnl_vect_free(&s_tS_delta);
+=======
+
+	/** Initialisation des vecteurs de calcul */
+	PnlVect *G = pnl_vect_new();
+	PnlVect *V = pnl_vect_create(size_);
+	PnlVect *W = pnl_vect_create(size_);
+
+	double timestep = T / (nbTimeSteps);
+	double sqrtTimestep = sqrt(timestep);
+	double sigmaJ = 0.0;
+	PnlMat *pathInterest = pnl_mat_new();
+	interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	updateTrend(pathInterest);
+
+
+	/** Initialisation des paramètres */
+	double timeSpend = 0;
+	int counter = 0;
+
+	/** Remplissage de la matrice path par la matrice past jusqu'à t*/
+	while ((t >= timeSpend)/*&&( timeSpend < T)*/) {
+		pnl_mat_get_row(V, past, counter);
+		pnl_mat_set_row(path, V, counter);
+		timeSpend += timestep;
+		counter += 1;
+>>>>>>> 5301f16b89658ea4e9e81af55a902e64b08f24fa
 	}
 
 	simulateAsset(future, timestep, nbTimeStepsResidual, rng, r);
@@ -233,6 +289,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
 	interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
+	updateTrend(pathInterest);
 
 	/** Initialisation des paramètres */
 	double timeSpend = 0;

@@ -9,10 +9,10 @@ namespace Computations {
 	class SimpleRateModel : public InterestRateModel
 	{
 	public:
-		int size_; /// nombre de taux d'intérêt différent à prendre en compte
+		PnlVect *size_; /// nombre de taux d'intérêt différent à prendre en compte
 		SimpleRateModel(); /// Constructeur par défaut
 		SimpleRateModel(int size, double r); /// Constructeur taux identiques
-		SimpleRateModel(int size, PnlVect *r); /// Constructeur complet
+		SimpleRateModel(PnlVect *size, PnlVect *r); /// Constructeur complet
 		SimpleRateModel(const SimpleRateModel &SRM); /// Constructeur par recopie
 		~SimpleRateModel(); /// Destructeur
 		SimpleRateModel& operator = (const SimpleRateModel &SRM); /// Opérateur d'affectation =

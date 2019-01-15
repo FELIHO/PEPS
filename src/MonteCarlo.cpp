@@ -1,31 +1,35 @@
 #include "MonteCarlo.hpp"
-#include "Asian.hpp"
+#include "Call.hpp"
 #include "BlackScholesModel.hpp"
+#include "Delta_DF.hpp"
 #include <math.h>
 using namespace std;
 using namespace Computations;
+double TrendtimeSteps;
 
 /* Constructeur par défault */
 MonteCarlo::MonteCarlo(){
-   mod_ = new BlackScholesModel();
-   opt_ = new Asian();
-   rng_ = pnl_rng_create(PNL_RNG_MERSENNE);
-   r_ = 0;
-   fdStep_ = 0;
-   nbSamples_= 0;
+	delta_ = new Delta_DF();
+	mod_ = new BlackScholesModel();
+	opt_ = new Call();
+	rng_ = pnl_rng_create(PNL_RNG_MERSENNE);
+    fdStep_ = 0;
+    nbSamples_= 0;
  }
 
-MonteCarlo::MonteCarlo(AssetModel *mod,Option *opt,int nbSamples, PnlRng *rng, double fdStep, double r){
+MonteCarlo::MonteCarlo(DeltaCompute *delta, AssetModel *mod,Option *opt,int nbSamples, PnlRng *rng, double fdStep){
+   delta_ = delta;
    mod_ = mod;
    opt_ = opt;
    rng_ = pnl_rng_copy(rng);
    fdStep_= fdStep;
    nbSamples_ = nbSamples;
-   r_ = r;
+   TrendtimeSteps = opt_->T_ / opt_->nbTimeSteps_;
  }
 
 /* Destrcuteur de MonteCarlo */
 MonteCarlo::~MonteCarlo(){
+   delta_->~DeltaCompute();
    opt_->~Option();
    mod_->~AssetModel();
    pnl_rng_free(&rng_);
@@ -34,77 +38,33 @@ MonteCarlo::~MonteCarlo(){
 /** Calcul du prix */
 void MonteCarlo::price(double &prix, double &ic){
    PnlMat *path = pnl_mat_create ( opt_->nbTimeSteps_+1,opt_->size_);
+   PnlVect *vectActualisation = pnl_vect_new();
    double results = 0;
    double esp_carre = 0;
    for(int i = 0;i < nbSamples_;i++){
      mod_->asset(path, opt_->T_,opt_->nbTimeSteps_, rng_);
+	 // Le trend a été update dans asset
+	 vectActualisation = pnl_vect_copy(mod_->trend_); // Récupération du vecteur de trend
+	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // le vecteur de trend * -(T/N) ( on est dans le cas 0)
      double payOff = opt_->payoff(path);
+	 payOff *= exp(pnl_vect_sum(vectActualisation)); // intégrale sous forme de somme discrète
      results += payOff;
      esp_carre += payOff*payOff;
    }
    results = (results/nbSamples_);
    esp_carre = (esp_carre/nbSamples_);
    double esp = results;
-   prix = exp(-r_*(opt_->T_))*results;
+   prix = results;
 
-   double estim_carre = exp(-2*r_*(opt_->T_))*(esp_carre-esp*esp);
+   double estim_carre = (esp_carre-esp*esp);
    ic = 2*1.96*sqrt(estim_carre/nbSamples_);
    pnl_mat_free(&path);
+   pnl_vect_free(&vectActualisation);
  }
 
  /** Calcul du Delta */
  void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic){
-
-   //initialisation de la matrice path.
-   PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1,opt_->size_);
-   double timestep = opt_->T_/opt_->nbTimeSteps_;
-
-   //pas de la méthode.
-   double h = fdStep_;
-
-   //initialisation des matrices shift_path pour +h(et shift_path_inverse pour -h)
-   PnlMat *shift_path = pnl_mat_create_from_scalar ( opt_->nbTimeSteps_+1,opt_->size_,0);
-   PnlMat *shift_path_inverse = pnl_mat_create_from_scalar ( opt_->nbTimeSteps_+1,opt_->size_,0);
-
-  //Delta calculer pour chaque actif
-  double Delta = 0;
-
-  //vecteur des valeurs des actifs à l'instant t.
-  PnlVect *V = pnl_vect_create(mod_->size_);
-  pnl_mat_get_row(V, past, past->m - 1);
-
-   double param_actualisation = 0;
-   for(int d = 1; d < path->n + 1; d++){
-     double var = 0;
-     Delta = 0;
-     double diff = 0.0;
-     param_actualisation = (exp(-r_*(opt_->T_ - t)))/(nbSamples_*2*h);
-     for (size_t i__ = 0; i__ <nbSamples_; i__++) {
-       //chargement de la matrice path par la trajectoire.
-       mod_->asset(path,t,opt_->T_,opt_->nbTimeSteps_,rng_,past);
-       //pnl_mat_print(path);
-       //avoir la matrice shifté pour l'actif d
-       mod_->shiftAsset(shift_path, path, d, h, t, timestep);
-       //pnl_mat_print(shift_path);
-
-       mod_->shiftAsset(shift_path_inverse, path, d, -h, t, timestep);
-       //pnl_mat_print(shift_path_inverse);
-
-      //ajout du resultat du payoff à l'esperance empirique.
-      diff = opt_->payoff(shift_path) - opt_->payoff(shift_path_inverse);
-      Delta += diff;
-      var += diff*diff;
-     }
-
-    param_actualisation /= pnl_vect_get(V,d-1);
-    Delta *= param_actualisation;
-    var *= (param_actualisation*(nbSamples_))*(param_actualisation*(nbSamples_));
-    var /= nbSamples_;
-    //stockage de Delta en delta à la position d
-    pnl_vect_set(delta,d -1,Delta);
-    pnl_vect_set(ic,d -1, 2*1.96*sqrt((var - Delta*Delta)/nbSamples_));
-   }
-
+	 delta_->delta(past, t, delta, ic, mod_, opt_, rng_, nbSamples_);
  }
 
 
@@ -155,24 +115,31 @@ void MonteCarlo::price(double &prix, double &ic){
 
  void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
    PnlMat *path = pnl_mat_create ( opt_->nbTimeSteps_+1,opt_->size_);
+   PnlVect *vectActualisation = pnl_vect_new(); // Ce vecteur contiendra les taux d'intérêt multiplié par le temps
    double results = 0;
    double esp_carre=0;
    for(int i=0;i<nbSamples_;i++){
      mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
+	 vectActualisation = pnl_vect_copy(mod_->trend_); // on récupère le trend qui a été mise à jour dans asset juste après le calcul des taux d'intérêt
+	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // on multiplie tous les éléments du trend par T/n 
+	 // ComputeFirst time step retourne directement ti+i - t
+	 pnl_vect_set(vectActualisation, 0, pnl_vect_get(vectActualisation, 0) * (computeFirstTimeSteps(TrendtimeSteps, t) / TrendtimeSteps)); // on divise le premier élément par T/n pour le multiplier à Ti+1 - t
      double payOff = opt_->payoff(path);
+	 payOff *= exp(pnl_vect_sum(vectActualisation));
      results += payOff;
      esp_carre += payOff*payOff;
    }
    results = (results/nbSamples_);
    esp_carre = (esp_carre/nbSamples_);
    double esp = results;
-   prix = exp(-r_*((opt_->T_)-t))*results;
+
+   prix = results;
 
    //calcul du ic
-   double estim_carre = exp(-2*r_*((opt_->T_)-t))*(esp_carre-esp*esp);
+   double estim_carre = (esp_carre-esp*esp);
    ic = 2*1.96*sqrt(estim_carre/nbSamples_);
    pnl_mat_free(&path);
-
+   pnl_vect_free(&vectActualisation);
  }
 
 void MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,const int H ){
@@ -216,7 +183,14 @@ void MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,const int H ){
     vect_diff = pnl_vect_copy(delta_act);
     pnl_vect_minus_vect (vect_diff, delta_pres);
     pnl_mat_get_row(S_i,marche,i);
-    v_i =pnl_vect_get (V,i-1)*exp(r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i);
+	// TO DO BECAUSE I DON't UNDERSTAND 
+	/*
+	
+	v_i =pnl_vect_get (V,i-1)*exp(r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i); PREVIOUS
+
+	*/
+	// and now modified NOT GOOD but I have to send a version. i PUT 0.05 INSTEAD OF r_
+    v_i =pnl_vect_get (V,i-1)*exp(0.05*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i);
     pnl_vect_set (V, i, v_i);
     delta_pres =pnl_vect_copy(delta_act) ;
 
@@ -239,39 +213,17 @@ void MonteCarlo::Profit_and_loss(const PnlMat* marche,double &PL ,const int H ){
 
 
 }
- /*int main(int argc, char **argv)
- {
-   PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-   double T, r, strike, rho;
-   PnlVect *spot, *sigma, *divid;
-   string type;
-   int size;
-   size_t n_samples;
-   char *infile = argv[1];{t 0 , . . . , t N }
-   int M = 1E2; // à calculer selon l'intervalle de confiance
-   PnlMat *path = pnl_mat_create(M,size);
-   Param *P = new Parser(infile);
 
-   P->extract("option type", type);
-   P->extract("maturity", T);
-   P->extract("option size", size);
-   P->extract("spot", spot, size);
-   P->extract("volatility", sigma, size);
-   P->extract("interest rate", r);
-   P->extract("correlation", rho);
-   if (P->extract("dividend rate", divid, size, true) == false)
-   {
-       divid = pnl_vect_create_from_zero(size);
-   }
-   P->extract("strike", strike);
-   P->extract("sample number", n_samples);
 
-   BlackScholesModel bsm = BlackScholesModel(size, r, rho, sigma, spot);
-   bsm.asset(path, 3.0, M, rng);
-   pnl_mat_print(path);
-   //Option option = Option(, size);
-   //MonteCarlo mc = MonteCarlo();
 
-   delete P;
-   exit(0);
-}*/
+double computeFirstTimeSteps(double timeSteps, double t) {
+	int k = 0;
+	while (t > k * timeSteps) {
+		k = k + 1;
+	}
+	return (k * timeSteps) - t;
+}
+
+double Trenddrift(double TrendElement) {
+	return -TrendElement * TrendtimeSteps;
+}

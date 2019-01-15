@@ -13,8 +13,8 @@ namespace Computations {
 		InterestRateModel *interest_;
 		PnlMat *corr_;
 		PnlVect *sigma_; /// vecteur de volatilités
-		PnlVect *spot_; /// valeurs initiales des sous-jacents		
-
+		PnlVect *spot_; /*! valeurs initiales des sous-jacents		 */
+		PnlVect *trend_; /* trajectoire complète des taux européens mise à jour par l'interestRateModel*/
 		AssetModel(); /// Constructeur par défaut
 		AssetModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur sans prise en compte du passé des taux d'intérêt
 		AssetModel(const AssetModel &ASM); /// Constructeur par recopie
@@ -74,6 +74,11 @@ namespace Computations {
 		* @param[in] timestep pas de constatation du sous-jacent
 		*/
 		void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+
+		/* Met à jour le trend à chaque simulation, ce dernier est utile dans plusieurs classe c'est pour cela qu'on le stocke
+		* @param[in] path contenant tous les taux d'intérêts de façon unique, la première colonne doit être la colonne du taux d'intérêt européen
+		*/
+		void updateTrend(PnlMat *pathInterest);
 
 	private : 
 		PnlMat *chol_;
