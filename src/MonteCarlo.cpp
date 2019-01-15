@@ -108,6 +108,48 @@ void MonteCarlo::price(double &prix, double &ic){
  }
 
 
+ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
+  pnl_vect_resize(delta, opt_->size_);
+  PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
+  PnlMat *shift_path_plus = pnl_mat_new();
+  PnlMat *shift_path_minus = pnl_mat_new();
+
+  double timestep = opt_->T_/opt_->nbTimeSteps_;
+  double Diff = 0;
+  PnlVect *vectDiff = pnl_vect_create(opt_->size_);
+
+  for (int i = 0; i < nbSamples_; i++){
+    mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
+    for (int d = 0; d<opt_->size_; d++) {
+      mod_->shiftAsset(shift_path_plus, path, d, fdStep_ , t, timestep);
+      mod_->shiftAsset(shift_path_minus, path, d, -fdStep_, t, timestep);
+      Diff = opt_->payoff(shift_path_plus) - opt_->payoff(shift_path_minus);
+      pnl_vect_set(vectDiff,d,Diff);
+
+    }
+    pnl_vect_plus_vect(delta, vectDiff);
+
+  }
+
+
+  double scal = exp(-mod_->r_*(opt_->T_-t))/(2*nbSamples_*fdStep_);
+  pnl_vect_mult_scalar(delta, scal);
+  int nbRowsPast = past->m;
+  PnlVect* s_t = pnl_vect_new();
+  pnl_mat_get_row(s_t, past , nbRowsPast-1);
+  pnl_vect_div_vect_term(delta,s_t); // Division par s_t
+
+
+  pnl_vect_free(&s_t);
+  pnl_vect_free(&vectDiff);
+
+  pnl_mat_free(&path);
+  pnl_mat_free(&shift_path_plus);
+  pnl_mat_free(&shift_path_minus);
+  pnl_vect_free(&vectDiff);
+}
+
+
 
 //fonction qui permet de calculer le prix d'une option à n'importe quelle instant t
 

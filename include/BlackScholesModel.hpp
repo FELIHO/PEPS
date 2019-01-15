@@ -2,20 +2,106 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "AssetModel.hpp"
+
+#include <math.h>
+#include <assert.h>
+#include <sstream>
+#include <string>
+#include <fstream>
+#include <cstdlib>
+#include <time.h>
+#include <iostream>
+#include <stdexcept>
+
+#include "RandomGen.hpp"
+#include "FakeRnd.hpp"
+#include "PnlRand.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
 	class BlackScholesModel : public AssetModel
 	{
 	public:
-		PnlVect *trend_;
-		BlackScholesModel(); /// Constructeur par défaut
-		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur complet
-		BlackScholesModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *trend); /// Constructeur complet avec trendd
-		~BlackScholesModel(); /// Destructeur
-		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
+		/**
+		 * int size_ : nombre d'actifs du modèle
+		 */
+		int size_;
 
+		/**
+		 * double r_ : taux d'intérêt
+		 */
+		double r_;
+
+		/**
+		 *  double rho_ : paramètre de corrélation
+		 */
+		double rho_;
+
+		/**
+		 *  PnlVect *sigma_ : vecteur de volatilités
+		 */
+		PnlVect *sigma_;
+
+		/**
+		 *  PnlVect *spot_ : valeurs initiales des sous-jacents
+		 */
+		PnlVect *spot_;
+
+		/**
+		 *  PnlVect *trend_ : tendance du marche
+		 */
+		PnlVect *trend_;
+
+		/**
+		 *  PnlMat* choleskyFactor : récipient de la factorisation de Cholesky
+		 */
+		PnlMat* choleskyFactor;
+
+		/**
+		 * \brief Constructeur de la classe BlackScholesModel
+		 *
+		 * @param[in] size_ nombre d'actifs du modèle
+		 * @param[in] r_ taux d'intérêt
+		 * @param[in] rho_ paramètre de corrélation
+		 * @param[in] sigma_ vecteur de volatilités
+		 * @param[in] spot_ valeurs initiales des sous-jacents
+		 */
+		BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot);
+
+		/**
+		 * \brief Constructeur de la classe BlackScholesModel
+		 *
+		 * @param[in] size_ nombre d'actifs du modèle
+		 * @param[in] r_ taux d'intérêt
+		 * @param[in] rho_ paramètre de corrélation
+		 * @param[in] sigma_ vecteur de volatilités
+		 * @param[in] spot_ valeurs initiales des sous-jacents
+		 * @param[in] trend_ vecteur de v
+		 */
+		BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend_);
+
+
+		/**
+		Constructeur par défaut
+		*/
+		BlackScholesModel();
+
+		/**
+		Constructeur par copie
+		*/
+		BlackScholesModel(const BlackScholesModel &BlackScholesModelACopier);
+
+
+		/**
+		Destructeur
+		*/
+		~BlackScholesModel();
+
+		/** Methode d'affectation d'un BlackScholesModel
+		* @param[in] une image de la classe BlackScholesModel à affecter.
+		* @param[out] la même référence BlackScholesModel avec les mêmes paramètres que l'entrée
+		*/
+		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
 
 		/**
 		 * Génère une trajectoire du modèle et la stocke dans path
@@ -52,15 +138,31 @@ namespace Computations {
 		 * @param[in] nbTimeSteps nombre de pas de constatation
 		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
 		 * @param[in] past trajectoire réalisée jusqu'a la date t
+		 * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
 		 */
 		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
 
 
 	private :
-		PnlMat *chol_;
 		/**
-		* permet d'inialiser la matrice de cholesky
+		* Concatène deux PnlMat 
+		* @param[out] res matrice résultat de la concaténation
+		* @param[in] mat1 1ere matrice à concaténer
+		* @param[in] mat2 1ere matrice à concaténer
+		*
+		*/  
+		void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
+
+
+		/**
+		* Simule les cours des sous-jacents selon le modèle de Black-Scholes
+		*
+		* @param[out] path matrice contenant les données des cours S_t
+		* @param[in] timestep pas de constatation
+		* @param[in] nbTimeSteps nombre de pas de constatation
+		* @param[in] rng Générateur de nombre aléatoire
+		* @param[in] r vecteur des taux d'intérêts des sous-jacents
 		*/
-		void initalizeChol();
-	};
+		void simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, RandomGen *rng, PnlVect* r);
+		};
 }
