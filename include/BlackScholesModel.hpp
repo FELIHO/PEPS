@@ -154,6 +154,18 @@ namespace Computations {
 		//  * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
 		//  */
 		// void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
+    
+		/**
+		 * Génère une trajectoire du modèle selon la probabilité risque neutre et la stocke dans market
+		 *
+		 * @param[out] market contient une trajectoire du modèle.
+		 * C'est une matrice de taille (nbTimeSteps+1) x d
+		 * @param[in] trend tendance du marché
+		 * C'est un vecteur de taille nombre d'actifs
+		 * @param[in] T  maturité
+		 * @param[in] H nombre de dates d'observation
+		 */
+		void simul_market(PnlMat* market, double T, int H, PnlRng *rng);
 
 
 	private :

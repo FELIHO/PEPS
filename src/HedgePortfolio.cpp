@@ -47,7 +47,6 @@ HedgePortfolio::~HedgePortfolio(){
 
 
 HedgePortfolio::HedgePortfolio(PnlMat* marketData, MonteCarlo* monteCarlo){
-  //currentDate_ = 0;
   currentRebalancingIndex_= 0;
   monteCarlo_ = new MonteCarlo(*monteCarlo);
   H_ = marketData->m;
@@ -72,6 +71,8 @@ HedgePortfolio::HedgePortfolio(PnlMat* marketData, MonteCarlo* monteCarlo){
 }
 
 void HedgePortfolio::updateCompo(PnlMat* marketData){
+  double r_euro = pnl_vect_get (monteCarlo_->mod_->r_, 0);
+
   double currentDate = currentRebalancingIndex_ * (monteCarlo_->opt_->T_ / H_);
   int indexToUpdate = ceil ( (currentRebalancingIndex_*monteCarlo_->opt_->nbTimeSteps_)/H_ );
   cout << indexToUpdate << endl;
@@ -93,7 +94,7 @@ void HedgePortfolio::updateCompo(PnlMat* marketData){
   pnl_vect_minus_vect(differenceDelta, delta_anterieure);
 
   double val = pnl_vect_scalar_prod(differenceDelta, S_current);
-  double expo = exp(monteCarlo_->mod_->r_*monteCarlo_->opt_->T_/H_);
+  double expo = exp(r_euro*monteCarlo_->opt_->T_/H_);
 
   investTauxSansRisque_ = investTauxSansRisque_*expo - val;
 
@@ -110,7 +111,6 @@ double HedgePortfolio::HedgeError(PnlMat * marketData){
         currentRebalancingIndex_ += 1;
   }
   double payoff = monteCarlo_->opt_->payoff(past_);
-
 
   double PL = investTauxSansRisque_ + pnl_vect_scalar_prod(delta_, S_current)-payoff;
   return PL;

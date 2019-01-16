@@ -38,6 +38,14 @@ MonteCarlo::~MonteCarlo() {
   pnl_rng_free(&rng_);
 }
 
+MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples)
+{
+  mod_ = new BlackScholesModel(*mod);
+  opt_ = opt->clone();
+  pnl_rng_clone(rng_, rng);
+  fdStep_ = fdStep;
+  nbSamples_ = nbSamples;
+}
 
 void MonteCarlo::price(double &prix, double &ic)
 {

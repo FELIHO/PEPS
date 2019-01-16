@@ -203,6 +203,14 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
   }
 }
 
+  void BlackScholesModel::simul_market(PnlMat* market, double T, int H, PnlRng *rng)
+  {
+    pnl_mat_resize(market, H+1, size_);
+    pnl_mat_set_row(market, spot_, 0);
+    double timestep = T/H;
+    simulateAsset(market, timestep, H, rng, r_);
+  }
+
 // void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
 // 	assert(path->m == nbTimeSteps+1 && path->n == size_);
 // 	/** Initialisation des vecteurs de calcul */
