@@ -8,7 +8,8 @@
 #include <cmath>
 
 namespace Computations {
-	class Call : public Basket {
+	class Call : public Basket
+	{
 
 	public:
 
@@ -17,11 +18,6 @@ namespace Computations {
 		* Initialise everything to zero. Shouldn't be used.
 		*/
 		DLLEXP Call();
-
-		/**
-		* Constructor with parameters
-		*/
-		DLLEXP Call(double T, double strike_);
 
 		/*
 		* Copy Constructor
@@ -37,6 +33,13 @@ namespace Computations {
 		* Destructor
 		*/
 		DLLEXP ~Call();
+
+		/**
+		* Constructor with parameters
+		*/
+		DLLEXP Call(double T, double strike_);
+
+		virtual Call* clone();
 
 	};
 

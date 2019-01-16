@@ -19,7 +19,7 @@
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
-	class BlackScholesModel : public AssetModel
+	class BlackScholesModel //: public AssetModel
 	{
 	public:
 		/**
@@ -28,14 +28,14 @@ namespace Computations {
 		int size_;
 
 		/**
-		 * double r_ : taux d'intérêt
+		 * double r_ : taux d'intérêt pour chaque actif
 		 */
-		double r_;
+		PnlVect *r_;
 
 		/**
-		 *  double rho_ : paramètre de corrélation
+		 *  double rho_ : matrice de corrélation
 		 */
-		double rho_;
+		PnlMat *rho_;
 
 		/**
 		 *  PnlVect *sigma_ : vecteur de volatilités
@@ -50,12 +50,33 @@ namespace Computations {
 		/**
 		 *  PnlVect *trend_ : tendance du marche
 		 */
-		PnlVect *trend_;
+		PnlMat *trend_;
 
 		/**
 		 *  PnlMat* choleskyFactor : récipient de la factorisation de Cholesky
 		 */
-		PnlMat* choleskyFactor;
+		PnlMat* chol_;
+
+		/**
+		Constructeur par défaut
+		*/
+		BlackScholesModel();
+
+		/**
+		Constructeur par copie
+		*/
+		BlackScholesModel(const BlackScholesModel &BSM);
+
+		/** Methode d'affectation d'un BlackScholesModel
+		* @param[in] une image de la classe BlackScholesModel à affecter.
+		* @param[out] la même référence BlackScholesModel avec les mêmes paramètres que l'entrée
+		*/
+		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
+
+		/**
+		Destructeur
+		*/
+		~BlackScholesModel();
 
 		/**
 		 * \brief Constructeur de la classe BlackScholesModel
@@ -66,7 +87,7 @@ namespace Computations {
 		 * @param[in] sigma_ vecteur de volatilités
 		 * @param[in] spot_ valeurs initiales des sous-jacents
 		 */
-		BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot);
+		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
 		 * \brief Constructeur de la classe BlackScholesModel
@@ -78,30 +99,7 @@ namespace Computations {
 		 * @param[in] spot_ valeurs initiales des sous-jacents
 		 * @param[in] trend_ vecteur de v
 		 */
-		BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend_);
-
-
-		/**
-		Constructeur par défaut
-		*/
-		BlackScholesModel();
-
-		/**
-		Constructeur par copie
-		*/
-		BlackScholesModel(const BlackScholesModel &BlackScholesModelACopier);
-
-
-		/**
-		Destructeur
-		*/
-		~BlackScholesModel();
-
-		/** Methode d'affectation d'un BlackScholesModel
-		* @param[in] une image de la classe BlackScholesModel à affecter.
-		* @param[out] la même référence BlackScholesModel avec les mêmes paramètres que l'entrée
-		*/
-		BlackScholesModel& operator = (const BlackScholesModel &BSM); /// Opérateur d'affectation =
+		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlMat *trend);
 
 		/**
 		 * Génère une trajectoire du modèle et la stocke dans path
@@ -111,7 +109,7 @@ namespace Computations {
 		 * @param[in] T  maturité
 		 * @param[in] nbTimeSteps nombre de dates de constatation
 		 */
-		DLLEXP void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng);
+		void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng);
 
 		/**
 		 * Calcule une trajectoire du sous-jacent connaissant le
@@ -125,22 +123,37 @@ namespace Computations {
 		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
 		 * @param[in] past trajectoire réalisée jusqu'a la date t
 		 */
-		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
+		void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
 
 		/**
-		 * Calcule une trajectoire du sous-jacent connaissant le
-		 * passé jusqu' à la date t
+		 * Shift d'une trajectoire du sous-jacent
 		 *
-		 * @param[out] path  contient une trajectoire du sous-jacent
-		 * donnée jusqu'à l'instant t par la matrice past
-		 * @param[in] t date jusqu'à laquelle on connait la trajectoire.
-		 * t n'est pas forcément une date de discrétisation
-		 * @param[in] nbTimeSteps nombre de pas de constatation
-		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
-		 * @param[in] past trajectoire réalisée jusqu'a la date t
-		 * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
+		 * @param[in]  path contient en input la trajectoire
+		 * du sous-jacent
+		 * @param[out] shift_path contient la trajectoire path
+		 * dont la composante d a été shiftée par (1+h)
+		 * à partir de la date t.
+		 * @param[in] t date à partir de laquelle on shift
+		 * @param[in] h pas de différences finies
+		 * @param[in] d indice du sous-jacent à shifter
+		 * @param[in] timestep pas de constatation du sous-jacent
 		 */
-		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
+		void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+
+		// /**
+		//  * Calcule une trajectoire du sous-jacent connaissant le
+		//  * passé jusqu' à la date t
+		//  *
+		//  * @param[out] path  contient une trajectoire du sous-jacent
+		//  * donnée jusqu'à l'instant t par la matrice past
+		//  * @param[in] t date jusqu'à laquelle on connait la trajectoire.
+		//  * t n'est pas forcément une date de discrétisation
+		//  * @param[in] nbTimeSteps nombre de pas de constatation
+		//  * @param[in] T date jusqu'à laquelle on simule la trajectoire
+		//  * @param[in] past trajectoire réalisée jusqu'a la date t
+		//  * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
+		//  */
+		// void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
 
 
 	private :
@@ -163,6 +176,6 @@ namespace Computations {
 		* @param[in] rng Générateur de nombre aléatoire
 		* @param[in] r vecteur des taux d'intérêts des sous-jacents
 		*/
-		void simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, RandomGen *rng, PnlVect* r);
+		void simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, PnlRng *rng, PnlVect* r);
 		};
 }

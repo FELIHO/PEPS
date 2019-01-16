@@ -11,18 +11,50 @@ namespace Computations {
 	class MonteCarlo
 	{
 	public:
-		DeltaCompute *delta_; /*! pointeur vers la technique du calcul du delta */
-		AssetModel *mod_; /*! pointeur vers le modèle */
-		Option *opt_; /*! pointeur sur l'option */
-		PnlRng *rng_; /*! pointeur sur le générateur */
-		double fdStep_; /*! pas de différence finie */
-		size_t nbSamples_; /*! nombre de tirages Monte Carlo */
+		/**
+		 * pointeur vers le modèle 
+		 */
+		BlackScholesModel *mod_; 
+		/**
+		 * pointeur sur l'option
+		 */
+		Option *opt_; 
+		/**
+		 * pointeur sur le générateur
+		 */
+		PnlRng *rng_;
+		/**
+		 * pas de différence finie 
+		 */
+		double fdStep_;
+		/**
+		 * nombre de tirages Monte Carlo 
+		 */
+		int nbSamples_;
 
+		/**
+		Constructeur par défaut
+		*/
 		MonteCarlo();
-		/*MonteCarlo& operator = (const MonteCarlo &BSM);
-		MonteCarlo(const MonteCarlo &MC);*/
+
+		/**
+		 * Constructeur par Copie de la classe MonteCarlo
+		 *
+		 * @param[in] MonteCarloACopier Objet MonteCarlo à copier
+		 */
+		MonteCarlo(const MonteCarlo &MonteCarloACopier);
+
+		/** Methode d'affectation d'un MonteCarlo
+		* @param[in] une image de la classe MonteCarlo à affecter.
+		* @param[out] la même référence MonteCarlo avec les mêmes paramètres que l'entrée
+		*/
+		MonteCarlo& operator= (const MonteCarlo &MC);
+		
+		/**
+		 * Destructeur de la classe MonteCarlo
+		 */
 		~MonteCarlo();
-		MonteCarlo(DeltaCompute *delta, AssetModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
+		
 
 		/**
 		 * Calcule le prix de l'option à la date 0
@@ -47,6 +79,16 @@ namespace Computations {
 		/**
 		 * Calcule le delta de l'option à la date t
 		 *
+		 * @param[in] past contient la trajectoire du sous-jacent
+		 * jusqu'à l'instant t
+		 * @param[in] t date à laquelle le calcul est fait
+		 * @param[out] delta contient le vecteur de delta
+		 */
+		void delta(const PnlMat *past, double t, PnlVect *delta);
+
+		/**
+		 * Calcule le delta de l'option à la date t
+		 *
 		 * @param[in]  past contient la trajectoire du sous-jacent
 		 * jusqu'à l'instant t
 		 * @param[in] t date à laquelle le calcul est fait
@@ -57,6 +99,8 @@ namespace Computations {
 		DLLEXP void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
 
 
-		DLLEXP void Profit_and_loss(const PnlMat*past, double &PL, const int H);
+		//DLLEXP void Profit_and_loss(const PnlMat*past, double &PL, const int H);
+
+		//MonteCarlo(DeltaCompute *delta, AssetModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
 	};
 }

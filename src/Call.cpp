@@ -3,34 +3,40 @@ using namespace Computations;
 
 
 
-Call::Call() : Basket() {
-
+Call::Call(){
+	weights_ = pnl_vect_create_from_scalar(1, 1.0);
+  	T_ = 0;
+  	nbTimeSteps_ = 1;
+  	size_ = 1;
+  	strike_ = 0;
 }
-
-
-Call::Call(double T, double strike_) : Basket(T, 1, 1,  strike_, pnl_vect_create_from_scalar(1, 1.0)) {}
-
-
 
 Call::Call(const Call &C) {
 	T_ = C.T_;
+	strike_ = C.strike_;
 	nbTimeSteps_ = C.nbTimeSteps_;
 	size_ = C.size_;
-	strike_ = C.strike_;
-	PayOff_coefficient = pnl_vect_copy(C.PayOff_coefficient);
+	weights_ = pnl_vect_copy(C.weights_);
 }
-
 
 Call& Call::operator=(const Call &C) {
 	T_ = C.T_;
+	strike_ = C.strike_;
 	nbTimeSteps_ = C.nbTimeSteps_;
 	size_ = C.size_;
-	strike_ = C.strike_;
-	PayOff_coefficient = C.PayOff_coefficient;
+	weights_ = C.weights_;
 	return *this;
 }
 
+Call::~Call()
+{
+  pnl_vect_free(&weights_);
+}
 
-Call::~Call() {
-	pnl_vect_free(&PayOff_coefficient);
+Call::Call(double T, double strike){
+	weights_ = pnl_vect_create_from_scalar(1, 1.0);
+  	T_ = T;
+  	nbTimeSteps_ = 1;
+  	size_ = 1;
+  	strike_ = strike;
 }
