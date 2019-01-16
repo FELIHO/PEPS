@@ -8,83 +8,83 @@
 namespace Computations {
 	class AssetModel
 	{
-	public:
-		int size_; /// nombre d'actifs du modèle
-		InterestRateModel *interest_;
-		PnlMat *corr_;
-		PnlVect *sigma_; /// vecteur de volatilités
-		PnlVect *spot_; /*! valeurs initiales des sous-jacents		 */
-		PnlVect *trend_; /* trajectoire complète des taux européens mise à jour par l'interestRateModel*/
-		AssetModel(); /// Constructeur par défaut
-		AssetModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur sans prise en compte du passé des taux d'intérêt
-		AssetModel(const AssetModel &ASM); /// Constructeur par recopie
-		AssetModel& operator = (const AssetModel &ASM); /// opérateur d'affectation
-		~AssetModel(); /// Destructeur
+	// public:
+	// 	int size_; /// nombre d'actifs du modï¿½le
+	// 	InterestRateModel *interest_;
+	// 	PnlMat *corr_;
+	// 	PnlVect *sigma_; /// vecteur de volatilitï¿½s
+	// 	PnlVect *spot_; /*! valeurs initiales des sous-jacents		 */
+	// 	PnlVect *trend_; /* trajectoire complï¿½te des taux europï¿½ens mise ï¿½ jour par l'interestRateModel*/
+	// 	AssetModel(); /// Constructeur par dï¿½faut
+	// 	AssetModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot); /// Constructeur sans prise en compte du passï¿½ des taux d'intï¿½rï¿½t
+	// 	AssetModel(const AssetModel &ASM); /// Constructeur par recopie
+	// 	AssetModel& operator = (const AssetModel &ASM); /// opï¿½rateur d'affectation
+	// 	~AssetModel(); /// Destructeur
 
-		/**
-		 * Génère une trajectoire du modèle et la stocke dans path
-		 *
-		 * @param[out] path contient une trajectoire du modèle.
-		 * C'est une matrice de taille (nbTimeSteps+1) x d
-		 * @param[in] T  maturité
-		 * @param[in] nbTimeSteps nombre de dates de constatation
-		 */
-		virtual void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) = 0;
+	// 	/**
+	// 	 * Gï¿½nï¿½re une trajectoire du modï¿½le et la stocke dans path
+	// 	 *
+	// 	 * @param[out] path contient une trajectoire du modï¿½le.
+	// 	 * C'est une matrice de taille (nbTimeSteps+1) x d
+	// 	 * @param[in] T  maturitï¿½
+	// 	 * @param[in] nbTimeSteps nombre de dates de constatation
+	// 	 */
+	// 	virtual void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) = 0;
 
-		/**
-		 * Calcule une trajectoire du sous-jacent connaissant le
-		 * passé jusqu' à la date t
-		 *
-		 * @param[out] path  contient une trajectoire du sous-jacent
-		 * donnée jusqu'à l'instant t par la matrice past
-		 * @param[in] t date jusqu'à laquelle on connait la trajectoire.
-		 * t n'est pas forcément une date de discrétisation
-		 * @param[in] nbTimeSteps nombre de pas de constatation
-		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
-		 * @param[in] past trajectoire réalisée jusqu'a la date t
-		 */
-		virtual void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) = 0;
+	// 	/**
+	// 	 * Calcule une trajectoire du sous-jacent connaissant le
+	// 	 * passï¿½ jusqu' ï¿½ la date t
+	// 	 *
+	// 	 * @param[out] path  contient une trajectoire du sous-jacent
+	// 	 * donnï¿½e jusqu'ï¿½ l'instant t par la matrice past
+	// 	 * @param[in] t date jusqu'ï¿½ laquelle on connait la trajectoire.
+	// 	 * t n'est pas forcï¿½ment une date de discrï¿½tisation
+	// 	 * @param[in] nbTimeSteps nombre de pas de constatation
+	// 	 * @param[in] T date jusqu'ï¿½ laquelle on simule la trajectoire
+	// 	 * @param[in] past trajectoire rï¿½alisï¿½e jusqu'a la date t
+	// 	 */
+	// 	virtual void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) = 0;
 
 
-		/**
-		 * Calcule une trajectoire du sous-jacent connaissant le
-		 * passé jusqu' à la date t
-		 *
-		 * @param[out] path  contient une trajectoire du sous-jacent
-		 * donnée jusqu'à l'instant t par la matrice past
-		 * @param[in] t date jusqu'à laquelle on connait la trajectoire.
-		 * t n'est pas forcément une date de discrétisation
-		 * @param[in] nbTimeSteps nombre de pas de constatation
-		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
-		 * @param[in] past trajectoire réalisée jusqu'a la date t
-		 */
-		virtual void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest) = 0;
+	// 	/**
+	// 	 * Calcule une trajectoire du sous-jacent connaissant le
+	// 	 * passï¿½ jusqu' ï¿½ la date t
+	// 	 *
+	// 	 * @param[out] path  contient une trajectoire du sous-jacent
+	// 	 * donnï¿½e jusqu'ï¿½ l'instant t par la matrice past
+	// 	 * @param[in] t date jusqu'ï¿½ laquelle on connait la trajectoire.
+	// 	 * t n'est pas forcï¿½ment une date de discrï¿½tisation
+	// 	 * @param[in] nbTimeSteps nombre de pas de constatation
+	// 	 * @param[in] T date jusqu'ï¿½ laquelle on simule la trajectoire
+	// 	 * @param[in] past trajectoire rï¿½alisï¿½e jusqu'a la date t
+	// 	 */
+	// 	virtual void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest) = 0;
 
-		/**
-		* Shift d'une trajectoire du sous-jacent
-		*
-		* @param[in]  path contient en input la trajectoire
-		* du sous-jacent
-		* @param[out] shift_path contient la trajectoire path
-		* dont la composante d a été shiftée par (1+h)
-		* à partir de la date t.
-		* @param[in] t date à partir de laquelle on shift
-		* @param[in] h pas de différences finies
-		* @param[in] d indice du sous-jacent à shifter
-		* @param[in] timestep pas de constatation du sous-jacent
-		*/
-		void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+	// 	/**
+	// 	* Shift d'une trajectoire du sous-jacent
+	// 	*
+	// 	* @param[in]  path contient en input la trajectoire
+	// 	* du sous-jacent
+	// 	* @param[out] shift_path contient la trajectoire path
+	// 	* dont la composante d a ï¿½tï¿½ shiftï¿½e par (1+h)
+	// 	* ï¿½ partir de la date t.
+	// 	* @param[in] t date ï¿½ partir de laquelle on shift
+	// 	* @param[in] h pas de diffï¿½rences finies
+	// 	* @param[in] d indice du sous-jacent ï¿½ shifter
+	// 	* @param[in] timestep pas de constatation du sous-jacent
+	// 	*/
+	// 	void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
 
-		/* Met à jour le trend à chaque simulation, ce dernier est utile dans plusieurs classe c'est pour cela qu'on le stocke
-		* @param[in] path contenant tous les taux d'intérêts de façon unique, la première colonne doit être la colonne du taux d'intérêt européen
-		*/
-		void updateTrend(PnlMat *pathInterest);
+	// 	/* Met ï¿½ jour le trend ï¿½ chaque simulation, ce dernier est utile dans plusieurs classe c'est pour cela qu'on le stocke
+	// 	* @param[in] path contenant tous les taux d'intï¿½rï¿½ts de faï¿½on unique, la premiï¿½re colonne doit ï¿½tre la colonne du taux d'intï¿½rï¿½t europï¿½en
+	// 	*/
+	// 	void updateTrend(PnlMat *pathInterest);
 
-	private : 
-		PnlMat *chol_;
-		/**
-		* permet d'inialiser la matrice de cholesky
-		*/
-		void initalizeChol();
+	// private : 
+	// 	PnlMat *chol_;
+	// 	/**
+	// 	* permet d'inialiser la matrice de cholesky
+	// 	*/
+	// 	void initalizeChol();
 	};
 }

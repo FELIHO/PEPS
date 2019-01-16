@@ -19,7 +19,7 @@
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
-	class BlackScholesModel //: public AssetModel
+	class BlackScholesModel : public AssetModel
 	{
 	public:
 		/**

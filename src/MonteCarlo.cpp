@@ -1,8 +1,6 @@
-#include "pch.h"
 #include "MonteCarlo.hpp"
 #include "Call.hpp"
 #include "BlackScholesModel.hpp"
-#include "DeltaDF.hpp"
 #include <math.h>
 using namespace std;
 using namespace Computations;

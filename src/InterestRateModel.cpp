@@ -1,5 +1,4 @@
 #include "InterestRateModel.hpp"
-#include "pch.h"
 #include <math.h>
 #include <iostream>
 #include <stdexcept>
@@ -7,22 +6,22 @@ using namespace std;
 using namespace Computations;
 
 /**
-Constructeur par défaut
+Constructeur par dï¿½faut
 */
 InterestRateModel::InterestRateModel()
 {
-	size_ = pnl_vect_create_from_zero(0); /// nombre d'actif du modèle
-	rSpot_ = pnl_vect_create_from_zero(0); /// taux d'intérêt
+	size_ = pnl_vect_create_from_zero(0); /// nombre d'actif du modï¿½le
+	rSpot_ = pnl_vect_create_from_zero(0); /// taux d'intï¿½rï¿½t
 }
 
 
 /**
-Constructeur avec taux d'intérêt identique
+Constructeur avec taux d'intï¿½rï¿½t identique
 */
 InterestRateModel::InterestRateModel(int size, double r)
 {
 	size_ = pnl_vect_create_from_scalar(1, size);
-	rSpot_ = pnl_vect_create_from_scalar(1, r); /// vecteur de taux d'intérêt pour les actions internationnales
+	rSpot_ = pnl_vect_create_from_scalar(1, r); /// vecteur de taux d'intï¿½rï¿½t pour les actions internationnales
 }
 
 /**
@@ -33,8 +32,8 @@ InterestRateModel::InterestRateModel(PnlVect *size, PnlVect *r)
 	if (size_->size != rSpot_->size) {
 		throw length_error("size_ attribute and rSpot_ attribute must be the same");
 	}
-	size_ = pnl_vect_copy(size); /// nombre d'actifs du modèle
-	rSpot_ = pnl_vect_copy(r); /// vecteur de taux d'intérêt pour les actions internationnales
+	size_ = pnl_vect_copy(size); /// nombre d'actifs du modï¿½le
+	rSpot_ = pnl_vect_copy(r); /// vecteur de taux d'intï¿½rï¿½t pour les actions internationnales
 }
 
 /**
@@ -57,10 +56,10 @@ InterestRateModel::~InterestRateModel()
 
 
 /** Methode d'affectation d'un InterestRateModel
-* @param[in] une image de la classe InterestRateModel à affecter.
-* @param[out] la même référence InterestRateModel avec les mêmes paramètres que l'entrée
+* @param[in] une image de la classe InterestRateModel ï¿½ affecter.
+* @param[out] la mï¿½me rï¿½fï¿½rence InterestRateModel avec les mï¿½mes paramï¿½tres que l'entrï¿½e
 */
-InterestRateModel& InterestRateModel::operator = (const InterestRateModel &IRM) //le const c'est pour traduire le fait que cet opérateur ne modifie pas le Dvector
+InterestRateModel& InterestRateModel::operator = (const InterestRateModel &IRM) //le const c'est pour traduire le fait que cet opï¿½rateur ne modifie pas le Dvector
 {
 	size_ = IRM.size_;
 	rSpot_ = IRM.rSpot_;
