@@ -1,6 +1,6 @@
 #include "HedgePortfolio.hpp"
 using namespace std;
-
+using namespace Computations;
 
 HedgePortfolio::~HedgePortfolio(){
   delete(monteCarlo_);
@@ -74,7 +74,7 @@ void HedgePortfolio::updateCompo(PnlMat* marketData){
   pnl_vect_minus_vect(differenceDelta, delta_anterieure);
 
   double val = pnl_vect_scalar_prod(differenceDelta, S_current);
-  double expo = exp(monteCarlo_->mod_->r_*monteCarlo_->opt_->T_/H_);
+  double expo = exp(pnl_vect_get(monteCarlo_->mod_->r_,0)*monteCarlo_->opt_->T_/H_);
 
   investTauxSansRisque_ = investTauxSansRisque_*expo - val;
 

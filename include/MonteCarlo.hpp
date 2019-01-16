@@ -1,6 +1,8 @@
 #pragma once
+#include "pch.h"
 #include "Option.hpp"
 #include "AssetModel.hpp"
+#include "BlackScholesModel.hpp"
 #include "DeltaCompute.hpp"
 #include "pnl/pnl_random.h"
 #include <iostream>

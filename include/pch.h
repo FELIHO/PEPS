@@ -25,6 +25,7 @@
 #include "DeltaDF.hpp"
 #include "DeltaPW.hpp"
 #include "DeltaLH.hpp"
+#include "HedgePortfolio.hpp"
 #include <algorithm>
 
 #endif //PCH_H
