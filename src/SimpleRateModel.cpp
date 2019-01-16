@@ -1,6 +1,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "pch.h"
 #include "InterestRateModel.hpp"
 #include "SimpleRateModel.hpp"
 #define DLLEXP   __declspec( dllexport )

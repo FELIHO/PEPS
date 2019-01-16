@@ -15,7 +15,7 @@ namespace Computations {
 		PnlMat *corr_;
 		CIRModel(); /// Constructeur par défaut
 		CIRModel(int size, double r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur taux identiques
-		CIRModel(int size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur complet
+		CIRModel(PnlVect *size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr); /// Constructeur complet
 		CIRModel(const CIRModel &CIRM); /// Constructeur par recopie
 		~CIRModel(); /// Destructeur
 		void initalizeChol(); /// Initialisateur de la matrice de cholesky

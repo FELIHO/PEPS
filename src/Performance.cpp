@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
@@ -8,7 +9,8 @@ Performance::Performance():Option(){
   PayOff_coefficient = pnl_vect_new ();
 }
 
-Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
+Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient)//:Option(T, nbTimeSteps, size)
+{
   PayOff_coefficient = pnl_vect_copy(payOff_coefficient);
 }
 

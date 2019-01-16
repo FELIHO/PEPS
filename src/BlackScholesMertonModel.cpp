@@ -1,4 +1,5 @@
 #include "BlackScholesMertonModel.hpp"
+#include "pch.h"
 #include <math.h>
 #include <iostream>
 #include <stdexcept>

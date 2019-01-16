@@ -3,6 +3,7 @@
 #include "pnl/pnl_matrix.h"
 #include <math.h>
 #include <stdexcept>
+#include "pch.h"
 #include "InterestRateModel.hpp"
 
 #include "VasicekModel.hpp"

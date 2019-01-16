@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdexcept>
 #include "InterestRateModel.hpp"
+#include "pch.h"
 
 #include "CIRModel.hpp"
 #define DLLEXP   __declspec( dllexport )
@@ -31,7 +32,7 @@ CIRModel::CIRModel(int size, double r, PnlVect *speedReversion, PnlVect *longTer
 	initalizeChol();
 }
 
-CIRModel::CIRModel(int size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr) : InterestRateModel(size, r)
+CIRModel::CIRModel(PnlVect* size, PnlVect *r, PnlVect *speedReversion, PnlVect *longTermMean, PnlVect *volatilities, PnlMat *corr) : InterestRateModel(size, r)
 {
 	speedReversion_ = pnl_vect_copy(speedReversion);
 	longTermMean_ = pnl_vect_copy(longTermMean);
