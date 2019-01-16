@@ -1,16 +1,18 @@
-#include <algorithm>
-#include "Option.hpp"
+#include "pch.h"
 #include "Kozei.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include <algorithm>
+#include "Option.hpp"
 using namespace Computations;
+
 
 
 Kozei::Kozei() :Option() {
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init) : Option(T, nbTimeSteps, size) {
+Kozei::Kozei( double inv_init)  {
 	inv_init_ = inv_init;	
 }
 

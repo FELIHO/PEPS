@@ -1,4 +1,5 @@
 #include "Call.hpp"
+#include "pch.h"
 using namespace Computations;
 
 
@@ -39,4 +40,8 @@ Call::Call(double T, double strike){
   	nbTimeSteps_ = 1;
   	size_ = 1;
   	strike_ = strike;
+}
+
+Call* Call::clone() {
+	return (new Call(*this));
 }

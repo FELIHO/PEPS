@@ -1,4 +1,5 @@
 #include "FakeRnd.hpp"
+#include "pch.h"
 
 FakeRnd::FakeRnd(FakeRnd const &FakeRndACopier){
   val_ = FakeRndACopier.val_;

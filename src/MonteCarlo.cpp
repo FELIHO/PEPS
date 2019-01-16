@@ -1,7 +1,8 @@
+#include "pch.h"
 #include "MonteCarlo.hpp"
 #include "Call.hpp"
 #include "BlackScholesModel.hpp"
-#include "Delta_DF.hpp"
+#include "DeltaDF.hpp"
 #include <math.h>
 using namespace std;
 using namespace Computations;
@@ -30,6 +31,7 @@ MonteCarlo& MonteCarlo::operator= (const MonteCarlo &MC) {
   rng_ = MC.rng_;
   fdStep_ = MC.fdStep_;
   nbSamples_ = MC.nbSamples_;
+  return *this;
 }
 
 MonteCarlo::~MonteCarlo() {
