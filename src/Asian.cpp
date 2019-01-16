@@ -1,4 +1,4 @@
-
+#include "pch.h"
 #include <algorithm>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
@@ -6,7 +6,7 @@
 /// \brief Classe Option abstraite
 #include "Option.hpp"
 #include "Asian.hpp"
-#include "pch.h"
+
 
 using namespace Computations;
 

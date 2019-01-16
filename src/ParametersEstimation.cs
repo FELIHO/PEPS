@@ -38,8 +38,8 @@ namespace ProjetNet.Models
         {
             List<DataFeed> usefulData = usefulDataFeeds(dataFeedList, rebalancingDate, estimationWindow);
             double[,] assetValues = getAssetValues(usefulData);
-            double[,] logAssests = computeWRELogAssets(assetValues);
-            double[,] corrMatrix = computeWRECorrelationMatrix(logAssests);
+            double[,] logAssests = computeLogAssets(assetValues);
+            double[,] corrMatrix = computeCorrelationMatrix(logAssests);
             double[] volTable = computeWREVolatilityTable(logAssests);
             this.correlation = corrMatrix;
             this.volatility = volTable;
