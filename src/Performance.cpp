@@ -8,7 +8,8 @@ Performance::Performance():Option(){
   PayOff_coefficient = pnl_vect_new ();
 }
 
-Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient):Option(T, nbTimeSteps, size){
+Performance::Performance(double T, int nbTimeSteps, int size, PnlVect *payOff_coefficient)//:Option(T, nbTimeSteps, size)
+{
   PayOff_coefficient = pnl_vect_copy(payOff_coefficient);
 }
 
