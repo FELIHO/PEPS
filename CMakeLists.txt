@@ -72,11 +72,11 @@ include_directories(include include/AssetModel include/Delta include/Hedge inclu
 
 # Adding our own libraries
 add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp) # src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Rnd/PnlRand.cpp include/Rnd/PnlRand.hpp)
-add_library(Options src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp)
+add_library(Options src/Option/Option.cpp include/Option/Option.hpp src/Option/Call.cpp include/Option/Call.hpp src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp)
 
 # Adding subdirectories
 add_subdirectory(include)
 add_subdirectory(src)
-# add_subdirectory(test)
+# add_subdirectory(Test)
 # add_subdirectory(doc)
 enable_testing()

@@ -24,6 +24,12 @@ public:
    */
     int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
 
+
+    Option();
+    Option(const Option &C);
+    Option& operator=(const Option &C);
+
+
     /**
      * \brief Calcule la valeur du payoff sur la trajectoire
      *
@@ -33,8 +39,8 @@ public:
      * @return phi(trajectoire)
      */
     virtual double payoff(const PnlMat *path);
+    virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect *currency);
 
-	  virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect *currency);
 
 /* ######################################################################## */
 /* ######################################################################## */
