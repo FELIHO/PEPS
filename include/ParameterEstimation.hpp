@@ -8,6 +8,7 @@ namespace Computations {
 	class ParameterEstimation
 	{
 	public:
+		ParameterEstimation() {}
 		static PnlMat* getLogRendementMatrix(const PnlMat *path);
 
 		static PnlMat* getCovarianceMatrix(const PnlMat *path);
@@ -17,7 +18,6 @@ namespace Computations {
 		static PnlVect* getVolatilitiesVector(const PnlMat *path);
 
 	private:
-		ParameterEstimation() {}
 	};
 
 

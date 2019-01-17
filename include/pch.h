@@ -23,8 +23,8 @@
 #include "Basket.hpp"
 #include "DeltaCompute.hpp"
 #include "DeltaDF.hpp"
-#include "DeltaPW.hpp"
 #include "DeltaLH.hpp"
+#include "DeltaPW.hpp"
 #include "HedgePortfolio.hpp"
 #include <algorithm>
 
