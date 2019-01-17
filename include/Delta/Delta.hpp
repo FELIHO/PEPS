@@ -30,8 +30,8 @@ namespace Computations {
 		 * @param[in] t date � laquelle le calcul est fait
 		 * @param[out]  delta contient le delta
 		 * @param[out] ic contient la largeur de l'intervalle
-		 * de confiance sur le calcul du delta
-		 */
+		* de confiance sur le calcul du delta
+		*/
 		virtual void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, AssetModel *mod, Option *opt, PnlRng *rng, int nbSamples) = 0;
 	};
 }
