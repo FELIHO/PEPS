@@ -10,22 +10,23 @@
 #define PCH_H
 
 // TODO: Ajoutez les en-têtes à précompiler ici
-#include "InterestRateModel.hpp"
-#include "AssetModel.hpp"
-#include "BlackScholesModel.hpp"
-#include "BlackScholesMertonModel.hpp"
-#include "SimpleRateModel.hpp"
-#include "VasicekModel.hpp"
-#include "Option.hpp"
-#include "Asian.hpp"
-#include "Basket.hpp"
-#include "Call.hpp"
-#include "Basket.hpp"
-#include "DeltaCompute.hpp"
-#include "DeltaDF.hpp"
-#include "DeltaLH.hpp"
-#include "DeltaPW.hpp"
-#include "HedgePortfolio.hpp"
+#include "InterestModel/InterestRateModel.hpp"
+
+#include "AssetModel/BlackScholesModel.hpp"
+#include "AssetModel/BlackScholesMertonModel.hpp"
+#include "InterestModel/SimpleRateModel.hpp"
+#include "InterestModel/VasicekModel.hpp"
+#include "Option/Option.hpp"
+#include "Option/Asian.hpp"
+#include "Option/Basket.hpp"
+#include "Option/Call.hpp"
+#include "Option/Basket.hpp"
+#include "Delta/Delta.hpp"
+#include "Delta/DeltaDF.hpp"
+#include "Delta/DeltaLH.hpp"
+#include "Delta/DeltaPW.hpp"
+//#include "Hedge/HedgePortfolio.hpp"
+#include "Hedge/ParameterEstimation.hpp"
 #include <algorithm>
 
 #endif //PCH_H
