@@ -2,7 +2,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Option/Performance.hpp"
+#include "Performance.hpp"
 using namespace Computations;
 
 Performance::Performance() 

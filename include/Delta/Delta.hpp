@@ -2,8 +2,8 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
-#include "Option/Option.hpp"
-#include "AssetModel/BlackScholesModel.hpp"
+#include "Option.hpp"
+#include "BlackScholesModel.hpp"
 
 namespace Computations {
 	class Delta

@@ -1,4 +1,4 @@
-#include "AssetModel/BlackScholesMertonModel.hpp"
+#include "BlackScholesMertonModel.hpp"
 #include "pch.h"
 #include <math.h>
 #include <iostream>

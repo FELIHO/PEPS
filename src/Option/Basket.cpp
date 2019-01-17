@@ -1,6 +1,6 @@
 /// \brief Classe Option abstraite
-#include "Option/Option.hpp"
-#include "Option/Basket.hpp"
+#include "Option.hpp"
+#include "Basket.hpp"
 #include "pch.h"
 #include <algorithm>
 using namespace Computations;

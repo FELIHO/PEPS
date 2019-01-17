@@ -3,7 +3,7 @@
 #include "pch.h"
 
 /// \brief Classe DeltaPW abstraite
-#include "Delta/DeltaPW.hpp"
+#include "DeltaPW.hpp"
 using namespace Computations;
 
 DeltaPW::DeltaPW() {

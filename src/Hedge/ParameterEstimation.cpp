@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Hedge/ParameterEstimation.hpp"
+#include "ParameterEstimation.hpp"
 #include <math.h>
 
 using namespace std;

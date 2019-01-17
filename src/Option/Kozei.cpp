@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "Option/Kozei.hpp"
+#include "Kozei.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Option/Option.hpp"
+#include "Option.hpp"
 using namespace Computations;
 
 

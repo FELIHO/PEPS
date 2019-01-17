@@ -2,8 +2,8 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "AssetModel/BlackScholesModel.hpp"
-#include "InterestModel/InterestRateModel.hpp"
+#include "BlackScholesModel.hpp"
+#include "InterestRateModel.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {

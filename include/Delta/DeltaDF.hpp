@@ -1,7 +1,7 @@
 #pragma once
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "Delta/Delta.hpp"
+#include "Delta.hpp"
 
 #define DLLEXP  __declspec( dllexport )
 namespace Computations {

@@ -1,4 +1,4 @@
-#include "Hedge/HedgePortfolio.hpp"
+#include "HedgePortfolio.hpp"
 using namespace std;
 using namespace Computations;
 

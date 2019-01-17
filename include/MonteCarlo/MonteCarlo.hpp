@@ -1,9 +1,9 @@
 #pragma once
 #include "pch.h"
-#include "Option/Option.hpp"
+#include "Option.hpp"
 
-#include "AssetModel/BlackScholesModel.hpp"
-#include "Delta/Delta.hpp"
+#include "BlackScholesModel.hpp"
+#include "Delta.hpp"
 #include "pnl/pnl_random.h"
 #include <iostream>
 #include <string>

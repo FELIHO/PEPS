@@ -1,7 +1,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
-#include "Delta/DeltaLH.hpp"
+#include "DeltaLH.hpp"
 using namespace Computations;
 
 DeltaLH::DeltaLH() {

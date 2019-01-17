@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "MonteCarlo/MonteCarlo.hpp"
+#include "MonteCarlo.hpp"
 
 namespace Computations {
   /** \class HedgePortfolio

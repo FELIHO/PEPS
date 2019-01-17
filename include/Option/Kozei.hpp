@@ -1,7 +1,7 @@
 #pragma once
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "Option/Option.hpp"
+#include "Option.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {

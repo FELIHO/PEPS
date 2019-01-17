@@ -1,11 +1,11 @@
-#include "AssetModel/BlackScholesModel.hpp"
-#include "MonteCarlo/MonteCarlo.hpp"
-#include "Hedge/HedgePortfolio.hpp"
+#include "BlackScholesModel.hpp"
+#include "MonteCarlo.hpp"
+#include "HedgePortfolio.hpp"
 #include "jlparser/parser.hpp" 
-#include "Option/Option.hpp"
-#include "Option/Basket.hpp" 
-#include "Option/Performance.hpp"
-#include "Option/Asian.hpp" 
+#include "Option.hpp"
+#include "Basket.hpp" 
+#include "Performance.hpp"
+#include "Asian.hpp" 
 #include <ctime>
 
 using namespace std; 
