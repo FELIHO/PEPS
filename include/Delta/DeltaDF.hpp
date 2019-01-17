@@ -5,18 +5,19 @@
 
 #define DLLEXP  __declspec( dllexport )
 namespace Computations {
-	class DeltaLH : public DeltaCompute {
+	class DeltaDF : public Delta {
 	public:
-		DeltaLH();
-		DeltaLH(const DeltaLH &B);
-		~DeltaLH();
+		double fdStep_;
+		DeltaDF(double fdStep);
+		DeltaDF(const DeltaDF &B);
+		~DeltaDF();
 		/**
-		 * Calcule le delta de l'option à la date t avec la méthode de vraisemblance (Likelihood)
-		 * @param[in] mod contient le modèle de simulation
+		 * Calcule le delta de l'option ï¿½ la date t avec la mï¿½thode des diffï¿½rences finies
+		 * @param[in] mod contient le modï¿½le de simulation
 		 * @param[in] opt contient l'option
 		 * @param[in]  past contient la trajectoire du sous-jacent
-		 * jusqu'à l'instant t
-		 * @param[in] t date à laquelle le calcul est fait
+		 * jusqu'ï¿½ l'instant t
+		 * @param[in] t date ï¿½ laquelle le calcul est fait
 		 * @param[out]  delta contient le delta
 		 * @param[out] ic contient la largeur de l'intervalle
 		 * de confiance sur le calcul du delta

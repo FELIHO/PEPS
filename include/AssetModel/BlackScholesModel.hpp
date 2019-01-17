@@ -13,13 +13,10 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "RandomGen.hpp"
-#include "FakeRnd.hpp"
-#include "PnlRand.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
-	class BlackScholesModel : public AssetModel
+	class BlackScholesModel
 	{
 	public:
 		/**

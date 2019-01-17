@@ -1,4 +1,3 @@
-
 #include "BlackScholesModel.hpp"
 #include "MonteCarlo.hpp"
 #include "HedgePortfolio.cpp"
@@ -195,5 +194,5 @@ int main(int argc,char **argv){
   delete opt;
 
   return 0; 
-  
+
 }
