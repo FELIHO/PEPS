@@ -32,7 +32,9 @@ public:
      * par la fonction asset.
      * @return phi(trajectoire)
      */
-    virtual double payoff(const PnlMat *path) = 0;
+    virtual double payoff(const PnlMat *path);
+
+	  virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect *currency);
 
 /* ######################################################################## */
 /* ######################################################################## */
@@ -40,9 +42,9 @@ public:
   /*!
    *  \brief Destructeur virtuel de la classe mère Option
    */
-    virtual ~Option() {};
+    virtual ~Option();
 
-    virtual Option* clone() = 0;
+    virtual Option* clone();
 
 };
 

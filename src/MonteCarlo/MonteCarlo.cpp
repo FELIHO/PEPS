@@ -97,6 +97,34 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
   pnl_mat_free(&pathCourant);
 }
 
+void MonteCarlo::price(const PnlMat *past, const PnlMat *pastChangeRate , const PnlVect *currency , double t, double &prix, double &ic)
+{
+	double r_euro = pnl_vect_get(mod_->r_, 0);
+	double payoff;
+	double sommePayoff = 0;
+	double sommePayoffCarre = 0;
+	PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_ + 1, opt_->size_);
+	PnlMat *pathCourantChangeRate = pnl_mat_create(opt_->nbTimeSteps_ + 1, opt_->size_);
+
+	for (int i = 0; i < nbSamples_; i++) {
+		mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
+		mod_->asset(pathCourantChangeRate, t, opt_->T_, opt_->nbTimeSteps_, rng_, pastChangeRate);
+		payoff = opt_->payoff(pathCourant, pastChangeRate, currency);
+		sommePayoff += payoff;
+		sommePayoffCarre += payoff * payoff;
+	}
+	double moyennePayoff = sommePayoff / nbSamples_;
+	double moyennePayoffCarre = sommePayoffCarre / nbSamples_;
+
+	double ksiCarreM = exp(-2 * r_euro*opt_->T_)*(moyennePayoffCarre - moyennePayoff * moyennePayoff);
+
+	ic = 1.96*sqrt(ksiCarreM / nbSamples_) * 2;
+
+	prix = exp(-r_euro * (opt_->T_ - t))*moyennePayoff;
+
+	pnl_mat_free(&pathCourant);
+}
+
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
   double r_euro = pnl_vect_get (mod_->r_, 0);
   pnl_vect_resize(delta, opt_->size_);
