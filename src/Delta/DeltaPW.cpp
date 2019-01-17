@@ -3,7 +3,7 @@
 #include "pch.h"
 
 /// \brief Classe DeltaPW abstraite
-#include "DeltaPW.hpp"
+#include "Delta/DeltaPW.hpp"
 using namespace Computations;
 
 DeltaPW::DeltaPW() {
@@ -20,6 +20,6 @@ DeltaPW::DeltaPW(const DeltaPW &O) {
 
 }
 
-void DeltaPW::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, AssetModel *mod, Option *opt, PnlRng *rng, int nbSamples) {
+void DeltaPW::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples) {
 	// TO DO NOT YET IMPLEMENTED
 }

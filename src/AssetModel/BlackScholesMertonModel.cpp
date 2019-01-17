@@ -1,4 +1,4 @@
-#include "BlackScholesMertonModel.hpp"
+#include "AssetModel/BlackScholesMertonModel.hpp"
 #include "pch.h"
 #include <math.h>
 #include <iostream>
@@ -9,17 +9,16 @@ using namespace Computations;
 /**
 Constructeur par défaut
 */
-BlackScholesMertonModel::BlackScholesMertonModel() : AssetModel()
+BlackScholesMertonModel::BlackScholesMertonModel() : BlackScholesModel()
 {	
 	dividend_ = pnl_vect_new();
 }
 
 
-
 /**
 Constructeur complet
 */
-BlackScholesMertonModel::BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *dividend) : AssetModel(size, interest, corr, sigma, spot)
+BlackScholesMertonModel::BlackScholesMertonModel(int size, PnlVect *r, PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlVect *dividend) : BlackScholesModel(size, r, rho, sigma, spot)
 {
 	dividend_ = pnl_vect_copy(dividend);
 }
@@ -32,12 +31,13 @@ Destructeur
 
 BlackScholesMertonModel::~BlackScholesMertonModel()
 {	
-	interest_->~InterestRateModel();
+	pnl_vect_free(&r_);
+	pnl_mat_free(&rho_);
 	pnl_vect_free(&sigma_);
 	pnl_vect_free(&spot_);
-	pnl_vect_free(&trend_);
-	pnl_vect_free(&dividend_);
 	pnl_mat_free(&chol_);
+	pnl_mat_free(&trend_);
+	pnl_vect_free(&dividend_);
 }
 
 
@@ -48,42 +48,13 @@ BlackScholesMertonModel::~BlackScholesMertonModel()
 BlackScholesMertonModel& BlackScholesMertonModel::operator = (const BlackScholesMertonModel &BSMM) //le const c'est pour traduire le fait que cet opérateur ne modifie pas le Dvector
 {
 	size_ = BSMM.size_;
-	interest_ = BSMM.interest_;
-	corr_ = BSMM.corr_;
+	rho_ = BSMM.rho_;
 	sigma_ = BSMM.sigma_;
 	spot_ = BSMM.spot_;
 	trend_ = BSMM.trend_;
-	dividend_ = BSMM.dividend_;
 	chol_ = BSMM.chol_;
+	dividend_ = BSMM.dividend_;
 	return *this;
-}
-
-void BlackScholesMertonModel::initalizeChol() {
-	/** Initialisation de la matrice de corrélation et de la matrice de cholesky*/
-
-	/** Validation de la matrice de corrélation */
-	PnlVect *eigenValues = pnl_vect_create(size_);
-	PnlMat *eigenVectors = pnl_mat_create(size_, size_);
-	bool validatedRho = false;
-
-	pnl_mat_eigen(eigenValues, eigenVectors, corr_, 1);
-	for (int i = 0; i < size_; i++) {
-		if (GET(eigenValues, i) <= 0) {
-			validatedRho = true;
-			break;
-		}
-	}
-
-	pnl_vect_free(&eigenValues);
-	pnl_mat_free(&eigenVectors);
-	//lever une exeption si  la matrice de corrélation n'est pas diagonalisable
-	if (validatedRho) {
-		throw length_error("Invalid matrix");
-	}
-
-	chol_ = pnl_mat_copy(corr_);
-	pnl_mat_chol(chol_);
-
 }
 
 /**
@@ -103,8 +74,8 @@ void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, Pnl
 	double sqrtTimestep = sqrt(timestep);
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
-	interest_->interest(pathInterest, T, nbTimeSteps, rng);
-	updateTrend(pathInterest);
+	//interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	//updateTrend(pathInterest);
 
 	// Première ligne
 	pnl_mat_set_row(path, spot_, 0);
@@ -156,8 +127,8 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	double sqrtTimestep = sqrt(timestep);
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
-	interest_->interest(pathInterest, T, nbTimeSteps, rng);
-	updateTrend(pathInterest);
+	//interest_->interest(pathInterest, T, nbTimeSteps, rng);
+	//updateTrend(pathInterest);
 
 	/** Initialisation des paramètres */
 	double timeSpend = 0;
@@ -233,8 +204,8 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	double sqrtTimestep = sqrt(timestep);
 	double sigmaJ = 0.0;
 	PnlMat *pathInterest = pnl_mat_new();
-	interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
-	updateTrend(pathInterest);
+	//interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
+	//updateTrend(pathInterest);
 	/** Initialisation des paramètres */
 	double timeSpend = 0;
 	int counter = 0;

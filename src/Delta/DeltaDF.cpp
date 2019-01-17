@@ -1,7 +1,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
-#include "DeltaDF.hpp"
+#include "Delta/DeltaDF.hpp"
 using namespace Computations;
 double DFTrendtimeSteps;
 
@@ -19,7 +19,7 @@ DeltaDF::DeltaDF(const DeltaDF &O) {
 	fdStep_ = O.fdStep_;
 }
 
-void DeltaDF::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_delta, AssetModel *mod, Option *opt, PnlRng *rng, int nbSamples) {
+void DeltaDF::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_delta, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples) {
 	DFTrendtimeSteps = opt->T_ / opt->nbTimeSteps_;
 	pnl_vect_resize(delta, opt->size_);
 	pnl_vect_resize(ic_delta, opt->size_);
@@ -49,7 +49,7 @@ void DeltaDF::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_de
 
 		pnl_vect_plus_vect(delta_carre, vectDiffCarre); // moyenne des carres
 	}
-	double exp_ = exp(-pnl_vect_get(mod->trend_,0)*(opt->T_ - t));
+	double exp_ = exp(-pnl_vect_get(mod->r_,0)*(opt->T_ - t));
 	// calcul delta
 	double denominateur = 2 * fdStep_;
 	int nbRowsPast = past->m;

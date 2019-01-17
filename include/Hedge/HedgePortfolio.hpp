@@ -1,12 +1,8 @@
 #pragma once
-
-#ifndef HEDGEPORTFOLIO_HPP
-#define HEDGEPORTFOLIO_HPP
-
+#include "pch.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "MonteCarlo.hpp"
-
+#include "MonteCarlo/MonteCarlo.hpp"
 
 namespace Computations {
   /** \class HedgePortfolio
@@ -15,25 +11,25 @@ namespace Computations {
   class HedgePortfolio
   {
   public:
-    /**
-     * Priceur par méthode Monte Carlo utilisé pour la couverture
-     */
-    MonteCarlo* monteCarlo_;
-    /**
-     * Matrice contenant les cours passés des sous-jacents
-     */
-    PnlMat* past_;
-    /**
-     * Vecteur contenant les delta
-     */
-    PnlVect *delta_;
-    /**
-     * cours à la date courante
-     */
-    PnlVect* S_current;
-    /**
-     * date courante
-     */
+	 /**
+	* Priceur par méthode Monte Carlo utilisé pour la couverture
+	*/
+	  MonteCarlo *monteCarlo_;
+	  /**
+	   * Matrice contenant les cours passés des sous-jacents
+	   */
+	  PnlMat *past_;
+	  /**
+	   * Vecteur contenant les delta
+	   */
+	  PnlVect *delta_;
+	  /**
+	   * cours à la date courante
+	  */
+	 PnlVect* S_current;
+	 /**
+	 * date courante
+	 */
     //double currentDate_;
     int currentRebalancingIndex_;
     /**
@@ -53,6 +49,8 @@ namespace Computations {
      */
     double H_;
 
+
+
     /**
 		Constructeur par défaut
 		*/
@@ -66,7 +64,7 @@ namespace Computations {
     */
     HedgePortfolio(const HedgePortfolio &HPF);
 
-    /** Methode d'affectation HedgePortfoli
+    /** Methode d'affectation HedgePortfolio
 		* @param[in] une image de la classe HedgePortfoli à affecter.
 		* @param[out] la même référence HedgePortfoli avec les mêmes paramètres que l'entrée
 		*/
@@ -84,7 +82,7 @@ namespace Computations {
      * @param[in] monteCarlo, un object de la classe monteCarlo pour les calculs du price et delta
      *
     */
-    HedgePortfolio(PnlMat* Data, MonteCarlo* monteCarlo);
+    HedgePortfolio(PnlMat *Data, MonteCarlo *monteCarlo);
 
     /**
      * \brief updateCompo met à jour la composition du portefeuille couverture
@@ -92,7 +90,7 @@ namespace Computations {
      * @param[in] Data, la matrice de données à utiliser pour les calculs
      *
     */
-    void updateCompo(PnlMat* Data);
+    void updateCompo(PnlMat *Data);
 
     /**
      * \brief HedgeError boucle sur les données aux dates de rebalancement et renvoie le P&L
@@ -100,7 +98,7 @@ namespace Computations {
      * @param[in] marketData, la matrice de données à utiliser pour les calculs
      *
     */
-    double HedgeError(PnlMat * marketData);
+    double HedgeError(PnlMat *marketData);
 
     /**
      * \brief met à jour la matrice past avec les données aux dates de constatations et à la date actuelle
@@ -114,4 +112,3 @@ namespace Computations {
   };
 }
 
-#endif

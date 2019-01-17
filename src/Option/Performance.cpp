@@ -2,7 +2,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Performance.hpp"
+#include "Option/Performance.hpp"
 using namespace Computations;
 
 Performance::Performance() 
@@ -27,6 +27,7 @@ Performance& Performance::operator=(const Performance &P)
   T_ = P.T_;
   nbTimeSteps_ = P.nbTimeSteps_;
   size_ = P.size_;
+  return *this;
 }
 
 Performance::~Performance()
@@ -60,7 +61,7 @@ double Performance::payoff(const PnlMat *path){
   spot_date_i = pnl_vect_create(size_);
   spot_date_i_1 = pnl_vect_create(size_);
 
-  for (unsigned int i=0 ; i < nbTimeSteps_ ; i++)
+  for (int i=0 ; i < nbTimeSteps_ ; i++)
   {
     // Charging the rows
     pnl_mat_get_row(spot_date_i_1, path, i);

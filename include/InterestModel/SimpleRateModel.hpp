@@ -2,7 +2,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "InterestRateModel.hpp"
+#include "InterestModel/InterestRateModel.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {

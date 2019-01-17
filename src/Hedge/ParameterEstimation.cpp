@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ParameterEstimation.hpp"
+#include "Hedge/ParameterEstimation.hpp"
 #include <math.h>
 
 using namespace std;
@@ -39,7 +39,7 @@ PnlMat* ParameterEstimation::getCovarianceMatrix(const PnlMat *past) {
 			E_Y = pnl_vect_sum(Y) / nbDate;
 			pnl_vect_mult_vect_term(X, Y);
 			E_XY = pnl_vect_sum(X) / nbDate;
-			cov = E_XY - E_X * E_Y;
+			cov = E_XY - E_X *E_Y ;
 			pnl_mat_set(covMatrix, i, j, cov);
 			pnl_mat_set(covMatrix, j, i, cov);
 		}
@@ -53,15 +53,19 @@ PnlMat* ParameterEstimation::getCovarianceMatrix(const PnlMat *past) {
 }
 
 PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
-	PnlMat* covMatrix = getCovarianceMatrix(getLogRendementMatrix(past));
+	PnlMat* covMatrix = getCovarianceMatrix(past);
 	PnlMat* corrMatrix = pnl_mat_create_diag(pnl_vect_create_from_scalar(covMatrix->n, 1));
 	double Sigma_X;
 	double Sigma_Y;
+	double cor;
 	for (int i = 0; i < covMatrix->n; i++) {
 		for (int j = 0; j < i; j++) {
-			Sigma_X = sqrt(pnl_mat_get(covMatrix, i, i));
-			Sigma_Y = sqrt(pnl_mat_get(covMatrix, j, j));
-			pnl_mat_set(corrMatrix, i, j, pnl_mat_get(covMatrix, i, j)/(Sigma_X * Sigma_Y));
+			Sigma_X = sqrt(abs(pnl_mat_get(covMatrix, i, i)));
+			Sigma_Y = sqrt(abs(pnl_mat_get(covMatrix, j, j)));
+			cor = pnl_mat_get(covMatrix, i, j) / (Sigma_X * Sigma_Y);
+			pnl_mat_set(corrMatrix, i, j, cor);
+			pnl_mat_set(corrMatrix, j, i, cor);
+
 		}
 	}
 	pnl_mat_free(&covMatrix);
@@ -69,7 +73,7 @@ PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
 }
 
 PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *past) {
-	PnlMat* covMatrix = getCovarianceMatrix(getLogRendementMatrix(past));
+	PnlMat* covMatrix = getCovarianceMatrix(past);
 	PnlVect* volatilities = pnl_vect_create(covMatrix->n);
 	int numberOfDaysPerYear = 252;
 	for (int i = 0; i < covMatrix->n; i++) {

@@ -4,8 +4,8 @@
 #include "pnl/pnl_matrix.h"
 
 /// \brief Classe Option abstraite
-#include "Option.hpp"
-#include "Asian.hpp"
+#include "Option/Option.hpp"
+#include "Option/Asian.hpp"
 
 
 using namespace Computations;
@@ -65,7 +65,7 @@ double Asian::payoff(const PnlMat *path){
   PnlVect *spot_date;
   spot_date = pnl_vect_create(size_);
 
-  for (unsigned int i=0 ; i <= nbTimeSteps_; i++)
+  for (int i=0 ; i <= nbTimeSteps_; i++)
   {
     // Charging the i row
     pnl_mat_get_row(spot_date, path, i);

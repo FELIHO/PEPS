@@ -1,7 +1,9 @@
 #pragma once
-#include "Option.hpp"
-#include "AssetModel.hpp"
-#include "DeltaCompute.hpp"
+#include "pch.h"
+#include "Option/Option.hpp"
+
+#include "AssetModel/BlackScholesModel.hpp"
+#include "Delta/Delta.hpp"
 #include "pnl/pnl_random.h"
 #include <iostream>
 #include <string>
@@ -112,6 +114,6 @@ namespace Computations {
 
 		//DLLEXP void Profit_and_loss(const PnlMat*past, double &PL, const int H);
 
-		//MonteCarlo(DeltaCompute *delta, AssetModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
+		//MonteCarlo(DeltaCompute *delta, BlackScholesModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
 	};
 }

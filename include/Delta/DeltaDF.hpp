@@ -1,7 +1,7 @@
 #pragma once
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "DeltaCompute.hpp"
+#include "Delta/Delta.hpp"
 
 #define DLLEXP  __declspec( dllexport )
 namespace Computations {
@@ -22,6 +22,6 @@ namespace Computations {
 		 * @param[out] ic contient la largeur de l'intervalle
 		 * de confiance sur le calcul du delta
 		 */
-		void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, AssetModel *mod, Option *opt, PnlRng *rng, int nbSamples);
+		void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples);
 	};
 }

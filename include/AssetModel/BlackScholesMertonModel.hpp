@@ -2,16 +2,19 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "AssetModel.hpp"
+#include "AssetModel/BlackScholesModel.hpp"
+#include "InterestModel/InterestRateModel.hpp"
 #define DLLEXP   __declspec( dllexport )
 
 namespace Computations {
-	class BlackScholesMertonModel //: public AssetModel
+	class BlackScholesMertonModel : public BlackScholesModel
 	{
 	public:
 		PnlVect *dividend_;
 		BlackScholesMertonModel(); /// Constructeur par d�faut
-		BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *dividend_); /// Constructeur complet
+		BlackScholesMertonModel(int size, PnlVect *r, PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlVect *dividend);
+		BlackScholesMertonModel(int size, PnlVect *r, PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlMat *trend, PnlVect *dividend);
+		//BlackScholesMertonModel(int size, InterestRateModel *interest, PnlMat *corr, PnlVect *sigma, PnlVect *spot, PnlVect *dividend_); /// Constructeur complet
 		~BlackScholesMertonModel(); /// Destructeur
 		BlackScholesMertonModel& operator = (const BlackScholesMertonModel &BSM); /// Op�rateur d'affectation =
 
@@ -55,10 +58,5 @@ namespace Computations {
 		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
 
 	private:
-		PnlMat *chol_;
-		/**
-		* permet d'inialiser la matrice de cholesky
-		*/
-		void initalizeChol();
 	};
 }
