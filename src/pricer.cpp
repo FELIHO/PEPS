@@ -1,6 +1,6 @@
 #include "BlackScholesModel.hpp"
 #include "MonteCarlo.hpp"
-#include "HedgePortfolio.cpp"
+#include "HedgePortfolio.hpp"
 #include "jlparser/parser.hpp" 
 #include "Option.hpp"
 #include "Basket.hpp" 
