@@ -8,7 +8,7 @@ namespace Computations {
 	class Kozei : public Option {
 	public:
 		double inv_init_; //investissement initial
-		double T = 8;
+		int T = 8;
 		int nbTimeSteps = 182 / 365;
 		int size = 30;
 		Kozei();
