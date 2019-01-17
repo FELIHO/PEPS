@@ -41,14 +41,14 @@ set(LIBS ${LIBS} m Pricer Options)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-add_subdirectory(src/3rdparty/jlparser)
+add_subdirectory(3rdparty/jlparser)
 
 # Test the parser
-add_executable(test-parser src/test_parser.cpp)
-target_link_libraries(test-parser jl_parser ${LIBS})
+# add_executable(test-parser src/test_parser.cpp)
+# target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp)
-target_link_libraries(mc-example jl_parser ${LIBS})
+# add_executable(mc-example src/mc_example.cpp)
+# target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Executable Product
 add_executable(pricer src/pricer.cpp)
@@ -64,8 +64,17 @@ else()
     message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
 endif()
 
+# Include
+include_directories(include include/AssetModel include/Delta include/Hedge include/InterestModel include/MonteCarlo include/Option) # include/Rnd )
 
+
+# Adding our own libraries
+add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp) # src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Rnd/PnlRand.cpp include/Rnd/PnlRand.hpp)
+add_library(Options src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp)
+
+# Adding subdirectories
+add_subdirectory(include)
 add_subdirectory(src)
-add_subdirectory(test)
-add_subdirectory(doc)
+# add_subdirectory(test)
+# add_subdirectory(doc)
 enable_testing()

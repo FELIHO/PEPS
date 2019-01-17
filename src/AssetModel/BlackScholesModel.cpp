@@ -1,4 +1,4 @@
-#include "AssetModel/BlackScholesModel.hpp"
+#include "BlackScholesModel.hpp"
 #include "pch.h"
 #include <math.h>
 #include <iostream>
