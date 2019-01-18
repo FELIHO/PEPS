@@ -87,6 +87,17 @@ namespace Computations {
 		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
+		 * \brief Constructeur de la classe BlackScholesModel avec corrélation constante
+		 *
+		 * @param[in] size_ nombre d'actifs du modèle
+		 * @param[in] r_ taux d'intérêt
+		 * @param[in] rho_ paramètre de corrélation crée une matrice dont tous les coefficients à rho_ or de la diagonal qui est à 1
+		 * @param[in] sigma_ vecteur de volatilités
+		 * @param[in] spot_ valeurs initiales des sous-jacents
+		 */
+		BlackScholesModel(int size, PnlVect *r , double rho, PnlVect *sigma, PnlVect *spot);
+
+		/**
 		 * \brief Constructeur de la classe BlackScholesModel
 		 *
 		 * @param[in] size_ nombre d'actifs du modèle

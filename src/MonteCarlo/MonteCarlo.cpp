@@ -18,7 +18,7 @@ MonteCarlo::MonteCarlo(){
 MonteCarlo::MonteCarlo(const MonteCarlo &MonteCarloACopier){
   mod_ = new BlackScholesModel(*MonteCarloACopier.mod_);
   opt_ = MonteCarloACopier.opt_->clone();
-  pnl_rng_clone (rng_, MonteCarloACopier.rng_);
+	rng_ = pnl_rng_copy(MonteCarloACopier.rng_);
   fdStep_ = MonteCarloACopier.fdStep_;
   nbSamples_ = MonteCarloACopier.nbSamples_;
 }
@@ -42,7 +42,7 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double 
 {
   mod_ = new BlackScholesModel(*mod);
   opt_ = opt->clone();
-  pnl_rng_clone(rng_, rng);
+	rng_ = pnl_rng_copy(rng);
   fdStep_ = fdStep;
   nbSamples_ = nbSamples;
 }
@@ -324,7 +324,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
 //    for(int i=0;i<nbSamples_;i++){
 //      mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
 // 	 vectActualisation = pnl_vect_copy(mod_->trend_); // on récupère le trend qui a été mise à jour dans asset juste après le calcul des taux d'intérêt
-// 	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // on multiplie tous les éléments du trend par T/n 
+// 	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // on multiplie tous les éléments du trend par T/n
 // 	 // ComputeFirst time step retourne directement ti+i - t
 // 	 pnl_vect_set(vectActualisation, 0, pnl_vect_get(vectActualisation, 0) * (computeFirstTimeSteps(TrendtimeSteps, t) / TrendtimeSteps)); // on divise le premier élément par T/n pour le multiplier à Ti+1 - t
 //      double payOff = opt_->payoff(path);
@@ -386,9 +386,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
 //     vect_diff = pnl_vect_copy(delta_act);
 //     pnl_vect_minus_vect (vect_diff, delta_pres);
 //     pnl_mat_get_row(S_i,marche,i);
-// 	// TO DO BECAUSE I DON't UNDERSTAND 
+// 	// TO DO BECAUSE I DON't UNDERSTAND
 // 	/*
-	
+
 // 	v_i =pnl_vect_get (V,i-1)*exp(r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i); PREVIOUS
 
 // 	*/
