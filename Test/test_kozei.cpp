@@ -6,6 +6,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "Kozei.hpp"
+#include "Basket.hpp"
 #include "BlackScholesModel.hpp"
 #include "MonteCarlo.hpp"
 #include "ParameterEstimation.hpp"
@@ -17,6 +18,7 @@
 #include <limits.h>
 
 using namespace std;
+using namespace Computations;
 
 int main(){
 
@@ -40,6 +42,9 @@ int main(){
   int n_timestep;
   double h = 0.1;
 
+  // undeclared rho
+  double rho;
+
   T = 1;
   n_timestep = 1;
   rho = 0;
@@ -60,7 +65,8 @@ int main(){
 
   BlackScholesModel bc = BlackScholesModel(size, r, rho, sigma, spot);
   Kozei kozei_test = Kozei(inv_init);
-  MonteCarlo mc_test = MonteCarlo(&bc , &basket_test, n_samples, rng, h);
+  //MonteCarlo mc_test = MonteCarlo(&bc , &basket_test, n_samples, rng, h);
+  MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, n_samples, rng, h);
 
   PnlVect *delta = pnl_vect_create_from_scalar(size, 0.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(size, 0.0);

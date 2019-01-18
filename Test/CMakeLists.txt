@@ -100,3 +100,15 @@ add_test(test_mem_delta_t test_mem_delta_t)
 add_executable (test_mem_delta_ti test_mem_delta_ti.cpp)
 target_link_libraries(test_mem_delta_ti jl_parser ${LIBS})
 add_test(test_mem_delta_ti test_mem_delta_ti)
+
+
+#############################################
+################## PEPS  ####################
+#############################################
+
+add_executable (test_kozei test_kozei.cpp)
+target_link_libraries(test_kozei jl_parser ${LIBS})
+add_test(test_kozei test_kozei)
+
+
+
