@@ -4,9 +4,13 @@
 #include "pnl/pnl_matrix.h"
 #include "BlackScholesModel.hpp"
 #include "InterestRateModel.hpp"
-
+#include "BlackScholesMertonModel.hpp"
+#include <math.h>
+#include <iostream>
+#include <stdexcept>
 
 namespace Computations {
+
 	class BlackScholesMertonModel : public BlackScholesModel
 	{
 	public:

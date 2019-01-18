@@ -13,6 +13,8 @@
 #include <iostream>
 #include <stdexcept>
 
+// for PEPS
+//#include "pch.h"
 
 
 namespace Computations {
@@ -95,7 +97,7 @@ namespace Computations {
 		 * @param[in] sigma_ vecteur de volatilités
 		 * @param[in] spot_ valeurs initiales des sous-jacents
 		 */
-		BlackScholesModel(int size, PnlVect *r , double rho, PnlVect *sigma, PnlVect *spot);
+		BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
 		 * \brief Constructeur de la classe BlackScholesModel
@@ -175,8 +177,6 @@ namespace Computations {
 		 */
 		void simul_market(PnlMat* market, double T, int H, PnlRng *rng);
 
-
-	private :
 		/**
 		* Concatène deux PnlMat
 		* @param[out] res matrice résultat de la concaténation
@@ -186,6 +186,8 @@ namespace Computations {
 		*/
 		void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
 
+
+	private :
 
 		/**
 		* Simule les cours des sous-jacents selon le modèle de Black-Scholes

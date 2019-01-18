@@ -2,13 +2,14 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
 
-#include "RandomGen.hpp"
-#include "FakeRnd.cpp"
-#include "PnlRand.cpp"
+//#include "RandomGen.hpp"
+//#include "FakeRnd.cpp"
+//#include "PnlRand.cpp"
 
 #include "BlackScholesModel.hpp"
 
 using namespace std;
+using namespace Computations;
 
 int main(int argc, char **argv)
 {
