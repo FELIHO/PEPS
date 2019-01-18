@@ -1,7 +1,5 @@
 #pragma once
-#include "pch.h"
 #include "Option.hpp"
-
 #include "BlackScholesModel.hpp"
 #include "Delta.hpp"
 #include "pnl/pnl_random.h"

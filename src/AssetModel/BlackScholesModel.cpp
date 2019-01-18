@@ -1,8 +1,7 @@
+
 #include "BlackScholesModel.hpp"
-#include "pch.h"
-#include <math.h>
-#include <iostream>
-#include <stdexcept>
+
+
 using namespace std;
 using namespace Computations;
 
@@ -66,12 +65,13 @@ BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect
   trend_ = pnl_mat_new();
 }
 
-BlackScholesModel::BlackScholesModel(int size, PnlVect *r , double rho, PnlVect *sigma, PnlVect *spot)
+// Constructeur BlackScholes avec r et rho double, pour les tests de l'ancien projet pricer MonteCarlo C++
+BlackScholesModel::BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot)
 {
   size_ = size;
-  r_ = pnl_vect_copy(r);
+  r_ = pnl_vect_create_from_scalar(size, r);
   rho_ = pnl_mat_create_from_scalar(size, size, rho);
-	pnl_mat_plus_mat(rho_, pnl_mat_create_diag(pnl_vect_create_from_scalar(size, 1 - rho)));
+  pnl_mat_plus_mat(rho_, pnl_mat_create_diag(pnl_vect_create_from_scalar(size, 1 - rho)));
   sigma_ = pnl_vect_copy(sigma);
   spot_ = pnl_vect_copy(spot);
   // la factorisée de Cholesky

@@ -13,6 +13,8 @@
 #include <iostream>
 #include <stdexcept>
 
+// for PEPS
+//#include "pch.h"
 
 
 namespace Computations {
@@ -95,7 +97,7 @@ namespace Computations {
 		 * @param[in] sigma_ vecteur de volatilités
 		 * @param[in] spot_ valeurs initiales des sous-jacents
 		 */
-		BlackScholesModel(int size, PnlVect *r , double rho, PnlVect *sigma, PnlVect *spot);
+		BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
 		 * \brief Constructeur de la classe BlackScholesModel
