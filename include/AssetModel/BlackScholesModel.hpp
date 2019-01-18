@@ -13,7 +13,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define DLLEXP   __declspec( dllexport )
+
 
 namespace Computations {
 	class BlackScholesModel
@@ -151,7 +151,7 @@ namespace Computations {
 		//  * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
 		//  */
 		// void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
-    
+
 		/**
 		 * Génère une trajectoire du modèle selon la probabilité risque neutre et la stocke dans market
 		 *
@@ -167,12 +167,12 @@ namespace Computations {
 
 	private :
 		/**
-		* Concatène deux PnlMat 
+		* Concatène deux PnlMat
 		* @param[out] res matrice résultat de la concaténation
 		* @param[in] mat1 1ere matrice à concaténer
 		* @param[in] mat2 1ere matrice à concaténer
 		*
-		*/  
+		*/
 		void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
 
 

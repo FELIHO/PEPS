@@ -2,7 +2,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "Option.hpp"
-#define DLLEXP   __declspec( dllexport )
+
 
 namespace Computations {
 	class Kozei : public Option {
@@ -16,6 +16,6 @@ namespace Computations {
 		Kozei(const Kozei &K);
 		Kozei& operator=(const Kozei &K);
 		~Kozei();
-		DLLEXP double payoff(const PnlMat *path);
+		 double payoff(const PnlMat *path);
 	};
 }

@@ -3,7 +3,7 @@
 #include "pnl/pnl_matrix.h"
 #include "Delta.hpp"
 
-#define DLLEXP  __declspec( dllexport )
+
 namespace Computations {
 	class DeltaDF : public Delta {
 	public:

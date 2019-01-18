@@ -3,7 +3,7 @@
 #include "pnl/pnl_matrix.h"
 #include "Option.hpp"
 
-#define DLLEXP  __declspec( dllexport )
+
 namespace Computations {
 
 	/** \class Basket
@@ -64,7 +64,7 @@ namespace Computations {
 	 * par la fonction asset.
 	 * @return phi(trajectoire)
 	 */
-	DLLEXP virtual double payoff(const PnlMat *path);
+	 virtual double payoff(const PnlMat *path);
 
 	virtual Basket* clone();
 

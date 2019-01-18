@@ -43,7 +43,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(3rdparty/jlparser)
 
-set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
+#set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
 # Test the parser
 # add_executable(test-parser src/test_parser.cpp)

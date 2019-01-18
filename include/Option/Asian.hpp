@@ -2,7 +2,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "Option.hpp"
-#define DLLEXP   __declspec( dllexport )
+
 
 namespace Computations {
 
@@ -22,7 +22,7 @@ namespace Computations {
 	/**
 	 * PnlVect *weights_ : vecteur des coefficients de pondération des actifs sous-jacents
 	 */
-	PnlVect *weights_; // vector containing the proportions of each one of the D underlying asset 
+	PnlVect *weights_; // vector containing the proportions of each one of the D underlying asset
 
 
 	/**
@@ -64,12 +64,11 @@ namespace Computations {
 	 * contenant une trajectoire du modèle telle que créée
 	 * par la fonction asset.
 	 * @return phi(trajectoire)
-	 */ 
-	DLLEXP virtual double payoff(const PnlMat *path);
+	 */
+	 virtual double payoff(const PnlMat *path);
 
 	virtual Asian* clone();
 
 	};
 
 }
-

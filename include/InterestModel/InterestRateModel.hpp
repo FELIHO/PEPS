@@ -2,50 +2,50 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#define DLLEXP   __declspec( dllexport )
+
 
 namespace Computations {
 	class InterestRateModel
 	{
 	public:
-		PnlVect *size_; /// nombre de taux d'intérêt différent à prendre en compte
-		PnlVect *rSpot_; /// taux d'intérêt
-		InterestRateModel(); /// Constructeur par défaut
+		PnlVect *size_; /// nombre de taux d'intï¿½rï¿½t diffï¿½rent ï¿½ prendre en compte
+		PnlVect *rSpot_; /// taux d'intï¿½rï¿½t
+		InterestRateModel(); /// Constructeur par dï¿½faut
 		InterestRateModel(int size, double r); /// Constructeur taux identiques
 		InterestRateModel(PnlVect *size, PnlVect *r); /// Constructeur complet
 		InterestRateModel(const InterestRateModel &IRM); /// Constructeur par recopie
 		~InterestRateModel(); /// Destructeur
-		InterestRateModel& operator = (const InterestRateModel &IRM); /// Opérateur d'affectation =
+		InterestRateModel& operator = (const InterestRateModel &IRM); /// Opï¿½rateur d'affectation =
 
 		/**
-		 * Génère une trajectoire du modèle de taux et la stocke dans path
+		 * Gï¿½nï¿½re une trajectoire du modï¿½le de taux et la stocke dans path
 		 *
-		 * @param[out] path contient une trajectoire du modèle.
+		 * @param[out] path contient une trajectoire du modï¿½le.
 		 * C'est une matrice de taille (nbTimeSteps+1) x d
-		 * @param[in] T  maturité
+		 * @param[in] T  maturitï¿½
 		 * @param[in] nbTimeSteps nombre de dates de constatation
 		 */
 		virtual void interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) = 0;
 
 		/**
 		 * Calcule une trajectoire du sous-jacent connaissant le
-		 * passé jusqu' à la date t
+		 * passï¿½ jusqu' ï¿½ la date t
 		 *
 		 * @param[out] path  contient une trajectoire du sous-jacent
-		 * donnée jusqu'à l'instant t par la matrice past
-		 * @param[in] t date jusqu'à laquelle on connait la trajectoire.
-		 * t n'est pas forcément une date de discrétisation
+		 * donnï¿½e jusqu'ï¿½ l'instant t par la matrice past
+		 * @param[in] t date jusqu'ï¿½ laquelle on connait la trajectoire.
+		 * t n'est pas forcï¿½ment une date de discrï¿½tisation
 		 * @param[in] nbTimeSteps nombre de pas de constatation
-		 * @param[in] T date jusqu'à laquelle on simule la trajectoire
-		 * @param[in] past trajectoire réalisée jusqu'a la date t
+		 * @param[in] T date jusqu'ï¿½ laquelle on simule la trajectoire
+		 * @param[in] past trajectoire rï¿½alisï¿½e jusqu'a la date t
 		 */
 		virtual void interest(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) = 0;
 
-		/* 
-		* Permet de ressortir la matrice des taux d'intérêt pour chaque sous-jacent, la première colonne est toujours celle des taux d'intérêt européen,
-		* chaque taux d'intérêt est répliqué size_[i] fois dans la matrice pour le taux d'intérêt i
-		@param[in] path contenant de façon unique chaque taux d'intérêt simulé
-		@param[out] path contenant de façon multiples les taux d'intérêt, la matrice a donc une taille de somme sur i de size_[i]
+		/*
+		* Permet de ressortir la matrice des taux d'intï¿½rï¿½t pour chaque sous-jacent, la premiï¿½re colonne est toujours celle des taux d'intï¿½rï¿½t europï¿½en,
+		* chaque taux d'intï¿½rï¿½t est rï¿½pliquï¿½ size_[i] fois dans la matrice pour le taux d'intï¿½rï¿½t i
+		@param[in] path contenant de faï¿½on unique chaque taux d'intï¿½rï¿½t simulï¿½
+		@param[out] path contenant de faï¿½on multiples les taux d'intï¿½rï¿½t, la matrice a donc une taille de somme sur i de size_[i]
 		*/
 		void makeCompletePathInterest(PnlMat *pathInterest);
 
@@ -53,34 +53,33 @@ namespace Computations {
 }
 
 /**
- * Calcule fonction utile pour retourner le carré d'un vecteur
+ * Calcule fonction utile pour retourner le carrï¿½ d'un vecteur
  *
- * @param[out] le carré de l'élément du vecteur
- * @param[in] l'élément à mettre au carré
+ * @param[out] le carrï¿½ de l'ï¿½lï¿½ment du vecteur
+ * @param[in] l'ï¿½lï¿½ment ï¿½ mettre au carrï¿½
  */
 double squared(double vectorElement);
 
 /**
  * Calcule fonction utile pour retourner la racine d'un vecteur
  *
- * @param[out] la racine de l'élément du vecteur
- * @param[in] l'élément à mettre au carré
+ * @param[out] la racine de l'ï¿½lï¿½ment du vecteur
+ * @param[in] l'ï¿½lï¿½ment ï¿½ mettre au carrï¿½
  */
 double unsquared(double vectorElement);
 
 /**
  * Calcule fonction utile pour retourner 1 - x le vecteur
  *
- * @param[out] l'élément y = f(x) = 1 -x
- * @param[in] l'élément x
+ * @param[out] l'ï¿½lï¿½ment y = f(x) = 1 -x
+ * @param[in] l'ï¿½lï¿½ment x
  */
 double oneUnaryMinus(double vectorElement);
 
 /**
- * Cette fonction permet de retrouver à quel instant t
+ * Cette fonction permet de retrouver ï¿½ quel instant t
  *
- * @param[out] l'élément y = f(x) = 1 -x
- * @param[in] l'élément x
+ * @param[out] l'ï¿½lï¿½ment y = f(x) = 1 -x
+ * @param[in] l'ï¿½lï¿½ment x
  */
 double computeFirstTimeSteps(double timeSteps, double t);
-
