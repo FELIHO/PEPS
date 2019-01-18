@@ -1,6 +1,6 @@
-#include "MonteCarlo/MonteCarlo.hpp"
-#include "Option/Call.hpp"
-#include "AssetModel/BlackScholesModel.hpp"
+#include "MonteCarlo.hpp"
+#include "Call.hpp"
+#include "BlackScholesModel.hpp"
 #include <math.h>
 using namespace std;
 using namespace Computations;
@@ -18,7 +18,7 @@ MonteCarlo::MonteCarlo(){
 MonteCarlo::MonteCarlo(const MonteCarlo &MonteCarloACopier){
   mod_ = new BlackScholesModel(*MonteCarloACopier.mod_);
   opt_ = MonteCarloACopier.opt_->clone();
-  pnl_rng_clone (rng_, MonteCarloACopier.rng_);
+	rng_ = pnl_rng_copy(MonteCarloACopier.rng_);
   fdStep_ = MonteCarloACopier.fdStep_;
   nbSamples_ = MonteCarloACopier.nbSamples_;
 }
@@ -42,7 +42,7 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double 
 {
   mod_ = new BlackScholesModel(*mod);
   opt_ = opt->clone();
-  pnl_rng_clone(rng_, rng);
+	rng_ = pnl_rng_copy(rng);
   fdStep_ = fdStep;
   nbSamples_ = nbSamples;
 }
@@ -95,6 +95,34 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
   prix = exp(-r_euro*(opt_->T_-t))*moyennePayoff;
 
   pnl_mat_free(&pathCourant);
+}
+
+void MonteCarlo::price(const PnlMat *past, const PnlMat *pastChangeRate , const PnlVect *currency , double t, double &prix, double &ic)
+{
+	double r_euro = pnl_vect_get(mod_->r_, 0);
+	double payoff;
+	double sommePayoff = 0;
+	double sommePayoffCarre = 0;
+	PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_ + 1, opt_->size_);
+	PnlMat *pathCourantChangeRate = pnl_mat_create(opt_->nbTimeSteps_ + 1, opt_->size_);
+
+	for (int i = 0; i < nbSamples_; i++) {
+		mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
+		mod_->asset(pathCourantChangeRate, t, opt_->T_, opt_->nbTimeSteps_, rng_, pastChangeRate);
+		payoff = opt_->payoff(pathCourant, pastChangeRate, currency);
+		sommePayoff += payoff;
+		sommePayoffCarre += payoff * payoff;
+	}
+	double moyennePayoff = sommePayoff / nbSamples_;
+	double moyennePayoffCarre = sommePayoffCarre / nbSamples_;
+
+	double ksiCarreM = exp(-2 * r_euro*opt_->T_)*(moyennePayoffCarre - moyennePayoff * moyennePayoff);
+
+	ic = 1.96*sqrt(ksiCarreM / nbSamples_) * 2;
+
+	prix = exp(-r_euro * (opt_->T_ - t))*moyennePayoff;
+
+	pnl_mat_free(&pathCourant);
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
@@ -296,7 +324,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
 //    for(int i=0;i<nbSamples_;i++){
 //      mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
 // 	 vectActualisation = pnl_vect_copy(mod_->trend_); // on récupère le trend qui a été mise à jour dans asset juste après le calcul des taux d'intérêt
-// 	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // on multiplie tous les éléments du trend par T/n 
+// 	 pnl_vect_map_inplace(vectActualisation, &Trenddrift); // on multiplie tous les éléments du trend par T/n
 // 	 // ComputeFirst time step retourne directement ti+i - t
 // 	 pnl_vect_set(vectActualisation, 0, pnl_vect_get(vectActualisation, 0) * (computeFirstTimeSteps(TrendtimeSteps, t) / TrendtimeSteps)); // on divise le premier élément par T/n pour le multiplier à Ti+1 - t
 //      double payOff = opt_->payoff(path);
@@ -358,9 +386,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
 //     vect_diff = pnl_vect_copy(delta_act);
 //     pnl_vect_minus_vect (vect_diff, delta_pres);
 //     pnl_mat_get_row(S_i,marche,i);
-// 	// TO DO BECAUSE I DON't UNDERSTAND 
+// 	// TO DO BECAUSE I DON't UNDERSTAND
 // 	/*
-	
+
 // 	v_i =pnl_vect_get (V,i-1)*exp(r_*opt_->T_/H) - pnl_vect_scalar_prod(vect_diff,S_i); PREVIOUS
 
 // 	*/

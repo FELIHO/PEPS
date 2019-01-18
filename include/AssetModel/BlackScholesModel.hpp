@@ -13,7 +13,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#define DLLEXP   __declspec( dllexport )
+// for PEPS
+//#include "pch.h"
+
 
 namespace Computations {
 	class BlackScholesModel
@@ -87,6 +89,17 @@ namespace Computations {
 		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
+		 * \brief Constructeur de la classe BlackScholesModel avec corrélation constante
+		 *
+		 * @param[in] size_ nombre d'actifs du modèle
+		 * @param[in] r_ taux d'intérêt
+		 * @param[in] rho_ paramètre de corrélation crée une matrice dont tous les coefficients à rho_ or de la diagonal qui est à 1
+		 * @param[in] sigma_ vecteur de volatilités
+		 * @param[in] spot_ valeurs initiales des sous-jacents
+		 */
+		BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot);
+
+		/**
 		 * \brief Constructeur de la classe BlackScholesModel
 		 *
 		 * @param[in] size_ nombre d'actifs du modèle
@@ -151,7 +164,7 @@ namespace Computations {
 		//  * @param[in] pastInterest trajectoire réalisée par les taux d'intéret jusqu'a la date t
 		//  */
 		// void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
-    
+
 		/**
 		 * Génère une trajectoire du modèle selon la probabilité risque neutre et la stocke dans market
 		 *
@@ -164,17 +177,17 @@ namespace Computations {
 		 */
 		void simul_market(PnlMat* market, double T, int H, PnlRng *rng);
 
-
-	private :
 		/**
-		* Concatène deux PnlMat 
+		* Concatène deux PnlMat
 		* @param[out] res matrice résultat de la concaténation
 		* @param[in] mat1 1ere matrice à concaténer
 		* @param[in] mat2 1ere matrice à concaténer
 		*
-		*/  
+		*/
 		void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
 
+
+	private :
 
 		/**
 		* Simule les cours des sous-jacents selon le modèle de Black-Scholes

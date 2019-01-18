@@ -1,4 +1,4 @@
-#include "InterestModel/InterestRateModel.hpp"
+#include "InterestRateModel.hpp"
 #include <math.h>
 #include <iostream>
 #include <stdexcept>

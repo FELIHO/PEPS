@@ -2,8 +2,8 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
-#include "Option/Option.hpp"
-#include "AssetModel/BlackScholesModel.hpp"
+#include "Option.hpp"
+#include "BlackScholesModel.hpp"
 
 namespace Computations {
 	class Delta
@@ -34,5 +34,6 @@ namespace Computations {
 		 * de confiance sur le calcul du delta
 		 */
 		virtual void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples) = 0;
+
 	};
 }

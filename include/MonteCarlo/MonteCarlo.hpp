@@ -1,36 +1,34 @@
 #pragma once
-#include "pch.h"
-#include "Option/Option.hpp"
-
-#include "AssetModel/BlackScholesModel.hpp"
-#include "Delta/Delta.hpp"
+#include "Option.hpp"
+#include "BlackScholesModel.hpp"
+#include "Delta.hpp"
 #include "pnl/pnl_random.h"
 #include <iostream>
 #include <string>
-#define DLLEXP   __declspec( dllexport )
+
 
 namespace Computations {
 	class MonteCarlo
 	{
 	public:
 		/**
-		 * pointeur vers le modèle 
+		 * pointeur vers le modèle
 		 */
-		BlackScholesModel *mod_; 
+		BlackScholesModel *mod_;
 		/**
 		 * pointeur sur l'option
 		 */
-		Option *opt_; 
+		Option *opt_;
 		/**
 		 * pointeur sur le générateur
 		 */
 		PnlRng *rng_;
 		/**
-		 * pas de différence finie 
+		 * pas de différence finie
 		 */
 		double fdStep_;
 		/**
-		 * nombre de tirages Monte Carlo 
+		 * nombre de tirages Monte Carlo
 		 */
 		int nbSamples_;
 
@@ -51,12 +49,12 @@ namespace Computations {
 		* @param[out] la même référence MonteCarlo avec les mêmes paramètres que l'entrée
 		*/
 		MonteCarlo& operator= (const MonteCarlo &MC);
-		
+
 		/**
 		 * Destructeur de la classe MonteCarlo
 		 */
 		~MonteCarlo();
-		
+
 
 		/**
 		 * Constructeur de la classe MonteCarlo
@@ -68,14 +66,14 @@ namespace Computations {
 		 * @param[in] nbSamples nombre de tirages Monte Carlo
 		 */
 		MonteCarlo(BlackScholesModel *mod, Option *opt,	PnlRng *rng, double fdStep, int nbSamples);
-    
+
 		/**
 		 * Calcule le prix de l'option à la date 0
 		 *
 		 * @param[out] prix valeur de l'estimateur Monte Carlo
 		 * @param[out] ic largeur de l'intervalle de confiance
 		 */
-		DLLEXP void price(double &prix, double &ic);
+		 void price(double &prix, double &ic);
 
 		/**
 		 * Calcule le prix de l'option à la date t
@@ -87,7 +85,9 @@ namespace Computations {
 		 * @param[out] ic contient la largeur de l'intervalle
 		 * de confiance sur le calcul du prix
 		 */
-		DLLEXP void price(const PnlMat *past, double t, double &prix, double &ic);
+		 void price(const PnlMat *past, double t, double &prix, double &ic);
+
+		 void price(const PnlMat *past, const PnlMat *pastChangeRate , const PnlVect *currency , double t, double &prix, double &ic);
 
 		/**
 		 * Calcule le delta de l'option à la date t
@@ -109,10 +109,10 @@ namespace Computations {
 		 * @param[out] ic contient la largeur de l'intervalle
 		 * de confiance sur le calcul du delta
 		 */
-		DLLEXP void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
+		 void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
 
 
-		//DLLEXP void Profit_and_loss(const PnlMat*past, double &PL, const int H);
+		// void Profit_and_loss(const PnlMat*past, double &PL, const int H);
 
 		//MonteCarlo(DeltaCompute *delta, BlackScholesModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
 	};

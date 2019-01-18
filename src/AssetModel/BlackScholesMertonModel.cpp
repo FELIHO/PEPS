@@ -1,8 +1,5 @@
-#include "AssetModel/BlackScholesMertonModel.hpp"
-#include "pch.h"
-#include <math.h>
-#include <iostream>
-#include <stdexcept>
+#include "BlackScholesMertonModel.hpp"
+
 using namespace std;
 using namespace Computations;
 

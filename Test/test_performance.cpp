@@ -11,6 +11,7 @@
 #include <ctime>
 
 using namespace std;
+using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -59,9 +60,9 @@ int main(int argc, char **argv)
   Performance *test_Performance = new Performance(T, nbTimeSteps, size, weights);
 
   // Initializing Random Number Generator
-  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(pnlRng, time(NULL));
-  RandomGen* rng = new PnlRand(pnlRng);
+  PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(rng, time(NULL));
+  //RandomGen* rng = new PnlRand(pnlRng);
 
 
   // TEST : BlackScholes
@@ -94,6 +95,7 @@ int main(int argc, char **argv)
   pnl_vect_free(&weights);
   pnl_mat_free(&path);
   delete P;
+  delete(rng);
 
   // TEST PASS VERIFICATION
   // ######################

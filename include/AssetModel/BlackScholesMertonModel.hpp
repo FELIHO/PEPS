@@ -2,11 +2,15 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "AssetModel/BlackScholesModel.hpp"
-#include "InterestModel/InterestRateModel.hpp"
-#define DLLEXP   __declspec( dllexport )
+#include "BlackScholesModel.hpp"
+#include "InterestRateModel.hpp"
+#include "BlackScholesMertonModel.hpp"
+#include <math.h>
+#include <iostream>
+#include <stdexcept>
 
 namespace Computations {
+
 	class BlackScholesMertonModel : public BlackScholesModel
 	{
 	public:
@@ -27,7 +31,7 @@ namespace Computations {
 		 * @param[in] T  maturit�
 		 * @param[in] nbTimeSteps nombre de dates de constatation
 		 */
-		DLLEXP void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng);
+		 void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng);
 
 		/**
 		 * Calcule une trajectoire du sous-jacent connaissant le
@@ -41,7 +45,7 @@ namespace Computations {
 		 * @param[in] T date jusqu'� laquelle on simule la trajectoire
 		 * @param[in] past trajectoire r�alis�e jusqu'a la date t
 		 */
-		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
+		 void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
 
 		/**
 		 * Calcule une trajectoire du sous-jacent connaissant le
@@ -55,7 +59,7 @@ namespace Computations {
 		 * @param[in] T date jusqu'� laquelle on simule la trajectoire
 		 * @param[in] past trajectoire r�alis�e jusqu'a la date t
 		 */
-		DLLEXP void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
+		 void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest);
 
 	private:
 	};

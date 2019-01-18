@@ -1,8 +1,7 @@
-#include "AssetModel/BlackScholesModel.hpp"
-#include "pch.h"
-#include <math.h>
-#include <iostream>
-#include <stdexcept>
+
+#include "BlackScholesModel.hpp"
+
+
 using namespace std;
 using namespace Computations;
 
@@ -55,6 +54,24 @@ BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect
   size_ = size;
   r_ = pnl_vect_copy(r);
   rho_ = pnl_mat_copy(rho);
+  sigma_ = pnl_vect_copy(sigma);
+  spot_ = pnl_vect_copy(spot);
+  // la factorisée de Cholesky
+  chol_ = pnl_mat_copy(rho_);
+  int defPos = pnl_mat_chol(chol_);
+  if (defPos == FAIL) {
+    throw invalid_argument("la matrice de correlation n'est pas définie positive");
+  }
+  trend_ = pnl_mat_new();
+}
+
+// Constructeur BlackScholes avec r et rho double, pour les tests de l'ancien projet pricer MonteCarlo C++
+BlackScholesModel::BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot)
+{
+  size_ = size;
+  r_ = pnl_vect_create_from_scalar(size, r);
+  rho_ = pnl_mat_create_from_scalar(size, size, rho);
+  pnl_mat_plus_mat(rho_, pnl_mat_create_diag(pnl_vect_create_from_scalar(size, 1 - rho)));
   sigma_ = pnl_vect_copy(sigma);
   spot_ = pnl_vect_copy(spot);
   // la factorisée de Cholesky
