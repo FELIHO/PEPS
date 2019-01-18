@@ -56,6 +56,8 @@ add_subdirectory(3rdparty/jlparser)
 add_executable(pricer src/pricer.cpp)
 target_link_libraries(pricer jl_parser ${LIBS})
 
+# For DLL, but unrecognised in ENSIMAG's machines
+# set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
