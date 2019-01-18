@@ -6,8 +6,8 @@
 #include "FakeRnd.cpp"
 #include "PnlRand.cpp"
 
-#include "MonteCarlo.hpp"
-#include "Basket.hpp"
+#include "MonteCarlo/MonteCarlo.hpp"
+#include "Option/Basket.hpp"
 
 using namespace std;
 

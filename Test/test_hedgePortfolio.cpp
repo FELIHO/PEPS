@@ -1,7 +1,7 @@
 
-#include "Basket.hpp"
+#include "Option/Basket.hpp"
 #include "HedgePortfolio.hpp"
-#include "MonteCarlo.hpp"
+#include "MonteCarlo/MonteCarlo.hpp"
 
 #include <iostream>
 #include <string>

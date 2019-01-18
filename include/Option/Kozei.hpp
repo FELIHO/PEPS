@@ -17,5 +17,6 @@ namespace Computations {
 		Kozei& operator=(const Kozei &K);
 		~Kozei();
 		DLLEXP double payoff(const PnlMat *path);
+		virtual Kozei* clone();
 	};
 }
