@@ -177,8 +177,6 @@ namespace Computations {
 		 */
 		void simul_market(PnlMat* market, double T, int H, PnlRng *rng);
 
-
-	private :
 		/**
 		* Concatène deux PnlMat
 		* @param[out] res matrice résultat de la concaténation
@@ -188,6 +186,8 @@ namespace Computations {
 		*/
 		void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
 
+
+	private :
 
 		/**
 		* Simule les cours des sous-jacents selon le modèle de Black-Scholes

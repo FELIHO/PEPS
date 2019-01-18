@@ -9,6 +9,7 @@
 #include <ctime>
 
 using namespace std;
+using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -21,7 +22,10 @@ int main(int argc, char **argv)
   PnlVect *spot = pnl_vect_create_from_double(size, 3);
   PnlVect *weights = pnl_vect_create_from_double(size, 1/size);
 
-  FakeRnd* rng = new FakeRnd(0.3);
+  //FakeRnd* rng = new FakeRnd(0.3);
+  PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(rng, time(NULL));
+
 
   double fdStep = 1;
   int nbSamples = 50000;
@@ -44,5 +48,6 @@ int main(int argc, char **argv)
   delete(BMS);
   delete(monteCarlo);
   delete(hedgePortfolio);
+  delete(rng);
 
 }

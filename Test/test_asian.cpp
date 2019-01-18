@@ -7,6 +7,7 @@
 #include <ctime>
 
 using namespace std;
+using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -57,9 +58,9 @@ int main(int argc, char **argv)
   Asian *test_Asian = new Asian(T, nbTimeSteps, size, strike, weights);
 
   // Initializing Random Number Generator
-  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(pnlRng, time(NULL));
-  RandomGen* rng = new PnlRand(pnlRng);
+  PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(rng, time(NULL));
+  //RandomGen* rng = new PnlRand(pnlRng);
 
   BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, sigma, spot);
   // bs_model->asset(path, T, nbTimeSteps, rng); // Simulating the path from spot t=0 only
