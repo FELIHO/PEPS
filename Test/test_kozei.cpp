@@ -33,8 +33,13 @@ int main(){
   way.assign(cwd);
   size_t pos = way.find("/RESSOURCES_CHAMILO/");
   string str3 = way.substr(0,pos+20);
-
+  int ConstationsDate[19] = {20140411, 20140414, 20140415,20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419};
+  // Get AllData
   ParameterEstimation p;
+  str4 = str3+"market-data/market-data/kozei.dat.dat";
+  const char *cstr = str4.c_str();
+
+
   double T, r, inv_init;
   PnlVect *spot, *sigma, *divid, *payOffCoeff;
   int size;
@@ -65,8 +70,7 @@ int main(){
 
   BlackScholesModel bc = BlackScholesModel(size, r, rho, sigma, spot);
   Kozei kozei_test = Kozei(inv_init);
-  //MonteCarlo mc_test = MonteCarlo(&bc , &basket_test, n_samples, rng, h);
-  MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, n_samples, rng, h);
+  MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, rng, h, n_samples);
 
   PnlVect *delta = pnl_vect_create_from_scalar(size, 0.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(size, 0.0);
@@ -89,7 +93,7 @@ int main(){
   pnl_mat_get_row(V, past, past->m -1);
   BlackScholesModel bc2 = BlackScholesModel(size, r, rho, sigma, V);
   Basket basket_test2 = Basket(T-200.0*T/365, n_timestep , size, inv_init, payOffCoeff);
-  MonteCarlo mc_test2 = MonteCarlo(&bc2 , &basket_test2, n_samples, rng, 0.1);
+  MonteCarlo mc_test2 = MonteCarlo(&bc2 , &basket_test2,  rng, 0.1,n_samples);
 
   mc_test2.price(prix_0,ic_0);
 
