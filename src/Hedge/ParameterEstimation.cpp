@@ -5,6 +5,7 @@
 using namespace std;
 using namespace Computations;
 
+
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
 	PnlVect* rendement = pnl_vect_new();
@@ -72,16 +73,11 @@ PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
 	return corrMatrix;
 }
 
-PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *past) {
-	PnlMat* covMatrix = getCovarianceMatrix(past);
-	PnlVect* volatilities = pnl_vect_create(covMatrix->n);
-	int numberOfDaysPerYear = 252;
-	for (int i = 0; i < covMatrix->n; i++) {
-		pnl_vect_set(volatilities, i, sqrt(pnl_mat_get(covMatrix, i, i) * numberOfDaysPerYear));
-	}
-	pnl_mat_free(&covMatrix);
-	return volatilities;
+double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double Sigma_Y, const double rhoXY) {
+	return sqrt(Sigma_X*Sigma_X + Sigma_Y*Sigma_Y + Sigma_X*Sigma_Y*rhoXY);
 }
+
+
 
 double makeLogonAllElements(double vectorElement) {
 	return log(vectorElement);
