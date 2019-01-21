@@ -1,4 +1,6 @@
 #include "HedgePortfolio.hpp"
+#include "MonteCarlo.hpp"
+
 using namespace std;
 using namespace Computations;
 

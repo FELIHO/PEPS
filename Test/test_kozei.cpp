@@ -22,90 +22,91 @@ using namespace Computations;
 
 int main(){
 
-  char cwd[PATH_MAX];
-  if (getcwd(cwd, sizeof(cwd)) != NULL) {
-    } else {
-      perror("getcwd() error");
-      return 1;
-  }
-
-  string way;
-  way.assign(cwd);
-  size_t pos = way.find("/RESSOURCES_CHAMILO/");
-  string str3 = way.substr(0,pos+20);
-  int ConstationsDate[19] = {20140411, 20140414, 20140415,20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419};
-  // Get AllData
-  ParameterEstimation p;
-  str4 = str3+"market-data/market-data/kozei.dat.dat";
-  const char *cstr = str4.c_str();
+  // char cwd[PATH_MAX];
+  // if (getcwd(cwd, sizeof(cwd)) != NULL) {
+  //   } else {
+  //     perror("getcwd() error");
+  //     return 1;
+  // }
 
 
-  double T, r, inv_init;
-  PnlVect *spot, *sigma, *divid, *payOffCoeff;
-  int size;
-  size_t n_samples;
-  int n_timestep;
-  double h = 0.1;
+  // string way;
+  //int ConstationsDate[19] = {20140411, 20140414, 20140415,20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419};
+  // way.assign(cwd);
+  // size_t pos = way.find("/RESSOURCES_CHAMILO/");
+  // string str3 = way.substr(0,pos+20);
 
-  // undeclared rho
-  double rho;
+  // ParameterEstimation p;
+  // double T, r, inv_init;
+  // PnlVect *spot, *sigma, *divid, *payOffCoeff;
+  // int size;
+  // size_t n_samples;
+  // int n_timestep;
+  // double h = 0.1;
 
-  T = 1;
-  n_timestep = 1;
-  rho = 0;
-  r=0.04879;
-  inv_init = 100;
-  size=1;
-  n_samples=50000;
 
-  spot = pnl_vect_create_from_scalar (1, 100.0);
-  sigma = pnl_vect_create_from_scalar (1, 0.20);
-  divid = pnl_vect_create_from_scalar (1, 0);
-  payOffCoeff = pnl_vect_create_from_scalar (1, 1.0);
+  // // undeclared rho
+  // double rho;
+
+  // T = 1;
+  // n_timestep = 1;
+  // rho = 0;
+  // r=0.04879;
+  // inv_init = 100;
+  // size=1;
+  // n_samples=50000;
+
+  // spot = pnl_vect_create_from_scalar (1, 100.0);
+  // sigma = pnl_vect_create_from_scalar (1, 0.20);
+  // divid = pnl_vect_create_from_scalar (1, 0);
+  // payOffCoeff = pnl_vect_create_from_scalar (1, 1.0);
 
 
 
-  PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
+  // PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  // pnl_rng_sseed(rng, time(NULL));
 
-  BlackScholesModel bc = BlackScholesModel(size, r, rho, sigma, spot);
-  Kozei kozei_test = Kozei(inv_init);
-  MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, rng, h, n_samples);
+  // BlackScholesModel bc = BlackScholesModel(size, r, rho, sigma, spot);
+  // Kozei kozei_test = Kozei(inv_init);
+  // //MonteCarlo mc_test = MonteCarlo(&bc , &basket_test, n_samples, rng, h);
+  // MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, n_samples, rng, h);
 
-  PnlVect *delta = pnl_vect_create_from_scalar(size, 0.0);
-  PnlVect *icdelta = pnl_vect_create_from_scalar(size, 0.0);
 
-  double prix_ent = 0.0;
-  double prix_0 = 0.0;
+  // PnlVect *delta = pnl_vect_create_from_scalar(size, 0.0);
+  // PnlVect *icdelta = pnl_vect_create_from_scalar(size, 0.0);
 
-  double ic_ent = 0.0;
-  double ic_0 = 0.0;
+  // double prix_ent = 0.0;
+  // double prix_0 = 0.0;
 
-  str3 = str3+"market-data/market-data/simul_call.dat";
-  const char *cstr = str3.c_str();
+  // double ic_ent = 0.0;
+  // double ic_0 = 0.0;
 
-  PnlMat *past = pnl_mat_create_from_file(cstr);
+  // str3 = str3+"market-data/market-data/simul_call.dat";
+  // const char *cstr = str3.c_str();
 
-  mc_test.price(past, 200.0*T/365, prix_ent, ic_ent);
-  mc_test.delta(past, 200.0*T/365, delta, icdelta);
+  // PnlMat *past = pnl_mat_create_from_file(cstr);
 
-  PnlVect *V = pnl_vect_create(size);
-  pnl_mat_get_row(V, past, past->m -1);
-  BlackScholesModel bc2 = BlackScholesModel(size, r, rho, sigma, V);
-  Basket basket_test2 = Basket(T-200.0*T/365, n_timestep , size, inv_init, payOffCoeff);
-  MonteCarlo mc_test2 = MonteCarlo(&bc2 , &basket_test2,  rng, 0.1,n_samples);
+  // mc_test.price(past, 200.0*T/365, prix_ent, ic_ent);
+  // mc_test.delta(past, 200.0*T/365, delta, icdelta);
 
-  mc_test2.price(prix_0,ic_0);
 
-  cout << "Delta :" << endl;
-  pnl_vect_print_asrow(delta);
+  // PnlVect *V = pnl_vect_create(size);
+  // pnl_mat_get_row(V, past, past->m -1);
+  // BlackScholesModel bc2 = BlackScholesModel(size, r, rho, sigma, V);
+  // Basket basket_test2 = Basket(T-200.0*T/365, n_timestep , size, inv_init, payOffCoeff);
+  // MonteCarlo mc_test2 = MonteCarlo(&bc2 , &basket_test2, n_samples, rng, 0.1);
 
-  cout<<"Prix calculer par la fct price(0) :"<<prix_0<<endl;
-  cout<<"Prix calculer par la fct price(t) :"<<prix_ent<<endl;
+  // mc_test2.price(prix_0,ic_0);
 
-  cout<<"IC par la fct price(0) :"<<ic_0<<endl;
-  cout<<"IC par la fct price(t) :"<<ic_ent<<endl;
+  // cout << "Delta :" << endl;
+  // pnl_vect_print_asrow(delta);
 
-  pnl_vect_free(&V);
+  // cout<<"Prix calculer par la fct price(0) :"<<prix_0<<endl;
+  // cout<<"Prix calculer par la fct price(t) :"<<prix_ent<<endl;
+
+  // cout<<"IC par la fct price(0) :"<<ic_0<<endl;
+  // cout<<"IC par la fct price(t) :"<<ic_ent<<endl;
+
+  // pnl_vect_free(&V);
 
 }

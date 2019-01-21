@@ -4,7 +4,8 @@
 #include "pnl/pnl_matrix.h"
 #include "BlackScholesModel.hpp"
 #include "InterestRateModel.hpp"
-#include "BlackScholesMertonModel.hpp"
+
+#include "BlackScholesModel.hpp"
 #include <math.h>
 #include <iostream>
 #include <stdexcept>
