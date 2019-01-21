@@ -62,6 +62,9 @@ add_executable (test_unit_deltas test_unit_deltas.cpp)
 target_link_libraries(test_unit_deltas jl_parser ${LIBS})
 add_test(test_unit_deltas test_unit_deltas)
 
+add_executable (test_unit_pnl test_unit_pnl.cpp)
+target_link_libraries(test_unit_pnl jl_parser ${LIBS})
+add_test(test_unit_pnl test_unit_pnl)
 
 #test unitaire de mémoire à utiliser avec valgrind
 

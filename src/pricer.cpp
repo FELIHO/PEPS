@@ -5,7 +5,9 @@
 #include "Option/Basket.hpp" 
 #include "Option/Performance.hpp"
 #include "Option/Asian.hpp" 
+#include "jlparser/parser.hpp" 
 #include <ctime>
+#include <string.h>
 
 using namespace std; 
 using namespace Computations; 
