@@ -3,7 +3,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_cdf.h"
-#include "Option/QuantoBasket.hpp"
+#include "QuantoBasket.hpp"
 #include <cmath>
 #include <assert.h>
 

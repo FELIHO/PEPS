@@ -60,8 +60,8 @@ PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
 	double cor;
 	for (int i = 0; i < covMatrix->n; i++) {
 		for (int j = 0; j < i; j++) {
-			Sigma_X = sqrt(abs(pnl_mat_get(covMatrix, i, i)));
-			Sigma_Y = sqrt(abs(pnl_mat_get(covMatrix, j, j)));
+			Sigma_X = sqrt(abs((long)pnl_mat_get(covMatrix, i, i)));
+			Sigma_Y = sqrt(abs((long)pnl_mat_get(covMatrix, j, j)));
 			cor = pnl_mat_get(covMatrix, i, j) / (Sigma_X * Sigma_Y);
 			pnl_mat_set(corrMatrix, i, j, cor);
 			pnl_mat_set(corrMatrix, j, i, cor);

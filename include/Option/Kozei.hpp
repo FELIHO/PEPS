@@ -8,9 +8,6 @@ namespace Computations {
 	class Kozei : public Option {
 	public:
 		double inv_init_; //investissement initial
-		int T = 8;
-		int nbTimeSteps = 182 / 365;
-		int size = 30;
 		Kozei();
 		Kozei(double inv_init);
 		Kozei(const Kozei &K);

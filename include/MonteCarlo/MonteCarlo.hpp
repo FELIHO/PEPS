@@ -1,7 +1,7 @@
 #pragma once
 #include "Option.hpp"
 #include "BlackScholesModel.hpp"
-#include "Delta.hpp"
+#include "Delta/Delta.hpp"
 #include "pnl/pnl_random.h"
 #include <iostream>
 #include <string>

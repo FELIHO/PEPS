@@ -4,7 +4,7 @@ using namespace std;
 using namespace Computations;
 
 /**
-Constructeur par défaut
+Constructeur par dï¿½faut
 */
 BlackScholesMertonModel::BlackScholesMertonModel() : BlackScholesModel()
 {	
@@ -39,10 +39,10 @@ BlackScholesMertonModel::~BlackScholesMertonModel()
 
 
 /** Methode d'affectation d'un BlackScholesMertonModel
-* @param[in] une image de la classe BlackScholesMertonModel à affecter.
-* @param[out] la même référence BlackScholesMertonModel avec les mêmes paramètres que l'entrée
+* @param[in] une image de la classe BlackScholesMertonModel ï¿½ affecter.
+* @param[out] la mï¿½me rï¿½fï¿½rence BlackScholesMertonModel avec les mï¿½mes paramï¿½tres que l'entrï¿½e
 */
-BlackScholesMertonModel& BlackScholesMertonModel::operator = (const BlackScholesMertonModel &BSMM) //le const c'est pour traduire le fait que cet opérateur ne modifie pas le Dvector
+BlackScholesMertonModel& BlackScholesMertonModel::operator = (const BlackScholesMertonModel &BSMM) //le const c'est pour traduire le fait que cet opï¿½rateur ne modifie pas le Dvector
 {
 	size_ = BSMM.size_;
 	rho_ = BSMM.rho_;
@@ -55,11 +55,11 @@ BlackScholesMertonModel& BlackScholesMertonModel::operator = (const BlackScholes
 }
 
 /**
-* Génère une trajectoire du modèle et la stocke dans path
+* Gï¿½nï¿½re une trajectoire du modï¿½le et la stocke dans path
 *
-* @param[out] path contient une trajectoire du modèle.
+* @param[out] path contient une trajectoire du modï¿½le.
 * C'est une matrice de taille (nbTimeSteps+1) x d
-* @param[in] T  maturité
+* @param[in] T  maturitï¿½
 * @param[in] nbTimeSteps nombre de dates de constatation
 */
 void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
@@ -74,7 +74,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, Pnl
 	//interest_->interest(pathInterest, T, nbTimeSteps, rng);
 	//updateTrend(pathInterest);
 
-	// Première ligne
+	// Premiï¿½re ligne
 	pnl_mat_set_row(path, spot_, 0);
 
 	/** Calcul de la matrice des trajectoires des actifs */
@@ -87,7 +87,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, Pnl
 		}
 	}
 
-	/** Libération de la mémoire */
+	/** Libï¿½ration de la mï¿½moire */
 	pnl_vect_free(&G);
 	pnl_vect_free(&V);
 
@@ -96,15 +96,15 @@ void BlackScholesMertonModel::asset(PnlMat *path, double T, int nbTimeSteps, Pnl
 
 /**
 * Calcule une trajectoire du sous-jacent connaissant le
-* passé jusqu' à la date t
+* passï¿½ jusqu' ï¿½ la date t
 *
 * @param[out] path  contient une trajectoire du sous-jacent
-* donnée jusqu'à l'instant t par la matrice past
-* @param[in] t date jusqu'à laquelle on connait la trajectoire.
-* t n'est pas forcément une date de discrétisation
+* donnï¿½e jusqu'ï¿½ l'instant t par la matrice past
+* @param[in] t date jusqu'ï¿½ laquelle on connait la trajectoire.
+* t n'est pas forcï¿½ment une date de discrï¿½tisation
 * @param[in] nbTimeSteps nombre de pas de constatation
-* @param[in] T date jusqu'à laquelle on simule la trajectoire
-* @param[in] past trajectoire réalisée jusqu'a la date t
+* @param[in] T date jusqu'ï¿½ laquelle on simule la trajectoire
+* @param[in] past trajectoire rï¿½alisï¿½e jusqu'a la date t
 */
 void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) {
 	if ((path->n != past->n) || (t > T)) {
@@ -127,11 +127,11 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	//interest_->interest(pathInterest, T, nbTimeSteps, rng);
 	//updateTrend(pathInterest);
 
-	/** Initialisation des paramètres */
+	/** Initialisation des paramï¿½tres */
 	double timeSpend = 0;
 	int counter = 0;
 
-	/** Remplissage de la matrice path par la matrice past jusqu'à t*/
+	/** Remplissage de la matrice path par la matrice past jusqu'ï¿½ t*/
 	while ((t >= timeSpend)/*&&( timeSpend < T)*/) {
 		pnl_mat_get_row(V, past, counter);
 		pnl_mat_set_row(path, V, counter);
@@ -139,7 +139,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 		counter += 1;
 	}
 
-	// On récupère St
+	// On rï¿½cupï¿½re St
 	pnl_mat_get_row(W, past, past->m - 1);
 
 	/** Calcul de la matrice des trajectoires des actifs */
@@ -149,7 +149,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 			pnl_mat_get_row(V, chol_, j);
 			sigmaJ = pnl_vect_get(sigma_, j);
 			if (i == counter) {
-				// on place St en première ligne
+				// on place St en premiï¿½re ligne
 				pnl_mat_set(path, i, j, pnl_vect_get(W, j) * exp((pnl_mat_get(pathInterest, i, j) - pnl_vect_get(dividend_, j) - (sigmaJ*sigmaJ) / 2) * (timeSpend - t) + sigmaJ * sqrt(timeSpend - t) * pnl_vect_scalar_prod(V, G)));
 			}
 			else {
@@ -160,7 +160,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 		}
 	}
 
-	/** Libération de la mémoire */
+	/** Libï¿½ration de la mï¿½moire */
 	pnl_vect_free(&W);
 	pnl_vect_free(&G);
 	pnl_vect_free(&V);
@@ -173,15 +173,15 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 
 /**
 * Calcule une trajectoire du sous-jacent connaissant le
-* passé jusqu' à la date t
+* passï¿½ jusqu' ï¿½ la date t
 *
 * @param[out] path  contient une trajectoire du sous-jacent
-* donnée jusqu'à l'instant t par la matrice past
-* @param[in] t date jusqu'à laquelle on connait la trajectoire.
-* t n'est pas forcément une date de discrétisation
+* donnï¿½e jusqu'ï¿½ l'instant t par la matrice past
+* @param[in] t date jusqu'ï¿½ laquelle on connait la trajectoire.
+* t n'est pas forcï¿½ment une date de discrï¿½tisation
 * @param[in] nbTimeSteps nombre de pas de constatation
-* @param[in] T date jusqu'à laquelle on simule la trajectoire
-* @param[in] past trajectoire réalisée jusqu'a la date t
+* @param[in] T date jusqu'ï¿½ laquelle on simule la trajectoire
+* @param[in] past trajectoire rï¿½alisï¿½e jusqu'a la date t
 */
 void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *pastInterest) {
 	if ((path->n != past->n) || (t > T)) {
@@ -203,11 +203,11 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 	PnlMat *pathInterest = pnl_mat_new();
 	//interest_->interest(pathInterest, t, T, nbTimeSteps, rng, pastInterest);
 	//updateTrend(pathInterest);
-	/** Initialisation des paramètres */
+	/** Initialisation des paramï¿½tres */
 	double timeSpend = 0;
 	int counter = 0;
 
-	/** Remplissage de la matrice path par la matrice past jusqu'à t*/
+	/** Remplissage de la matrice path par la matrice past jusqu'ï¿½ t*/
 	while ((t >= timeSpend)/*&&( timeSpend < T)*/) {
 		pnl_mat_get_row(V, past, counter);
 		pnl_mat_set_row(path, V, counter);
@@ -215,7 +215,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 		counter += 1;
 	}
 
-	// On récupère St
+	// On rï¿½cupï¿½re St
 	pnl_mat_get_row(W, past, past->m - 1);
 
 	/** Calcul de la matrice des trajectoires des actifs */
@@ -225,7 +225,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 			pnl_mat_get_row(V, chol_, j);
 			sigmaJ = pnl_vect_get(sigma_, j);
 			if (i == counter) {
-				// on place St en première ligne
+				// on place St en premiï¿½re ligne
 				pnl_mat_set(path, i, j, pnl_vect_get(W, j) * exp((pnl_mat_get(pathInterest, i, j) - pnl_vect_get(dividend_, j) - (sigmaJ*sigmaJ) / 2) * (timeSpend - t) + sigmaJ * sqrt(timeSpend - t) * pnl_vect_scalar_prod(V, G)));
 			}
 			else {
@@ -236,7 +236,7 @@ void BlackScholesMertonModel::asset(PnlMat *path, double t, double T, int nbTime
 		}
 	}
 
-	/** Libération de la mémoire */
+	/** Libï¿½ration de la mï¿½moire */
 	pnl_vect_free(&W);
 	pnl_vect_free(&G);
 	pnl_vect_free(&V);

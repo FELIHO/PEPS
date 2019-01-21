@@ -103,6 +103,7 @@ BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect
 }
 
 void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
+
   assert(mat1->n == mat2->n && mat2->n == res->n);
   assert(res->m == mat1->m + mat2->m);
   int nbRows= res->m;

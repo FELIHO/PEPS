@@ -4,8 +4,8 @@
 #include <math.h>
 #include <stdexcept>
 #include "pch.h"
-#include "InterestRateModel.hpp"
 #include "VasicekModel.hpp"
+#include "InterestRateModel.hpp"
 
 #define DLLEXP   __declspec( dllexport )
 using namespace Computations;
@@ -73,7 +73,7 @@ VasicekModel& VasicekModel::operator = (const VasicekModel &VCM)
 
 void VasicekModel::initalizeChol() {
 	
-	/** Validation de la matrice de corrélation */
+	/** Validation de la matrice de corrï¿½lation */
 	PnlVect *eigenValues = pnl_vect_create(rSpot_->size);
 	PnlMat *eigenVectors = pnl_mat_create(rSpot_->size, rSpot_->size);
 	bool validatedRho = false;
@@ -121,14 +121,14 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 		pnl_vect_mult_vect_term(V, drift_);  // (rti - 1 - V) * exp(-speedRversion * (ti - ti-1)
 		pnl_vect_plus_vect(V, longTermMean_); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1)
 
-		pnl_vect_map(U, volatilities_, &squared); //  sigma²
-		pnl_vect_div_scalar(U, 2.0); // sigma² / 2
-		pnl_vect_div_vect_term(U, speedReversion_); // sigma² / 2k
-		pnl_vect_mult_vect_term(U, doubledrift_); // (sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1))
-		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
-		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_map(U, volatilities_, &squared); //  sigmaï¿½
+		pnl_vect_div_scalar(U, 2.0); // sigmaï¿½ / 2
+		pnl_vect_div_vect_term(U, speedReversion_); // sigmaï¿½ / 2k
+		pnl_vect_mult_vect_term(U, doubledrift_); // (sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1))
+		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
 
-		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1) + epsilon * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1) + epsilon * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
 		pnl_mat_set_row(path, V, i);
 	}
 
@@ -170,14 +170,14 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		pnl_vect_mult_vect_term(V, firstdrift_);  // (rt - 1 - V) * exp(-speedRversion * (ti+1 - t)
 		pnl_vect_plus_vect(V, longTermMean_); // V + (rt - 1 - V) * exp(-speedRversion * (ti+1 - t)
 
-		pnl_vect_map(U, volatilities_, &squared); //  sigma²
-		pnl_vect_div_scalar(U, 2.0); // sigma² / 2
-		pnl_vect_div_vect_term(U, speedReversion_); // sigma² / 2k
-		pnl_vect_mult_vect_term(U, firstdoubledrift_); // (sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - t))
-		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
-		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
+		pnl_vect_map(U, volatilities_, &squared); //  sigmaï¿½
+		pnl_vect_div_scalar(U, 2.0); // sigmaï¿½ / 2
+		pnl_vect_div_vect_term(U, speedReversion_); // sigmaï¿½ / 2k
+		pnl_vect_mult_vect_term(U, firstdoubledrift_); // (sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - t))
+		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
+		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
 
-		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - t) + epsilon * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
+		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - t) + epsilon * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
 		
 		pnl_mat_set_row(path, rSpot_, past->m - 1);
 
@@ -202,14 +202,14 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		pnl_vect_mult_vect_term(V, drift_);  // (rti - 1 - V) * exp(-speedRversion * (ti - ti-1)
 		pnl_vect_plus_vect(V, longTermMean_); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1)
 
-		pnl_vect_map(U, volatilities_, &squared); //  sigma²
-		pnl_vect_div_scalar(U, 2.0); // sigma² / 2
-		pnl_vect_div_vect_term(U, speedReversion_); // sigma² / 2k
-		pnl_vect_mult_vect_term(U, doubledrift_); // (sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1))
-		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
-		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_map(U, volatilities_, &squared); //  sigmaï¿½
+		pnl_vect_div_scalar(U, 2.0); // sigmaï¿½ / 2
+		pnl_vect_div_vect_term(U, speedReversion_); // sigmaï¿½ / 2k
+		pnl_vect_mult_vect_term(U, doubledrift_); // (sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1))
+		pnl_vect_map_inplace(U, &unsquared); // sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
 
-		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1) + epsilon * sqrt((sigma² / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
+		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - ti - 1) + epsilon * sqrt((sigmaï¿½ / 2k) * (1 - exp(-2*speedRversion * (ti - ti-1)))
 		pnl_mat_set_row(path, V, i);
 	}
 

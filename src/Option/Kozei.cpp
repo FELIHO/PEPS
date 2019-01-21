@@ -1,9 +1,11 @@
 #include "pch.h"
-#include "Option/Kozei.hpp"
+#include "Kozei.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Option/Option.hpp"
+#include "Option.hpp"
+#include <iostream>
+using namespace std;
 using namespace Computations;
 
 
@@ -13,6 +15,9 @@ Kozei::Kozei()  {
 }
 
 Kozei::Kozei( double inv_init)  {
+	T_ = 8;
+	nbTimeSteps_ = 16;
+	size_ = 30;
 	inv_init_ = inv_init;	
 }
 
@@ -36,11 +41,12 @@ Kozei::~Kozei() {
 
 double Kozei::payoff(const PnlMat *path) {
 	/* A revoir certains entier sont pris comme des double par rapport au temps.
-	* Il faut convertir la valeur temporelle en double à l'entier qui lui correponds dans la matrice
-	* en gros, t est entre tk et tk+1, il faut l'opération qui pour t donne le k.
+	* Il faut convertir la valeur temporelle en double ï¿½ l'entier qui lui correponds dans la matrice
+	* en gros, t est entre tk et tk+1, il faut l'opï¿½ration qui pour t donne le k.
 	*/
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	pnl_mat_get_row(niveaux_initaux, path, 0);
+	
 	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
 	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
 	double Perfmoyenne;
@@ -62,9 +68,9 @@ double Kozei::payoff(const PnlMat *path) {
 
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
 	
-	free(&niveaux_initaux);
-	free(&Performance_t);
-	free(&PerformancePanier);
+	pnl_vect_free(&niveaux_initaux);
+	pnl_mat_free(&Performance_t);
+	pnl_vect_free(&PerformancePanier);
 
 
 	return inv_init_ * (0.9 + Perfmoyenne);
