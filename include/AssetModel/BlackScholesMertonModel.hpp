@@ -2,9 +2,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "BlackScholesModel.hpp"
-#include "InterestRateModel.hpp"
-#include "BlackScholesMertonModel.hpp"
+#include "AssetModel/BlackScholesModel.hpp"
+#include "InterestModel/InterestRateModel.hpp"
+
+#include "AssetModel/BlackScholesModel.hpp"
 #include <math.h>
 #include <iostream>
 #include <stdexcept>

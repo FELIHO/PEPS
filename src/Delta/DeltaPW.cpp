@@ -1,9 +1,11 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
+#include "Delta/DeltaPW.hpp"
 
-/// \brief Classe DeltaPW abstraite
-#include "DeltaPW.hpp"
+#include "AssetModel/BlackScholesModel.hpp"
+#include "Option/Option.hpp"
+
 using namespace Computations;
 
 DeltaPW::DeltaPW() {

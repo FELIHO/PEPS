@@ -1,5 +1,5 @@
 
-#include "BlackScholesModel.hpp"
+#include "AssetModel/BlackScholesModel.hpp"
 
 
 using namespace std;
@@ -103,6 +103,7 @@ BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect
 
 
 void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
+
   assert(mat1->n == mat2->n && mat2->n == res->n);
   assert(res->m == mat1->m + mat2->m);
   int nbRows= res->m;
@@ -176,7 +177,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
   PnlMat* future = pnl_mat_create(nbTimeStepsResidual+1, size_);
   PnlVect* s_t = pnl_vect_new();
   pnl_mat_get_row(s_t, past, nbRowsPast-1);
-  assert(nbRowsPast = ceil(t/timestep)+1);
+  assert(nbRowsPast == ceil(t/timestep)+1);
   if (nbRowsPast-1 == t/timestep){
     pnl_mat_set_row(future, s_t, 0);
   }

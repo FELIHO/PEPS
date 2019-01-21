@@ -4,8 +4,8 @@
 #include <math.h>
 #include <stdexcept>
 #include "pch.h"
-#include "InterestRateModel.hpp"
-#include "VasicekModel.hpp"
+#include "InterestModel/VasicekModel.hpp"
+#include "InterestModel/InterestRateModel.hpp"
 
 #define DLLEXP   __declspec( dllexport )
 using namespace Computations;

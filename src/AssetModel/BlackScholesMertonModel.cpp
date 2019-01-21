@@ -1,4 +1,4 @@
-#include "BlackScholesMertonModel.hpp"
+#include "AssetModel/BlackScholesMertonModel.hpp"
 
 using namespace std;
 using namespace Computations;

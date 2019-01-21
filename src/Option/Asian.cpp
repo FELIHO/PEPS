@@ -4,8 +4,8 @@
 #include "pnl/pnl_matrix.h"
 
 /// \brief Classe Option abstraite
-#include "Option.hpp"
-#include "Asian.hpp"
+#include "Option/Option.hpp"
+#include "Option/Asian.hpp"
 
 
 using namespace Computations;

@@ -4,6 +4,8 @@
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
 #include "Option/Option.hpp"
+#include <iostream>
+using namespace std;
 using namespace Computations;
 
 
@@ -13,6 +15,9 @@ Kozei::Kozei()  {
 }
 
 Kozei::Kozei( double inv_init)  {
+	T_ = 8;
+	nbTimeSteps_ = 16;
+	size_ = 30;
 	inv_init_ = inv_init;	
 }
 
@@ -41,6 +46,7 @@ double Kozei::payoff(const PnlMat *path) {
 	*/
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	pnl_mat_get_row(niveaux_initaux, path, 0);
+	
 	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
 	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
 	double Perfmoyenne;
@@ -62,9 +68,9 @@ double Kozei::payoff(const PnlMat *path) {
 
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
 	
-	free(&niveaux_initaux);
-	free(&Performance_t);
-	free(&PerformancePanier);
+	pnl_vect_free(&niveaux_initaux);
+	pnl_mat_free(&Performance_t);
+	pnl_vect_free(&PerformancePanier);
 
 
 	return inv_init_ * (0.9 + Perfmoyenne);

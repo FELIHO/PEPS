@@ -1,6 +1,6 @@
-#include "MonteCarlo.hpp"
-#include "Call.hpp"
-#include "BlackScholesModel.hpp"
+#include "MonteCarlo/MonteCarlo.hpp"
+#include "Option/Call.hpp"
+#include "AssetModel/BlackScholesModel.hpp"
 #include <math.h>
 using namespace std;
 using namespace Computations;

@@ -2,8 +2,8 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
-#include "InterestRateModel.hpp"
-#include "SimpleRateModel.hpp"
+#include "InterestModel/InterestRateModel.hpp"
+#include "InterestModel/SimpleRateModel.hpp"
 #define DLLEXP   __declspec( dllexport )
 using namespace Computations;
 

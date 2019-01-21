@@ -1,7 +1,10 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
-#include "DeltaLH.hpp"
+#include "Delta/DeltaLH.hpp"
+
+#include "AssetModel/BlackScholesModel.hpp"
+#include "Option/Option.hpp"
 using namespace Computations;
 
 DeltaLH::DeltaLH() {
