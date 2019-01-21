@@ -36,7 +36,7 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
   }
 
 
-  PnlMat *resultPast = pnl_mat_create(rebalancementDateIndexestoDate->size + 1, allData->n);
+  PnlMat *resultPast = pnl_mat_create(rebalancementDateIndexestoDate->size - 2, allData->n);
   PnlVect *dataFeed = pnl_vect_new();
   PnlVect *nextdataFeed = pnl_vect_new();
 
@@ -46,6 +46,7 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
 
   pnl_mat_get_row(nextdataFeed, allData, pnl_vect_int_get(rebalancementDateIndexestoDate, 2));
   pnl_vect_plus_vect(dataFeed, nextdataFeed);
+  pnl_vect_div_scalar(dataFeed, 3);
   pnl_mat_set_row(resultPast, dataFeed, 0);
   pnl_vect_free(&nextdataFeed);
 
@@ -54,7 +55,7 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
     pnl_mat_set_row(resultPast, dataFeed, i);
   }
   pnl_mat_get_row(dataFeed, allData, indexDate);
-  pnl_mat_set_row(resultPast, dataFeed, rebalancementDateIndexestoDate->size);
+  pnl_mat_set_row(resultPast, dataFeed, resultPast->m - 1);
 
   pnl_vect_int_free(&rebalancementDateIndexestoDate);
   pnl_vect_free(&dataFeed);

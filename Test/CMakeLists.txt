@@ -113,5 +113,6 @@ add_executable (test_kozei test_kozei.cpp)
 target_link_libraries(test_kozei jl_parser ${LIBS})
 add_test(test_kozei test_kozei)
 
-
-
+add_executable (test_dataselecter test_dataSelecter.cpp)
+target_link_libraries(test_dataselecter jl_parser ${LIBS})
+add_test(test_dataselecter test_dataselecter)

@@ -72,3 +72,4 @@ prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character(
 
 write.table(MyData[,-1], file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
 write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+
