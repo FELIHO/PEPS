@@ -2,7 +2,7 @@
 #include "ParameterEstimation.hpp"
 #include <math.h>
 
-using namespace std;
+
 using namespace Computations;
 
 

@@ -2,7 +2,6 @@
 #include "DataSelecter.hpp"
 #include <math.h>
 
-using namespace std;
 using namespace Computations;
 
 DataSelecter::DataSelecter(PnlVectInt *ConstationDate) {
@@ -20,7 +19,7 @@ DataSelecter::~DataSelecter(){
 
 PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateIndexes, const int Date) {
   PnlVectInt *rebalancementDateIndexestoDate = getRebalecementDateIndexestoDate(dateIndexes, Date);
-  int indexDate = getIndexDate(dateIndexes);
+  int indexDate = getIndexDate(dateIndexes, Date);
 
   if ((rebalancementDateIndexestoDate->size < 3) && (indexDate < 0)){
     pnl_vect_int_free(&rebalancementDateIndexestoDate);
@@ -43,10 +42,10 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
 
   pnl_mat_get_row(dataFeed, allData, pnl_vect_int_get(rebalancementDateIndexestoDate, 0));
   pnl_mat_get_row(nextdataFeed, allData, pnl_vect_int_get(rebalancementDateIndexestoDate, 1));
-  pnl_vect_plus_vect(dataFeed, nextDataFeed);
+  pnl_vect_plus_vect(dataFeed, nextdataFeed);
 
   pnl_mat_get_row(nextdataFeed, allData, pnl_vect_int_get(rebalancementDateIndexestoDate, 2));
-  pnl_vect_plus_vect(dataFeed, nextDataFeed);
+  pnl_vect_plus_vect(dataFeed, nextdataFeed);
   pnl_mat_set_row(resultPast, dataFeed, 0);
   pnl_vect_free(&nextdataFeed);
 
@@ -77,7 +76,7 @@ PnlVectInt* DataSelecter::getRebalecementDateIndexes(const PnlVectInt *dateIndex
   PnlVectInt *rebalancementDateIndexes = pnl_vect_int_create_from_scalar(ConstationDate_->size,0);
   int counter = 0;
   for (int i = 0; i < dateIndexes->size; i++){
-    if (pnl_vect_int_get(dateIndexes, i) == ConstationDate_[counter]){
+    if (pnl_vect_int_get(dateIndexes, i) == pnl_vect_int_get(ConstationDate_, counter)){
       pnl_vect_int_set(rebalancementDateIndexes, counter, i);
       counter++;
     }
@@ -89,12 +88,12 @@ PnlVectInt* DataSelecter::getRebalecementDateIndexes(const PnlVectInt *dateIndex
 PnlVectInt* DataSelecter::getRebalecementDateIndexestoDate(const PnlVectInt *dateIndexes, const int Date) {
   PnlVectInt *rebalancementDateIndexestoDate = getRebalecementDateIndexes(dateIndexes);
   int counter = 0;
-  for (int i = 0; i < rebalancementDateIndexes->size; i++){
-    if (pnl_vect_get(rebalancementDateIndexes, i) > Date){
+  for (int i = 0; i < rebalancementDateIndexestoDate->size; i++){
+    if (pnl_vect_int_get(rebalancementDateIndexestoDate, i) > Date){
     break;
     }
     counter++;
   }
-  pnl_vect_int_resize(rebalancementDateIndexes, counter);
+  pnl_vect_int_resize(rebalancementDateIndexestoDate, counter);
   return rebalancementDateIndexestoDate;
 }
