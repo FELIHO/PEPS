@@ -74,7 +74,7 @@ include_directories(include include/AssetModel include/Delta include/Hedge inclu
 
 # Adding our own libraries
 add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp src/Hedge/DataSelecter.cpp include/Hedge/DataSelecter.hpp src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp) # src/AssetModel/BlackScholesMertonModel.cpp include/AssetModel/BlackScholesMertonModel.hpp src/Delta/Delta.cpp include/Delta/Delta.hpp src/Delta/DeltaDF.cpp include/Delta/DeltaDF.hpp src/Delta/DeltaLH.cpp include/Delta/DeltaLH.hpp src/Delta/DeltaPW.cpp include/Delta/DeltaPW.hpp )
-add_library(Options src/Option/Option.cpp include/Option/Option.hpp src/Option/Call.cpp include/Option/Call.hpp src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp)
+add_library(Options src/Option/Option.cpp include/Option/Option.hpp src/Option/Call.cpp include/Option/Call.hpp src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp src/Option/Kozei.cpp include/Option/Kozei.hpp)
 
 # Adding subdirectories
 add_subdirectory(include)

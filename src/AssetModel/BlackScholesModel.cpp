@@ -81,6 +81,7 @@ BlackScholesModel::BlackScholesModel(int size, double r , PnlMat *rho, PnlVect *
   spot_ = pnl_vect_copy(spot);
   // la factorisée de Cholesky
   chol_ = pnl_mat_copy(rho_);
+	pnl_mat_print(rho_);
   int defPos = pnl_mat_chol(chol_);
   if (defPos == FAIL) {
     throw invalid_argument("la matrice de correlation n'est pas définie positive");

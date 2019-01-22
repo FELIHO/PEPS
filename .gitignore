@@ -1,10 +1,7 @@
-
-# Untracked files
-.gitignore
-.vscode/
-.vs/
-Documentation
-build/
+.vscode/*
+.vs/*
+build/*.txt
+build
 NativeProject/.vs/NativeProject/v15/Solution.VC.db
 NativeProject/.vs/NativeProject/v15/ipch/AutoPCH/d4a2ac17e696d206/
 NativeProject/NativeProject/x64/Debug/NativeProject.tlog/unsuccessfulbuild

@@ -40,7 +40,7 @@ PnlMat* ParameterEstimation::getCovarianceMatrix(const PnlMat *past) {
 			E_Y = pnl_vect_sum(Y) / nbDate;
 			pnl_vect_mult_vect_term(X, Y);
 			E_XY = pnl_vect_sum(X) / nbDate;
-			cov = E_XY - E_X *E_Y ;
+			cov = E_XY - E_X * E_Y ;
 			pnl_mat_set(covMatrix, i, j, cov);
 			pnl_mat_set(covMatrix, j, i, cov);
 		}
@@ -77,7 +77,14 @@ double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double 
 	return sqrt(Sigma_X*Sigma_X + Sigma_Y*Sigma_Y + Sigma_X*Sigma_Y*rhoXY);
 }
 
-
+PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {
+	PnlMat* covMatrix = getCovarianceMatrix(path);
+	PnlVect* volatilitiesVector = pnl_vect_create(covMatrix->n);
+	for (int j = 0; j < covMatrix->n; j++) {
+		pnl_vect_set(volatilitiesVector, j, sqrt(abs((long)pnl_mat_get(covMatrix, j, j))));
+	}
+	return volatilitiesVector;
+}
 
 double makeLogonAllElements(double vectorElement) {
 	return log(vectorElement);

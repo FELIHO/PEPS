@@ -98,3 +98,28 @@ PnlVectInt* DataSelecter::getRebalecementDateIndexestoDate(const PnlVectInt *dat
   pnl_vect_int_resize(rebalancementDateIndexestoDate, counter);
   return rebalancementDateIndexestoDate;
 }
+
+PnlVect* DataSelecter::getSpotFromData(const PnlMat *allData, const PnlVectInt *dateIndexes, const int Date){
+  int index = getIndexDate(dateIndexes, Date);
+  PnlVect* spot = pnl_vect_new();
+  pnl_mat_get_row(spot, allData, index);
+  return spot;
+}
+
+PnlMat DataSelecter::getWindowForEstimation(const PnlMat *allData, const PnlVectInt *dateIndexes, const int DateBegin, const int timeEstimation){
+    int index = getIndexDate(dateIndexes, DateBegin);
+    PnlMat windowEstimation = pnl_mat_wrap_mat_rows(allData, index, index + timeEstimation);
+    return windowEstimation;
+}
+
+PnlMat DataSelecter::getWindowPreviousEstimation(const PnlMat *allData, const PnlVectInt *dateIndexes, const int DateEnd, const int timeEstimation){
+    int index = getIndexDate(dateIndexes, DateEnd);
+    PnlMat windowEstimation = pnl_mat_wrap_mat_rows(allData, index - timeEstimation, index );
+    return windowEstimation;
+}
+
+double DataSelecter::computeTvalue(const PnlVectInt *dateIndexes, const int DateZero, const int DateT, const double T) {
+  int indexZero = getIndexDate(dateIndexes, DateZero);
+  int indexT = getIndexDate(dateIndexes, DateT);
+  return (indexT - indexZero + 0.0)/(T * 365);
+}
