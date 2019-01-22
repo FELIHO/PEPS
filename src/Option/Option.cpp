@@ -6,8 +6,14 @@ using namespace Computations;
 
 Option::Option(){
   	T_ = 0;
-  	nbTimeSteps_ = 1;
+  	nbTimeSteps_ = 0;
   	size_ = 0;
+}
+
+Option::Option(double T, double nbTimeSteps, double size){
+  	T_ = T;
+  	nbTimeSteps_ = nbTimeSteps;
+  	size_ = size;
 }
 
 Option::Option(const Option &C) {

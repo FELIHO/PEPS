@@ -46,8 +46,20 @@ int main(){
   //PnlVect* sigma = pe.getVolatilitiesVector(&allData);
   PnlMat* logMatrix = pe.getLogRendementMatrix(allData);
   //PnlMat* covMatrix = pe.getCovarianceMatrix(&allData);
-  pnl_mat_print(logMatrix);
 
+
+  pnl_mat_print(logMatrix);
+  bool missedValue = false;
+
+  for (int j = 0; j < logMatrix->m; j++) {
+    for (int i = 0; i < logMatrix->n; i++){
+      if (pnl_mat_get(logMatrix, j, i) < -1000){
+        missedValue = true;
+      }
+    }
+  }
+
+assert(!missedValue);
 
 
 

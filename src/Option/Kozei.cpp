@@ -3,21 +3,17 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Option.hpp"
 #include <iostream>
 using namespace std;
 using namespace Computations;
 
 
 
-Kozei::Kozei()  {
+Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init)  {
-	T_ = 8 + 11.0/365;
-	nbTimeSteps_ = 16;
-	size_ = 30;
+Kozei::Kozei( double inv_init) : Option(8 + 11.0/365, 16, 30)  {
 	inv_init_ = inv_init;
 }
 
@@ -52,7 +48,7 @@ double Kozei::payoff(const PnlMat *path) {
 	double Perfmoyenne;
 
 
-	for (int t = 0; t < T_ * 2; t++) {
+	for (int t = 0; t < nbTimeSteps_; t++) {
 		double S_0 = 0.0;
 		double Perf_Panier_t = 0.0;
 		double Perf_acti = 0.0;
@@ -78,4 +74,6 @@ double Kozei::payoff(const PnlMat *path) {
 
 
 }
-Kozei* Kozei::clone() { return new Kozei(); }
+Kozei* Kozei::clone() {
+  return new Kozei(*this);
+}

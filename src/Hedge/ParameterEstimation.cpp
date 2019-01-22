@@ -2,22 +2,36 @@
 #include "ParameterEstimation.hpp"
 #include <math.h>
 
-
+#include <iostream>
 using namespace Computations;
 
+int Test = 0;
+int Test2 = 0;
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
 	PnlVect* rendement = pnl_vect_new();
 	PnlVect* Nextrendement = pnl_vect_new();
+	PnlVect* logRendement = pnl_vect_create(past->n);
+	double rendementI;
+	double rendementJ;
 	for (int j = 0; j < logRendementMatrix->m; j++) {
 		pnl_mat_get_row(Nextrendement, past, j + 1);
 		pnl_mat_get_row(rendement, past, j);
-		pnl_vect_div_vect_term(Nextrendement, rendement);
-		pnl_vect_map_inplace(Nextrendement, &makeLogonAllElements);
-		pnl_mat_set_row(logRendementMatrix, Nextrendement, j);
+		for (int i = 0; i < logRendementMatrix->n; i++){
+				rendementI = pnl_vect_get(rendement, i);
+				rendementJ = pnl_vect_get(Nextrendement, i);
+				if ((rendementI < 0.001) || (rendementJ < 0.001)){
+					pnl_vect_set(logRendement, i, 0.0);
+				} else {
+					pnl_vect_set(logRendement, i, log(rendementJ/rendementI));
+				}
+			}
+			pnl_mat_set_row(logRendementMatrix, logRendement, j);
 	}
+
 	pnl_vect_free(&rendement);
+	pnl_vect_free(&logRendement);
 	pnl_vect_free(&Nextrendement);
 	return logRendementMatrix;
 }
@@ -61,8 +75,8 @@ PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
 	double cor;
 	for (int i = 0; i < covMatrix->n; i++) {
 		for (int j = 0; j < i; j++) {
-			Sigma_X = sqrt(abs((long)pnl_mat_get(covMatrix, i, i)));
-			Sigma_Y = sqrt(abs((long)pnl_mat_get(covMatrix, j, j)));
+			Sigma_X = sqrt(pnl_mat_get(covMatrix, i, i));
+			Sigma_Y = sqrt(pnl_mat_get(covMatrix, j, j));
 			cor = pnl_mat_get(covMatrix, i, j) / (Sigma_X * Sigma_Y);
 			pnl_mat_set(corrMatrix, i, j, cor);
 			pnl_mat_set(corrMatrix, j, i, cor);
@@ -79,13 +93,9 @@ double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double 
 
 PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {
 	PnlMat* covMatrix = getCovarianceMatrix(path);
-	PnlVect* volatilitiesVector = pnl_vect_create(covMatrix->n);
+	PnlVect* volatilitiesVector = pnl_vect_create_from_scalar(covMatrix->n, 0.0);
 	for (int j = 0; j < covMatrix->n; j++) {
-		pnl_vect_set(volatilitiesVector, j, sqrt(abs((long)pnl_mat_get(covMatrix, j, j))));
+		pnl_vect_set(volatilitiesVector, j, sqrt(pnl_mat_get(covMatrix, j, j)));
 	}
 	return volatilitiesVector;
-}
-
-double makeLogonAllElements(double vectorElement) {
-	return log(vectorElement);
 }

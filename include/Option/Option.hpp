@@ -25,7 +25,9 @@ public:
     int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
 
 
+
     Option();
+    Option(double T, double nbTimeSteps, double size);
     Option(const Option &C);
     Option& operator=(const Option &C);
 

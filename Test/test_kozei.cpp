@@ -93,9 +93,9 @@ int main(){
   double T = 8.0 + 11.0/365;
   double t = ds.computeTvalue(dateIndexes, pnl_vect_int_get(constationDate, 0), date, T);
 
-  BlackScholesModel bc = BlackScholesModel(past->n, r, corr, sigma, spot);
-  Kozei kozei_test = Kozei(inv_init);
-  MonteCarlo mc_test = MonteCarlo(&bc , &kozei_test, rng, h, n_samples);
+  BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
+  Kozei *kozei_test = new Kozei(inv_init);
+  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
 
   PnlVect *delta = pnl_vect_create_from_scalar(past->n, 0.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(past->n, 0.0);
@@ -106,9 +106,9 @@ int main(){
   double ic_ent = 0.0;
   double ic_0 = 0.0;
 
-  mc_test.price(prix_0,ic_0);
-  mc_test.price(past, t, prix_ent, ic_ent);
-  mc_test.delta(past, t, delta, icdelta);
+  mc_test->price(prix_0,ic_0);
+  mc_test->price(past, t, prix_ent, ic_ent);
+  mc_test->delta(past, t, delta, icdelta);
 
   cout << "Delta :" << endl;
   pnl_vect_print_asrow(delta);
