@@ -116,3 +116,19 @@ add_test(test_kozei test_kozei)
 add_executable (test_dataselecter test_dataSelecter.cpp)
 target_link_libraries(test_dataselecter jl_parser ${LIBS})
 add_test(test_dataselecter test_dataselecter)
+
+add_executable (test_getCorrelation test_getCorrelation.cpp)
+target_link_libraries(test_getCorrelation jl_parser ${LIBS})
+add_test(test_getCorrelation test_getCorrelation)
+
+add_executable (test_getCovariance test_getCovariance.cpp)
+target_link_libraries(test_getCovariance jl_parser ${LIBS})
+add_test(test_getCovariance test_getCovariance)
+
+add_executable (test_getLogRendements test_getLogRendements.cpp)
+target_link_libraries(test_getLogRendements jl_parser ${LIBS})
+add_test(test_getLogRendements test_getLogRendements)
+
+add_executable (test_getVolatilies test_getVolatilies.cpp)
+target_link_libraries(test_getVolatilies jl_parser ${LIBS})
+add_test(test_getVolatilies test_getVolatilies)

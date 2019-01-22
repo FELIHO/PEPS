@@ -67,7 +67,7 @@ for ( i in seq(nrow(MyData)-1, 1, by=-1)){
 }
 
 
-prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character("2014-04-11"),as.Date.character("2014-04-14"),as.Date.character("2014-04-15"),as.Date.character("2014-10-13"),as.Date.character("2015-04-13"),as.Date.character("2015-10-12"),as.Date.character("2016-04-11"),as.Date.character("2016-10-11"),as.Date.character("2017-04-11"),as.Date.character("2017-10-11"),as.Date.character("2018-04-11"),as.Date.character("2018-10-11"))), ]
+#prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character("2014-04-11"),as.Date.character("2014-04-14"),as.Date.character("2014-04-15"),as.Date.character("2014-10-13"),as.Date.character("2015-04-13"),as.Date.character("2015-10-12"),as.Date.character("2016-04-11"),as.Date.character("2016-10-11"),as.Date.character("2017-04-11"),as.Date.character("2017-10-11"),as.Date.character("2018-04-11"),as.Date.character("2018-10-11"))), ]
 
 
 write.table(MyData[,-1], file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)

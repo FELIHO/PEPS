@@ -3,22 +3,18 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
-#include "Option.hpp"
 #include <iostream>
 using namespace std;
 using namespace Computations;
 
 
 
-Kozei::Kozei()  {
+Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init)  {
-	T_ = 8;
-	nbTimeSteps_ = 16;
-	size_ = 30;
-	inv_init_ = inv_init;	
+Kozei::Kozei( double inv_init) : Option(8 + 11.0/365, 16, 30)  {
+	inv_init_ = inv_init;
 }
 
 Kozei::Kozei(const Kozei &K) {
@@ -46,13 +42,13 @@ double Kozei::payoff(const PnlMat *path) {
 	*/
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	pnl_mat_get_row(niveaux_initaux, path, 0);
-	
+
 	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
 	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
 	double Perfmoyenne;
 
 
-	for (int t = 0; t < T_ * 2; t++) {
+	for (int t = 0; t < nbTimeSteps_; t++) {
 		double S_0 = 0.0;
 		double Perf_Panier_t = 0.0;
 		double Perf_acti = 0.0;
@@ -67,15 +63,17 @@ double Kozei::payoff(const PnlMat *path) {
 	}
 
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
-	
+
 	pnl_vect_free(&niveaux_initaux);
 	pnl_mat_free(&Performance_t);
 	pnl_vect_free(&PerformancePanier);
 
 
 	return inv_init_ * (0.9 + Perfmoyenne);
-	
 
-	
+
+
 }
-Kozei* Kozei::clone() { return new Kozei(); }
+Kozei* Kozei::clone() {
+  return new Kozei(*this);
+}

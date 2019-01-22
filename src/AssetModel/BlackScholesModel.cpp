@@ -1,7 +1,6 @@
 
 #include "BlackScholesModel.hpp"
 
-
 using namespace std;
 using namespace Computations;
 
@@ -168,7 +167,8 @@ void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeS
 
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng)
 {
-  assert(path->m == nbTimeSteps+1 && path->n == size_);
+  //assert(path->m == nbTimeSteps+1 && path->n == size_);
+	pnl_mat_resize(path, nbTimeSteps + 1, size_);
   pnl_mat_set_row(path, spot_, 0);
   double timestep = T/nbTimeSteps;
   simulateAsset(path, timestep, nbTimeSteps, rng, r_, dividend_);
@@ -176,14 +176,15 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
 
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past)
 {
-  assert(path->m == nbTimeSteps+1 && path->n == size_);
+  //assert(path->m == nbTimeSteps+1 && path->n == size_);
+	pnl_mat_resize(path, nbTimeSteps + 1, size_);
   double timestep = T/nbTimeSteps;
   int nbRowsPast = past->m;
   int nbTimeStepsResidual = (nbTimeSteps+1) - nbRowsPast;
   PnlMat* future = pnl_mat_create(nbTimeStepsResidual+1, size_);
   PnlVect* s_t = pnl_vect_new();
   pnl_mat_get_row(s_t, past, nbRowsPast-1);
-  assert(nbRowsPast == ceil(t/timestep)+1);
+  //assert(nbRowsPast == ceil(t/timestep)+1);
   if (nbRowsPast-1 == t/timestep){
     pnl_mat_set_row(future, s_t, 0);
   }
@@ -207,7 +208,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
   }
   else{
     PnlMat* subPast = pnl_mat_new();
-    pnl_mat_extract_subblock(subPast,past,0,nbRowsPast-1,0,size_);
+    pnl_mat_extract_subblock(subPast, past, 0, nbRowsPast-1, 0, size_);
     concatenationMatrice( path , subPast, future );
     pnl_mat_free(&subPast);
   }

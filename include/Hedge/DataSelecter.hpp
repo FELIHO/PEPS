@@ -45,6 +45,14 @@ namespace Computations {
 
 		PnlVectInt* getRebalecementDateIndexestoDate(const PnlVectInt *dateIndexes, const int Date);
 
+		PnlVect* getSpotFromData(const PnlMat *allData, const PnlVectInt *dateIndexes, const int Date);
+
+		PnlMat getWindowForEstimation(const PnlMat *allData, const PnlVectInt *dateIndexes, const int DateBegin, const int timeEstimation);
+
+		PnlMat getWindowPreviousEstimation(const PnlMat *allData, const PnlVectInt *dateIndexes, const int DateEnd, const int timeEstimation);
+
+		double computeTvalue(const PnlVectInt *dateIndexes, const int DateZero, const int DateT, const double T);
+
 	private:
 	};
 
