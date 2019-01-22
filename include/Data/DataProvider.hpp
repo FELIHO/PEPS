@@ -8,17 +8,8 @@ namespace Computations {
 	class DataProvider
 	{
 	public:
-    /*
-    * Matrice contenant toutes les dates
-    */
-  	PnlMat *DataFeed_;
-
     virtual ~DataProvider() {};
-
-    virtual int *GetDataFeed(PnlMat *DataFeed_, int nbDates) = 0; 
-
+    virtual int *GetDataFeed(PnlMat *DataFeed_, int nbDates, int timeEstimation) = 0;
 	};
-
-
 
 }
