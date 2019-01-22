@@ -8,25 +8,37 @@
 #include <assert.h>
 
 namespace Computations {
-	class QuantoBasket : public Basket
+	class QuantoBasket : public Option
 	{
 
 	public:
+
+		// Attributes
 		/**
-		* Default Constructor
-		* Initialise everything to zero. Shouldn't be used.
+		 * double strike_ : prix d'exercice de l'option
+		 */
+		double strike_; // strike K of the basket option
+		/**
+		 * PnlVect *weights_ : vecteur des coefficients de pondération des actifs sous-jacents
+		 */
+		PnlVect *weights_; // vector containing the proportions of each one of the D underlying asset
+
+		/**
+		Constructeur par défaut
 		*/
 		 QuantoBasket();
 
-		/*
-		* Copy Constructor
+		/**
+		*  \brief Constructeur par copie d'objet Basket
+		*  @param[in] param source : l'objet Basket à copier
 		*/
-		 QuantoBasket(const QuantoBasket &C);
+		 QuantoBasket(const QuantoBasket &QB);
 
-		/*
-		* Affectation
+		/** Methode d'affectation d'une Option Basket
+		* @param[in] une image de l'Option Basket à affecter.
+		* @param[out] la même référence Option Basket avec les mêmes paramètres que l'entrée
 		*/
-		 QuantoBasket& operator=(const QuantoBasket &C);
+		 QuantoBasket& operator=(const QuantoBasket &QB);
 
 		/**
 		* Destructor

@@ -9,13 +9,13 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/pricer",
-            "args": [],
+            "args": ["-c", "${workspaceFolder}/market-soutenance/market_basket.dat" ,"${workspaceFolder}/data-soutenance/basket.dat"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/path/to/gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

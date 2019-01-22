@@ -5,19 +5,19 @@ using namespace Computations;
 
 
 QuantoBasket::QuantoBasket() {
-	weights_ = pnl_vect_create_from_scalar(1, 1.0);
+	weights_ = pnl_vect_new();
 	T_ = 0;
-	nbTimeSteps_ = 1;
-	size_ = 1;
+	nbTimeSteps_ = 0;
+	size_ = 0;
 	strike_ = 0;
 }
 
-QuantoBasket::QuantoBasket(const QuantoBasket &C) {
-	T_ = C.T_;
-	strike_ = C.strike_;
-	nbTimeSteps_ = C.nbTimeSteps_;
-	size_ = C.size_;
-	weights_ = pnl_vect_copy(C.weights_);
+QuantoBasket::QuantoBasket(const QuantoBasket &QB) {
+	T_ = QB.T_;
+	strike_ = QB.strike_;
+	nbTimeSteps_ = QB.nbTimeSteps_;
+	size_ = QB.size_;
+	weights_ = pnl_vect_copy(QB.weights_);
 }
 
 QuantoBasket& QuantoBasket::operator=(const QuantoBasket &C) {
@@ -68,13 +68,14 @@ double QuantoBasket::payoff(const PnlMat *path, const PnlMat *pathChangeRate, co
 	pnl_mat_get_row(last_date, path, nbTimeSteps_);
     pnl_mat_get_row(last_date_change_rate, pathChangeRate, nbTimeSteps_);
     for(int i = 0; i < last_date->size; i++) {
-        pnl_vect_set(last_date, i, (pnl_vect_get(last_date, i) - strike_) * pnl_vect_get(last_date_change_rate, pnl_vect_get(currency, i)));
+		res += pnl_vect_get(weights_, i)*pnl_vect_get(last_date, i)*pnl_vect_get(last_date_change_rate, pnl_vect_get(currency, i));
     }
 
-	res = (sign * pnl_vect_scalar_prod(weights_, last_date));
+	res = sign*res - strike_;
 
 	// Deleting last_date
 	pnl_vect_free(&last_date);
+	pnl_vect_free(&last_date_change_rate);
 
 	if (res >= 0)
 	{

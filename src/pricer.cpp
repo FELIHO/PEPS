@@ -24,6 +24,8 @@ int main(int argc,char **argv){
   if (!strcmp(argument, char_c)){ // if the -c option is given 
     file = argv[3]; // data_input to parse
     char *marketData = argv[2]; // market_file to parse
+    cout << marketData << endl;
+    pnl_mat_create_from_file(marketData);
     past = pnl_mat_create_from_file(marketData); // market data matrix 
   }
   else
@@ -72,6 +74,7 @@ int main(int argc,char **argv){
   // Initializing Option
   Option *opt;
   
+  
   if (type =="basket")
   {
     P->extract("strike", strike);
@@ -103,14 +106,10 @@ int main(int argc,char **argv){
   bs_model->trend_ = trend;
   */
 
-  PnlMat* rho_ =pnl_mat_create_from_scalar(size,size,rho);
-    for (int d = 0; d < size ; d++){
-    pnl_mat_set(rho_, d, d, 1);
-     }
-
   if (!strcmp(argument, char_c)) // option -c is given
   {
-    bs_model = new BlackScholesModel(size, pnl_vect_create_from_scalar(size,r) , rho_, sigma, spot);
+    
+    bs_model = new BlackScholesModel(size, r , rho, sigma, spot);
     
     //bs_model->simul_market(past,T,H,rng);
     //bs_model->asset(path, 0.0, T, nbTimeSteps, rng, past);
@@ -121,17 +120,17 @@ int main(int argc,char **argv){
   }
   else // option -c is not given
   {
-
     //bs_model->asset(path,T,nbTimeSteps,rng);
-    bs_model = new BlackScholesModel(size, pnl_vect_create_from_scalar(size,r) , rho_, sigma, spot);
+    bs_model = new BlackScholesModel(size, r , rho, sigma, spot);
     
     PnlMat* dataSimul = pnl_mat_new();
     bs_model->simul_market(dataSimul, T, H, rng);
   
   }
-
   
   MonteCarlo *mc_pricer = new MonteCarlo(bs_model, opt, rng, fdStep, n_samples);
+
+  
   
   if (strcmp(argument, char_c)) // option -c not given
   {

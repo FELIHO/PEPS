@@ -5,27 +5,27 @@ using namespace Computations;
 
 
 QuantoCall::QuantoCall(){
-	weights_ = pnl_vect_create_from_scalar(1, 1.0);
-  	T_ = 0;
-  	nbTimeSteps_ = 1;
-  	size_ = 1;
-  	strike_ = 0;
+	weights_ = pnl_vect_new();
+	T_ = 0;
+	nbTimeSteps_ = 0;
+	size_ = 0;
+	strike_ = 0;
 }
 
-QuantoCall::QuantoCall(const QuantoCall &C) {
-	T_ = C.T_;
-	strike_ = C.strike_;
-	nbTimeSteps_ = C.nbTimeSteps_;
-	size_ = C.size_;
-	weights_ = pnl_vect_copy(C.weights_);
+QuantoCall::QuantoCall(const QuantoCall &QC) {
+	T_ = QC.T_;
+	strike_ = QC.strike_;
+	nbTimeSteps_ = QC.nbTimeSteps_;
+	size_ = QC.size_;
+	weights_ = pnl_vect_copy(QC.weights_);
 }
 
-QuantoCall& QuantoCall::operator=(const QuantoCall &C) {
-	T_ = C.T_;
-	strike_ = C.strike_;
-	nbTimeSteps_ = C.nbTimeSteps_;
-	size_ = C.size_;
-	weights_ = C.weights_;
+QuantoCall& QuantoCall::operator=(const QuantoCall &QC) {
+	T_ = QC.T_;
+	strike_ = QC.strike_;
+	nbTimeSteps_ = QC.nbTimeSteps_;
+	size_ = QC.size_;
+	weights_ = QC.weights_;
 	return *this;
 }
 

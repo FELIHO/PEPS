@@ -8,68 +8,54 @@ using namespace Computations;
 BlackScholesModel::BlackScholesModel()
 {
 	size_ = 0;
-	r_= pnl_vect_new();
+	r_= 0;
+  dividend_= pnl_vect_new();
 	rho_ = pnl_mat_new();
 	sigma_ = pnl_vect_new();
 	spot_ = pnl_vect_new();
 	chol_ = pnl_mat_new();
-	trend_ = pnl_mat_new();
+	//trend_ = pnl_mat_new();
 }
 
 
 BlackScholesModel::BlackScholesModel(const BlackScholesModel &BSM){
   size_ = BSM.size_;
-  r_=  pnl_vect_copy(BSM.r_);
+  r_=  BSM.r_;
+  dividend_=  pnl_vect_copy(BSM.dividend_);
   rho_ =  pnl_mat_copy(BSM.rho_);
   sigma_ =  pnl_vect_copy(BSM.sigma_);
   spot_ =  pnl_vect_copy(BSM.spot_);
   chol_ =  pnl_mat_copy(BSM.chol_);
-  trend_ = pnl_mat_copy(BSM.trend_);
+  //trend_ = pnl_mat_copy(BSM.trend_);
 }
 
-BlackScholesModel& BlackScholesModel::operator = (const BlackScholesModel &BSMM)
+BlackScholesModel& BlackScholesModel::operator = (const BlackScholesModel &BSM)
 {
-	size_ = BSMM.size_;
-	rho_ = BSMM.rho_;
-	sigma_ = BSMM.sigma_;
-	spot_ = BSMM.spot_;
-	trend_ = BSMM.trend_;
-	chol_ = BSMM.chol_;
+	size_ = BSM.size_;
+  r_=  BSM.r_;
+  dividend_=  BSM.dividend_;
+	rho_ = BSM.rho_;
+	sigma_ = BSM.sigma_;
+	spot_ = BSM.spot_;
+	chol_ = BSM.chol_;
+  //trend_ = BSM.trend_;
 	return *this;
 }
 
 BlackScholesModel::~BlackScholesModel() {
-	pnl_vect_free(&r_);
-	pnl_mat_free(&rho_);
+	  pnl_vect_free(&dividend_);
+	  pnl_mat_free(&rho_);
     pnl_vect_free(&sigma_);
     pnl_vect_free(&spot_);
     pnl_mat_free(&chol_);
-    pnl_mat_free(&trend_);
+    //pnl_mat_free(&trend_);
 }
 
-
-
-BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot)
-{
-  size_ = size;
-  r_ = pnl_vect_copy(r);
-  rho_ = pnl_mat_copy(rho);
-  sigma_ = pnl_vect_copy(sigma);
-  spot_ = pnl_vect_copy(spot);
-  // la factorisée de Cholesky
-  chol_ = pnl_mat_copy(rho_);
-  int defPos = pnl_mat_chol(chol_);
-  if (defPos == FAIL) {
-    throw invalid_argument("la matrice de correlation n'est pas définie positive");
-  }
-  trend_ = pnl_mat_new();
-}
-
-// Constructeur BlackScholes avec r et rho double, pour les tests de l'ancien projet pricer MonteCarlo C++
 BlackScholesModel::BlackScholesModel(int size, double r , double rho, PnlVect *sigma, PnlVect *spot)
 {
   size_ = size;
-  r_ = pnl_vect_create_from_scalar(size, r);
+  r_ = r;
+  dividend_ = pnl_vect_create_from_scalar(size,0.0);
   rho_ = pnl_mat_create_from_scalar(size,size,rho);
   for (int d = 0; d < size ; d++){
     pnl_mat_set(rho_, d, d, 1);
@@ -82,14 +68,14 @@ BlackScholesModel::BlackScholesModel(int size, double r , double rho, PnlVect *s
   if (defPos == FAIL) {
     throw invalid_argument("la matrice de correlation n'est pas définie positive");
   }
-  trend_ = pnl_mat_new();
+  //trend_ = pnl_mat_new();
 }
 
-
-BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlMat *trend)
+BlackScholesModel::BlackScholesModel(int size, double r , PnlMat *rho, PnlVect *sigma, PnlVect *spot)
 {
   size_ = size;
-  r_ = pnl_vect_copy(r);
+  r_ = r;
+  dividend_ = pnl_vect_create_from_scalar(size,0.0);
   rho_ = pnl_mat_copy(rho);
   sigma_ = pnl_vect_copy(sigma);
   spot_ = pnl_vect_copy(spot);
@@ -99,7 +85,26 @@ BlackScholesModel::BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect
   if (defPos == FAIL) {
     throw invalid_argument("la matrice de correlation n'est pas définie positive");
   }
-  trend_ = pnl_mat_copy(trend);
+  //trend_ = pnl_mat_new();
+}
+
+
+
+BlackScholesModel::BlackScholesModel(int size, double r , PnlVect *dividend  , PnlMat *rho, PnlVect *sigma, PnlVect *spot)
+{
+  size_ = size;
+  r_ = r;
+  dividend_ = dividend;
+  rho_ = pnl_mat_copy(rho);
+  sigma_ = pnl_vect_copy(sigma);
+  spot_ = pnl_vect_copy(spot);
+  // la factorisée de Cholesky
+  chol_ = pnl_mat_copy(rho_);
+  int defPos = pnl_mat_chol(chol_);
+  if (defPos == FAIL) {
+    throw invalid_argument("la matrice de correlation n'est pas définie positive");
+  }
+  //trend_ = pnl_mat_copy(trend);
 }
 
 void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
@@ -123,14 +128,15 @@ void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, co
 
 
 
-void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, PnlRng *rng, PnlVect* r){
+void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, PnlRng *rng, double r, PnlVect *dividend){
   PnlVect* S_previous = pnl_vect_new();
   pnl_mat_get_row(S_previous, path, 0); // S_0
   // premierTerme = (r - sigma^²/2) * ( t_(i+1) - t_(i) )
   PnlVect* premierTerme = pnl_vect_copy(sigma_);
   pnl_vect_mult_vect_term(premierTerme, sigma_);
   pnl_vect_mult_scalar(premierTerme, -0.5);
-  pnl_vect_plus_vect(premierTerme, r);
+  pnl_vect_plus_scalar(premierTerme, r);
+  pnl_vect_minus_vect(premierTerme, dividend);
   pnl_vect_mult_scalar(premierTerme, timestep);
   // Mouvement Brownien standard à valeurs dans R^D
   PnlMat* MBS = pnl_mat_new();
@@ -165,7 +171,7 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
   assert(path->m == nbTimeSteps+1 && path->n == size_);
   pnl_mat_set_row(path, spot_, 0);
   double timestep = T/nbTimeSteps;
-  simulateAsset(path, timestep, nbTimeSteps, rng, r_);
+  simulateAsset(path, timestep, nbTimeSteps, rng, r_, dividend_);
 }
 
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past)
@@ -185,7 +191,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     double delta = (nbRowsPast - 1)*timestep -t;
     PnlMat* temp = pnl_mat_create(2, size_);
     pnl_mat_set_row(temp, s_t, 0);
-    simulateAsset(temp, delta, 1, rng, r_);
+    simulateAsset(temp, delta, 1, rng, r_, dividend_);
     PnlVect* s_tS_delta = pnl_vect_new();
     pnl_mat_get_row(s_tS_delta, temp , 1);
     pnl_mat_set_row(future, s_tS_delta, 0);
@@ -194,7 +200,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     pnl_vect_free(&s_tS_delta);
   }
 
-  simulateAsset(future, timestep, nbTimeStepsResidual, rng, r_);
+  simulateAsset(future, timestep, nbTimeStepsResidual, rng, r_, dividend_);
 
   if (past->m == 1){
     pnl_mat_clone(path,future);
@@ -226,5 +232,5 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
     pnl_mat_resize(market, H+1, size_);
     pnl_mat_set_row(market, spot_, 0);
     double timestep = T/H;
-    simulateAsset(market, timestep, H, rng, r_);
+    simulateAsset(market, timestep, H, rng, r_, dividend_);
   }

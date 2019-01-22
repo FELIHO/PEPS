@@ -27,9 +27,14 @@ namespace Computations {
 		int size_;
 
 		/**
-		 * double r_ : taux d'intérêt pour chaque actif
+		 * double r_ : taux d'intérêt
 		 */
-		PnlVect *r_;
+		double r_;
+
+		/**
+		 *  PnlVect *dividend_ : vecteur de dividende
+		 */
+		PnlVect *dividend_;
 
 		/**
 		 *  double rho_ : matrice de corrélation
@@ -47,14 +52,14 @@ namespace Computations {
 		PnlVect *spot_;
 
 		/**
-		 *  PnlVect *trend_ : tendance du marche
-		 */
-		PnlMat *trend_;
-
-		/**
 		 *  PnlMat* choleskyFactor : récipient de la factorisation de Cholesky
 		 */
 		PnlMat* chol_;
+
+		/**
+		 *  PnlVect *trend_ : tendance du marche
+		 */
+		//PnlMat *trend_;
 
 		/**
 		Constructeur par défaut
@@ -78,17 +83,6 @@ namespace Computations {
 		~BlackScholesModel();
 
 		/**
-		 * \brief Constructeur de la classe BlackScholesModel
-		 *
-		 * @param[in] size_ nombre d'actifs du modèle
-		 * @param[in] r_ taux d'intérêt
-		 * @param[in] rho_ paramètre de corrélation
-		 * @param[in] sigma_ vecteur de volatilités
-		 * @param[in] spot_ valeurs initiales des sous-jacents
-		 */
-		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
-
-		/**
 		 * \brief Constructeur de la classe BlackScholesModel avec corrélation constante
 		 *
 		 * @param[in] size_ nombre d'actifs du modèle
@@ -107,9 +101,20 @@ namespace Computations {
 		 * @param[in] rho_ paramètre de corrélation
 		 * @param[in] sigma_ vecteur de volatilités
 		 * @param[in] spot_ valeurs initiales des sous-jacents
-		 * @param[in] trend_ vecteur de v
 		 */
-		BlackScholesModel(int size, PnlVect *r , PnlMat *rho, PnlVect *sigma, PnlVect *spot, PnlMat *trend);
+		BlackScholesModel(int size, double r , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
+
+		/**
+		 * \brief Constructeur de la classe BlackScholesModel
+		 *
+		 * @param[in] size_ nombre d'actifs du modèle
+		 * @param[in] r_ taux d'intérêt
+		 * @param[in] dividend vecteur des dividendes
+		 * @param[in] rho_ paramètre de corrélation
+		 * @param[in] sigma_ vecteur de volatilités
+		 * @param[in] spot_ valeurs initiales des sous-jacents
+		 */
+		BlackScholesModel(int size, double r , PnlVect *dividend , PnlMat *rho, PnlVect *sigma, PnlVect *spot);
 
 		/**
 		 * Génère une trajectoire du modèle et la stocke dans path
@@ -198,6 +203,6 @@ namespace Computations {
 		* @param[in] rng Générateur de nombre aléatoire
 		* @param[in] r vecteur des taux d'intérêts des sous-jacents
 		*/
-		void simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, PnlRng *rng, PnlVect* r);
+		void simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, PnlRng *rng, double r, PnlVect *dividend);
 		};
 }
