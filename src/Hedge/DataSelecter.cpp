@@ -121,5 +121,5 @@ PnlMat DataSelecter::getWindowPreviousEstimation(const PnlMat *allData, const Pn
 double DataSelecter::computeTvalue(const PnlVectInt *dateIndexes, const int DateZero, const int DateT, const double T) {
   int indexZero = getIndexDate(dateIndexes, DateZero);
   int indexT = getIndexDate(dateIndexes, DateT);
-  return (indexT - indexZero + 0.0)/(T * 365);
+  return (indexT - indexZero + 0.0)/(T * 252);
 }

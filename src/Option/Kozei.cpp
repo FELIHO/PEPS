@@ -13,7 +13,7 @@ Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init) : Option(8 + 11.0/365, 16, 30)  {
+Kozei::Kozei( double inv_init) : Option(8 + 11.0/252, 16, 30)  {
 	inv_init_ = inv_init;
 }
 
