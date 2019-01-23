@@ -77,6 +77,10 @@ int DataSelecter::getIndexDate(const PnlVectInt *dateIndexes, const int Date) {
   return -1;
 }
 
+int DataSelecter::getIndexSpotDate(const PnlVectInt *dateIndexes) {
+  return getIndexDate(dateIndexes, pnl_vect_int_get(ConstationDate_, 0));
+}
+
 PnlVectInt* DataSelecter::getRebalecementDateIndexes(const PnlVectInt *dateIndexes) {
   PnlVectInt *rebalancementDateIndexes = pnl_vect_int_create_from_scalar(ConstationDate_->size,0);
   int counter = 0;

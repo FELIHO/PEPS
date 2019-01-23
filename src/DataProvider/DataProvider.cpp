@@ -21,5 +21,4 @@ DataProvider::DataProvider(const DataProvider& D) {
 DataProvider& DataProvider::operator=(const DataProvider &D) {
   DataFeed_ = D.DataFeed_;
   indexFirstSpot_ = D.indexFirstSpot_;
-  return *this;
 }
