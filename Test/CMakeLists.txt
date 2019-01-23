@@ -132,3 +132,7 @@ add_test(test_getLogRendements test_getLogRendements)
 add_executable (test_getVolatilies test_getVolatilies.cpp)
 target_link_libraries(test_getVolatilies jl_parser ${LIBS})
 add_test(test_getVolatilies test_getVolatilies)
+
+add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
+target_link_libraries(test_HistoricalDataProvider jl_parser ${LIBS})
+add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
