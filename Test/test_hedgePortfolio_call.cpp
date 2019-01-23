@@ -1,6 +1,7 @@
 #include "HedgePortfolio.hpp"
-#include "Option/Basket.hpp"
-#include "MonteCarlo/MonteCarlo.hpp"
+#include "Basket.hpp"
+#include "MonteCarlo.hpp"
+#include "BlackScholesModel.hpp"
 
 #include <iostream>
 #include <string>
