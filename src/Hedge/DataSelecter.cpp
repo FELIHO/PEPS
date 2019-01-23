@@ -8,6 +8,10 @@ DataSelecter::DataSelecter(PnlVectInt *ConstationDate) {
   ConstationDate_ = ConstationDate;
 }
 
+DataSelecter::DataSelecter() {
+  ConstationDate_ = pnl_vect_int_new();
+}
+
 DataSelecter::DataSelecter(const DataSelecter &D) {
   ConstationDate_ = pnl_vect_int_copy(D.ConstationDate_);
 }

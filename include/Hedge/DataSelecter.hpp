@@ -16,6 +16,11 @@ namespace Computations {
 		/*
 		* Constructeur par défaut
 		*/
+		DataSelecter();
+
+		/*
+		* Constructeur avec prise en compte de date de constatation
+		*/
 		DataSelecter(PnlVectInt *ConstationDate);
 
 		/*
