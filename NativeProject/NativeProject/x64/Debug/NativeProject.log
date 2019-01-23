@@ -1,7 +1,15 @@
 ﻿  Asian.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\Asian.cpp': No such file or directory
+  Basket.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\Basket.cpp': No such file or directory
+  BlackScholesModel.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\BlackScholesModel.cpp': No such file or directory
   MonteCarlo.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\MonteCarlo.cpp': No such file or directory
+  Option.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\Option.cpp': No such file or directory
+  Performance.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\Performance.cpp': No such file or directory
   Testeur.cpp
-c:\users\ensimag\downloads\pricer-skel\pricer-skel\src\testeur.cpp(22): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned long', perte possible de données
-  Génération de code en cours...
-     CrÚation de la bibliothÞque C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.lib et de l'objet C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.exp
-  NativeProject.vcxproj -> C:\Users\ensimag\source\repos\NativeProject\x64\Debug\NativeProject.dll
+c1xx : fatal error C1083: Cannot open source file: '..\..\..\..\Downloads\pricer-skel\pricer-skel\src\Testeur.cpp': No such file or directory
+  Generating Code...
