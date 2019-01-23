@@ -8,16 +8,30 @@ namespace Computations {
   /** \class ForwardTest
    * \brief Portefeuille de Couverture
    */
-  class ForwardTest
+  class KozeiForwardTest
   {
   public:
-	 /**
-	* Priceur par méthode Monte Carlo utilisé pour la couverture
-	*/
-	  MonteCarlo *monteCarlo_;
 	  /**
-	   * Matrice contenant les cours passés des sous-jacents
-	   */
+    * Priceur par méthode Monte Carlo utilisé pour la couverture
+    */
+	  MonteCarlo *monteCarlo_;
+
+    /**
+	   * Le spot sur lequel se base la simualtion des données de marchés
+	  */
+	  PnlVect* Spot_;
+
+    /**
+	   * fenetre d'estimation des paramètres
+	  */
+	  int estimationWindow_;
+
+    
+
+
+	  /**
+     * Matrice contenant les cours passés des sous-jacents
+     */
 	  PnlMat *past_;
 	  /**
 	   * Vecteur contenant les delta
@@ -26,11 +40,10 @@ namespace Computations {
 	  /**
 	   * cours à la date courante
 	  */
-	 PnlVect* S_current;
-	 /**
-	 * date courante
-	 */
-    //double currentDate_;
+	  PnlVect* S_current;
+	  /**
+	  * date courante
+	  */
     int currentRebalancingIndex_;
     /**
      * Prix calculé par Monte Carlo
@@ -45,16 +58,14 @@ namespace Computations {
      */
     double investTauxSansRisque_;
     /**
-     * nombre de dates de constatations
+     * nombre de dates de rebalancement
      */
     double H_;
-
-
 
     /**
 		Constructeur par défaut
 		*/
-		ForwardTest();
+		KozeiForwardTest();
 
 
     /**
@@ -62,18 +73,18 @@ namespace Computations {
      *
      * @param[in] ForwardTest, portefeuille de couverture à copier
     */
-    ForwardTest(const ForwardTest &FT);
+    KozeiForwardTest(const KozeiForwardTest &KFT);
 
     /** Methode d'affectation ForwardTest
 		* @param[in] une image de la classe HedgePortfoli à affecter.
 		* @param[out] la même référence HedgePortfoli avec les mêmes paramètres que l'entrée
 		*/
-		ForwardTest& operator= (const ForwardTest &FT);
+		KozeiForwardTest& operator= (const KozeiForwardTest &KFT);
 
     /**
      * \brief Destructeur de la classe ForwardTest
      */
-    ~ForwardTest();
+    ~KozeiForwardTest();
 
     /**
      * \brief Constructeur de la classe ForwardTest
@@ -82,7 +93,7 @@ namespace Computations {
      * @param[in] monteCarlo, un object de la classe monteCarlo pour les calculs du price et delta
      *
     */
-    ForwardTest(PnlMat *Data, MonteCarlo *monteCarlo);
+    KozeiForwardTest(PnlMat *Data, MonteCarlo *monteCarlo);
 
     /**
      * \brief updateCompo met à jour la composition du portefeuille couverture
