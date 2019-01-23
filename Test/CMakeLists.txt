@@ -136,3 +136,7 @@ add_test(test_getVolatilies test_getVolatilies)
 add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
 target_link_libraries(test_HistoricalDataProvider jl_parser ${LIBS})
 add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
+
+add_executable (test_SimulatedDataProvider test_SimulatedDataProvider.cpp)
+target_link_libraries(test_SimulatedDataProvider jl_parser ${LIBS})
+add_test(test_SimulatedDataProvider test_SimulatedDataProvider)
