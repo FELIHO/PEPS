@@ -1,12 +1,12 @@
-directory <- "/user/8/felihol/Desktop/PEPS/DataFeeds/Daily/Csv/"
+directory <- "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/ExchangeRates/"
 
-file <- paste(directory,"AWK", sep= "")
+file <- paste(directory,"USD", sep= "")
 file <- paste(file,".csv", sep= "")
 MyData <- read.csv(file, header=TRUE, sep=",")
 MyData <- MyData[,c(1,5)]
-colnames(MyData)[colnames(MyData)=="close"] <- "AWK"
+colnames(MyData)[colnames(MyData)=="close"] <- "USD"
 
-NameList <- c("A","DHR","ECL","FLS","PNR","UUGRY","AGCO","CNI","CF","K","MOS","MDLZ","DE","SU","CSX","NSC","6326.TOK","9020.TOK","SVT.LON","WEIR.LON","SEV.PAR","DSM.AMS","SGO.PAR","AA9.BER","LR.PAR","PHIA.AMS","SIE.FRK","ABBN.VSX","BRFS3.SAO")
+NameList <- c("JPY", "GBP", "CHF", "BRL")
 for (name in NameList) {
   file <- paste(directory,name, sep= "")
   file <- paste(file,".csv", sep= "")
@@ -71,5 +71,5 @@ MyData <- MyData[which(as.Date(MyData$timestamp) > as.Date.character("2009-12-31
 #prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character("2014-04-11"),as.Date.character("2014-04-14"),as.Date.character("2014-04-15"),as.Date.character("2014-10-13"),as.Date.character("2015-04-13"),as.Date.character("2015-10-12"),as.Date.character("2016-04-11"),as.Date.character("2016-10-11"),as.Date.character("2017-04-11"),as.Date.character("2017-10-11"),as.Date.character("2018-04-11"),as.Date.character("2018-10-11"))), ]
 
 
-write.table(MyData[,-1], file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
-write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(MyData[,-1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/kozei_dataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/kozei_IndexdataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)
