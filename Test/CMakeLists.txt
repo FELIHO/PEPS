@@ -149,3 +149,11 @@ add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
 add_executable (test_SimulatedDataProvider test_SimulatedDataProvider.cpp)
 target_link_libraries(test_SimulatedDataProvider jl_parser ${LIBS})
 add_test(test_SimulatedDataProvider test_SimulatedDataProvider)
+
+add_executable (test_BackWardTest test_BackWardTest.cpp)
+target_link_libraries(test_BackWardTest jl_parser ${LIBS})
+add_test(test_BackWardTest test_BackWardTest)
+
+add_executable (test_BackWardTestSixMonths test_BackWardTestSixMonths.cpp)
+target_link_libraries(test_BackWardTestSixMonths jl_parser ${LIBS})
+add_test(test_BackWardTestSixMonths test_BackWardTestSixMonths)

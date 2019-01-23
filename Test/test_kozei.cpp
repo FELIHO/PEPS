@@ -81,6 +81,7 @@ int main(){
   PnlVect* spot = pnl_vect_new();
   pnl_mat_get_row(spot, past, 0);
 
+
   double r;
   cout << "choisissez un taux d'intérêt zéro coupon européen (plus tard il faudrait avoir cette donnée sous forme de vecteur dans nos data): " << endl;
   cin >> r;
