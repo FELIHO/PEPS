@@ -11,20 +11,14 @@ namespace Computations {
   class KozeiForwardTest
   {
   public:
-	  /**
-    * Priceur par méthode Monte Carlo utilisé pour la couverture
-    */
-	  MonteCarlo *monteCarlo_;
-
     /**
 	   * Le spot sur lequel se base la simualtion des données de marchés
 	  */
 	  PnlVect* Spot_;
 
-    /**
-	   * fenetre d'estimation des paramètres
-	  */
-	  int estimationWindow_;
+    double r;
+    int nbDates;
+    double rho;
 
     
 

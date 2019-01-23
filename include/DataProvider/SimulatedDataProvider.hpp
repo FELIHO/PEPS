@@ -11,8 +11,8 @@ namespace Computations {
 	{
 	public:
 		SimulatedDataProvider(PnlVect* spot, double sigma, double r , double rho, int nbDates, int timeEstimation);
-    SimulatedDataProvider(PnlVect* spot, PnlVect* volatilities, double r , double rho, int nbDates, int timeEstimation);
-    ~SimulatedDataProvider();
+    	SimulatedDataProvider(PnlVect* spot, PnlVect* volatilities, double r , double rho, int nbDates, int timeEstimation);
+    	~SimulatedDataProvider();
 		SimulatedDataProvider(const SimulatedDataProvider& D);
 		SimulatedDataProvider& operator=(const SimulatedDataProvider &D);
 	};
