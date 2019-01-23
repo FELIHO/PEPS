@@ -1,12 +1,11 @@
 #include "pch.h"
 #include "ParameterEstimation.hpp"
 #include <math.h>
-
+#include <algorithm>
 #include <iostream>
-using namespace Computations;
+#include <assert.h>
 
-int Test = 0;
-int Test2 = 0;
+using namespace Computations;
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
@@ -89,6 +88,17 @@ PnlMat* ParameterEstimation::getCorrelationMatrix(const PnlMat *past) {
 
 double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double Sigma_Y, const double rhoXY) {
 	return sqrt(Sigma_X*Sigma_X + Sigma_Y*Sigma_Y + Sigma_X*Sigma_Y*rhoXY);
+}
+
+double ParameterEstimation::getCorrelation(const PnlVect* shareX, const PnlVect* shareY) {
+	assert(shareX->size == shareY->size);
+	PnlMat* corrMatrix = pnl_mat_create(shareX->size, 2);
+	pnl_mat_set_col (corrMatrix, shareX, 0);
+	pnl_mat_set_col (corrMatrix, shareY, 1);
+	corrMatrix = getCorrelationMatrix(corrMatrix);
+	double corr = pnl_mat_get(corrMatrix, 0, 1);
+	pnl_mat_free(&corrMatrix);
+	return corr;
 }
 
 PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {

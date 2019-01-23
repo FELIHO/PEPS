@@ -45,6 +45,13 @@ namespace Computations {
 		*/
 		static double getSigmaCorreled(const double Sigma_X, const double Sigma_Y, const double rhoXY);
 
+		/** Methode calculant la corrélation entre deux vecteurs, ces derniers doivent avoir la même taille
+		* @param[in]  ShareX, PnlVect* trajectoire de l'actif X
+		* @param[in]  ShareY, PnlVect* trajectoire de l'actif Y
+		* @param[out] la corrélation rhoXY entre deux trajectoires
+		*/
+		static double getCorrelation(const PnlVect* shareX, const PnlVect* shareY);
+
 	private:
 	};
 
