@@ -133,6 +133,7 @@ add_executable (test_getVolatilies test_getVolatilies.cpp)
 target_link_libraries(test_getVolatilies jl_parser ${LIBS})
 add_test(test_getVolatilies test_getVolatilies)
 
+
 add_executable (test_taux_change test_taux_change.cpp)
 target_link_libraries(test_taux_change jl_parser ${LIBS})
 add_test(test_taux_change test_taux_change)
@@ -140,3 +141,11 @@ add_test(test_taux_change test_taux_change)
 add_executable (test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei.cpp)
 target_link_libraries(test_hedgePortfolio_Kozei jl_parser ${LIBS})
 add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
+
+add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
+target_link_libraries(test_HistoricalDataProvider jl_parser ${LIBS})
+add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
+
+add_executable (test_SimulatedDataProvider test_SimulatedDataProvider.cpp)
+target_link_libraries(test_SimulatedDataProvider jl_parser ${LIBS})
+add_test(test_SimulatedDataProvider test_SimulatedDataProvider)

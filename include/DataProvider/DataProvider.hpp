@@ -11,7 +11,9 @@ namespace Computations {
 		PnlMat *DataFeed_;
 		int indexFirstSpot_;
 		DataProvider();
-    virtual ~DataProvider() {};
+    ~DataProvider();
+		DataProvider(const DataProvider& D);
+		DataProvider& operator=(const DataProvider &D);
 	};
 
 }

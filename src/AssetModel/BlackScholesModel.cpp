@@ -1,6 +1,6 @@
 
 #include "BlackScholesModel.hpp"
-
+#include <iostream>
 using namespace std;
 using namespace Computations;
 
@@ -107,6 +107,10 @@ BlackScholesModel::BlackScholesModel(int size, double r , PnlVect *dividend  , P
 }
 
 void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
+
+	std::cout << "mat1 : " << mat1->n << endl;
+	std::cout << "mat2 : " << mat2->n << endl;
+	std::cout << "res : " << res->n << endl;
 
   assert(mat1->n == mat2->n && mat2->n == res->n);
   assert(res->m == mat1->m + mat2->m);

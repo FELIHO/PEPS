@@ -8,6 +8,10 @@ DataSelecter::DataSelecter(PnlVectInt *ConstationDate) {
   ConstationDate_ = ConstationDate;
 }
 
+DataSelecter::DataSelecter() {
+  ConstationDate_ = pnl_vect_int_new();
+}
+
 DataSelecter::DataSelecter(const DataSelecter &D) {
   ConstationDate_ = pnl_vect_int_copy(D.ConstationDate_);
 }
@@ -71,6 +75,10 @@ int DataSelecter::getIndexDate(const PnlVectInt *dateIndexes, const int Date) {
 		}
 	}
   return -1;
+}
+
+int DataSelecter::getIndexSpotDate(const PnlVectInt *dateIndexes) {
+  return getIndexDate(dateIndexes, pnl_vect_int_get(ConstationDate_, 0));
 }
 
 PnlVectInt* DataSelecter::getRebalecementDateIndexes(const PnlVectInt *dateIndexes) {
