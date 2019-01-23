@@ -46,6 +46,12 @@ namespace Computations {
 		*/
 		int getIndexDate(const PnlVectInt *dateIndexes, const int Date);
 
+		/** Methode calculant le vecteur de volatilités des Log-Rendements à partir d'une matrice path avec un nombre de dates(lignes) >
+		* @param[in] dateIndexes la matrice associant dates et index
+		* @param[out] l'index de la matrice dans allData correspondant à la FirstSpotDate
+		*/
+		int getIndexSpotDate(const PnlVectInt *dateIndexes);
+
 		PnlVectInt* getRebalecementDateIndexes(const PnlVectInt *dateIndexes);
 
 		PnlVectInt* getRebalecementDateIndexestoDate(const PnlVectInt *dateIndexes, const int Date);

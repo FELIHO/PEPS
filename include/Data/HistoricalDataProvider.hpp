@@ -10,7 +10,7 @@ namespace Computations {
 	class HistoricalDataProvider : public DataProvider
 	{
 	public:
-    HistoricalDataProvider(PnlMat* historicalData,  double r, int nbDates, int timeEstimation);
+    HistoricalDataProvider(const PnlMat* historicalData, double r, int nbDates, int timeEstimation, int indexFirstSpot);
     ~HistoricalDataProvider();
 		HistoricalDataProvider(const HistoricalDataProvider& D);
 		HistoricalDataProvider& operator=(const HistoricalDataProvider &D);
