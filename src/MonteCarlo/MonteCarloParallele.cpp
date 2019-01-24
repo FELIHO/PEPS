@@ -16,6 +16,7 @@ MonteCarlo::MonteCarlo(){
   nbSamples_= 0;
  }
 
+
 MonteCarlo::MonteCarlo(const MonteCarlo &MC){
   mod_ = new BlackScholesModel(*MC.mod_);
   mod_ChangeRate_ = new BlackScholesModel(*MC.mod_ChangeRate_);
@@ -62,6 +63,8 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, BlackScholesModel *mod_ChangeRate
   nbSamples_ = nbSamples;
 }
 
+
+
 void MonteCarlo::price(double &prix, double &ic)
 {
   double payoff;
@@ -90,6 +93,7 @@ void MonteCarlo::price(double &prix, double &ic)
   ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
   prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
 
+	pnl_rng_free(rng);
   pnl_mat_free(&pathCourant);
 }
 
@@ -181,6 +185,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
   double timestep = opt_->T_/opt_->nbTimeSteps_;
   double Diff = 0;
   PnlVect *vectDiff = pnl_vect_create(opt_->size_);
+
   for (int i = 0; i < nbSamples_; i++){
     mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
     for (int d = 0; d<opt_->size_; d++) {
@@ -232,10 +237,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
     for (int d = 0; d<opt_->size_; d++) {
       mod_->shiftAsset(shift_path_plus, path, d, fdStep_ , t, timestep);
       mod_->shiftAsset(shift_path_minus, path, d, -fdStep_, t, timestep);
-      if( i == 0 && d == 0){
-      }
       Diff = opt_->payoff(shift_path_plus) - opt_->payoff(shift_path_minus);
-      
       pnl_vect_set(vectDiff, d, Diff);
 
       pnl_vect_set(vectDiffCarre, d, Diff*Diff);

@@ -7,6 +7,7 @@
 #include "DataSelecter.hpp"
 #include "ParameterEstimation.hpp"
 #include "BlackScholesModel.hpp"
+#include "HedgePortfolio.hpp"
 #include "MonteCarlo.hpp"
 #include "Kozei.hpp"
 #include <assert.h>
@@ -90,46 +91,36 @@ int main(){
   size_t n_samples = 50000;
   double h = 0.1;
   // Maturité from 0 is 8 year and 11 day
-  double T = 8.0 + 11.0/365;
+  double T = 2021.0/252.6;
   double t = ds.computeTvalue(dateIndexes, pnl_vect_int_get(constationDate, 0), date, T);
+
 
   BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
   Kozei *kozei_test = new Kozei(inv_init);
   MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
 
-  PnlVect *delta = pnl_vect_create_from_scalar(past->n, 0.0);
-  PnlVect *icdelta = pnl_vect_create_from_scalar(past->n, 0.0);
+  PnlMat* path = pnl_mat_new();
+  bc->asset(path, t, T, kozei_test->nbTimeSteps_, rng, past);
+  pnl_mat_print(path);
+  HedgePortfolio* hedgePortfolio = new HedgePortfolio(path, mc_test);
+  double PL = hedgePortfolio->HedgeError(path);
 
-  double prix_ent = 0.0;
-  double prix_0 = 0.0;
+  cout<<"P&L" << PL<<endl;
 
-  double ic_ent = 0.0;
-  double ic_0 = 0.0;
 
-  mc_test->price(prix_0,ic_0);
-  mc_test->price(past, t, prix_ent, ic_ent);
-  mc_test->delta(past, t, delta, icdelta);
 
-  cout << "Delta :" << endl;
-  pnl_vect_print_asrow(delta);
-  cout << "IC Delta :" << endl;
-  pnl_vect_print_asrow(icdelta);
-
-  cout<<"Prix calculer par la fct price(0) :"<<prix_0<<endl;
-  cout<<"Prix calculer par la fct price(t) :"<<prix_ent<<endl;
-
-  cout<<"IC par la fct price(0) :"<<ic_0<<endl;
-  cout<<"IC par la fct price(t) :"<<ic_ent<<endl;
 
   pnl_mat_free(&allData);
   pnl_vect_int_free(&constationDate);
   pnl_vect_int_free(&dateIndexes);
   pnl_mat_free(&past);
-  pnl_vect_free(&icdelta);
-  pnl_vect_free(&delta);
   pnl_vect_free(&sigma);
   pnl_mat_free(&corr);
   pnl_vect_free(&spot);
   pnl_rng_free(&rng);
+  pnl_mat_free(&path);
+  delete(bc);
+  delete(kozei_test);
+  delete(mc_test);
 
 }

@@ -5,6 +5,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "DataSelecter.hpp"
+#include "SimulatedDataProvider.hpp"
 #include <assert.h>
 #include <sstream>
 #include <string>
@@ -38,7 +39,7 @@ int main(){
 
   str4 = str4+"DataFeeds/kozei_IndexdataFeed.dat";
   const char *cstr2 = str4.c_str();
-  PnlVectInt *dataIndexes = pnl_vect_int_create_from_file(cstr2);
+  PnlVectInt *dateIndexes = pnl_vect_int_create_from_file(cstr2);
 
   str5 = str5+"DataFeeds/kozei_Constatation.dat";
   const char *cstr3 = str5.c_str();
@@ -46,17 +47,20 @@ int main(){
 
   DataSelecter ds = DataSelecter(constationDate);
 
-  // Normally we have 10 size
-  PnlMat *past = ds.getPast(allData, dataIndexes, 20180515);
+  int firstIndexDate = ds.getIndexSpotDate(dateIndexes);
 
-  pnl_mat_print(past);
-  cout<< past->m << endl;
+  double r = 0.05;
+  PnlVect* spot = pnl_vect_create_from_scalar(30, 10.0);
+  double sigma = 0.4;
+  double rho = 0.1;
+  SimulatedDataProvider* hdp = new SimulatedDataProvider(spot, sigma, r, rho, 2021);
 
-
+  pnl_mat_print(hdp->DataFeed_);
+  //assert((hdp->DataFeed_)->m == 2021);
 
   pnl_mat_free(&allData);
   pnl_vect_int_free(&constationDate);
-  pnl_vect_int_free(&dataIndexes);
-  pnl_mat_free(&past);
+  pnl_vect_int_free(&dateIndexes);
+  pnl_vect_free(&spot);
 
 }

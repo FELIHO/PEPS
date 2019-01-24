@@ -67,6 +67,22 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
 
 }
 
+PnlMat * DataSelecter::getApproximatePath(const PnlMat *FullData, int nbTimeSteps) {
+  int timeSteps = FullData->n / nbTimeSteps;
+  PnlMat *resultPath = pnl_mat_create(nbTimeSteps + 1, FullData->n);
+  PnlVect *dataFeed = pnl_vect_new();
+  pnl_mat_get_row(dataFeed, FullData, 0);
+  pnl_mat_set_row(resultPath, dataFeed, 0);
+  for (int i = 1; i < nbTimeSteps - 1; i++){
+  pnl_mat_get_row(dataFeed, FullData, timeSteps * i);
+  pnl_mat_set_row(resultPath, dataFeed, i);
+    }
+  pnl_mat_get_row(dataFeed, FullData, FullData->m - 1);
+  pnl_mat_set_row(resultPath, dataFeed, resultPath->m - 1);
+  pnl_vect_free(&dataFeed);
+  return resultPath;
+}
+
 
 int DataSelecter::getIndexDate(const PnlVectInt *dateIndexes, const int Date) {
 	for (int i = 0; i < dateIndexes->size; i++){

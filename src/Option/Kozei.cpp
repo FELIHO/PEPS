@@ -13,7 +13,7 @@ Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init) : Option(8 + 11.0/252, 16, 30)  {
+Kozei::Kozei( double inv_init) : Option(2021.0/252.6, 16, 30)  {
 	inv_init_ = inv_init;
 }
 
@@ -35,45 +35,39 @@ Kozei& Kozei::operator=(const Kozei&K) {
 Kozei::~Kozei() {
 }
 
+Kozei* Kozei::clone() {
+  return new Kozei(*this);
+}
+
 double Kozei::payoff(const PnlMat *path) {
-	/* A revoir certains entier sont pris comme des double par rapport au temps.
-	* Il faut convertir la valeur temporelle en double � l'entier qui lui correponds dans la matrice
-	* en gros, t est entre tk et tk+1, il faut l'op�ration qui pour t donne le k.
-	*/
-	PnlVect *niveaux_initaux = pnl_vect_create(size_);
+
+	PnlVect *niveaux_initaux = pnl_vect_new();;
 	pnl_mat_get_row(niveaux_initaux, path, 0);
 
-	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
-	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
+	PnlVect* PerformancePanier = pnl_vect_create(nbTimeSteps_+1);
 	double Perfmoyenne;
+	double S_0 = 0.0;
+	double Perf_Panier_t = 0.0;
+	double Perf_acti = 0.0;
 
-
-	for (int t = 0; t < nbTimeSteps_; t++) {
-		double S_0 = 0.0;
-		double Perf_Panier_t = 0.0;
-		double Perf_acti = 0.0;
+	for (int t = 0; t < nbTimeSteps_+1; t++) {
 		for (int act = 0; act < size_; act++) {
 			S_0 = pnl_vect_get(niveaux_initaux, act);
 			Perf_acti = (pnl_mat_get(path, t , act) - S_0) / S_0;
-			pnl_mat_set(Performance_t, t, act, Perf_acti);
 			Perf_Panier_t += Perf_acti;
 		}
 
 		pnl_vect_set(PerformancePanier, t, std::max(Perf_Panier_t /size_,0.0) );
+
 	}
 
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
 
 	pnl_vect_free(&niveaux_initaux);
-	pnl_mat_free(&Performance_t);
 	pnl_vect_free(&PerformancePanier);
 
+	double payoff = inv_init_ * (0.9 + Perfmoyenne);
 
-	return inv_init_ * (0.9 + Perfmoyenne);
+	return payoff;
 
-
-
-}
-Kozei* Kozei::clone() {
-  return new Kozei(*this);
 }

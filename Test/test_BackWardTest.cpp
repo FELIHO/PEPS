@@ -5,6 +5,9 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "DataSelecter.hpp"
+#include "Kozei.hpp"
+#include "HedgePortfolio.hpp"
+#include "HistoricalDataProvider.hpp"
 #include <assert.h>
 #include <sstream>
 #include <string>
@@ -38,25 +41,40 @@ int main(){
 
   str4 = str4+"DataFeeds/kozei_IndexdataFeed.dat";
   const char *cstr2 = str4.c_str();
-  PnlVectInt *dataIndexes = pnl_vect_int_create_from_file(cstr2);
+  PnlVectInt *dateIndexes = pnl_vect_int_create_from_file(cstr2);
 
   str5 = str5+"DataFeeds/kozei_Constatation.dat";
   const char *cstr3 = str5.c_str();
   PnlVectInt *constationDate = pnl_vect_int_create_from_file(cstr3);
 
   DataSelecter ds = DataSelecter(constationDate);
+  int indexFirstSpot = ds.getIndexSpotDate(dateIndexes);
+  int nbDates = 2021;
 
-  // Normally we have 10 size
-  PnlMat *past = ds.getPast(allData, dataIndexes, 20180515);
+  double inv_init;
+  cout << "Entrez un investissement de départ : " << endl;
+  cin >> inv_init;
 
-  pnl_mat_print(past);
-  cout<< past->m << endl;
+  int timeEstimation;
+  cout << "Entrez une durée fenêtre d'estimation un entier, en nombre de jour: " << endl;
+  cin >> timeEstimation;
 
+  double r;
+  cout << "choisissez un taux d'intérêt zéro coupon européen (plus tard il faudrait avoir cette donnée sous forme de vecteur dans nos data): " << endl;
+  cin >> r;
 
+  Kozei *kozei_test = new Kozei(inv_init);
+  HistoricalDataProvider* hdp = new HistoricalDataProvider(kozei_test, allData, r, nbDates, timeEstimation, indexFirstSpot);
+  HedgePortfolio *hedgePortfolio = new HedgePortfolio(hdp->DataFeed_, hdp->mc_);
+  double PL = hedgePortfolio->HedgeError(hdp->DataFeed_);
+
+  cout<<"P&L" << PL<<endl;
 
   pnl_mat_free(&allData);
   pnl_vect_int_free(&constationDate);
-  pnl_vect_int_free(&dataIndexes);
-  pnl_mat_free(&past);
+  pnl_vect_int_free(&dateIndexes);
+  delete(kozei_test);
+  delete(hdp);
+  delete(hedgePortfolio);
 
 }

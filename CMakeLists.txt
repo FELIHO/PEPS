@@ -20,6 +20,28 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 endif ()
 
+
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+IF(COMPILER_SUPPORTS_CXX11)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ELSEIF(COMPILER_SUPPORTS_CXX0X)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+ELSE()
+    MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+ENDIF()
+
+include_directories(${PROJECT_SOURCE_DIR})
+# Detect Boost
+set(Boost_NO_BOOST_CMAKE ON)
+find_package(Boost COMPONENTS program_options REQUIRED)
+message(STATUS "Boost program_options component: ${Boost_PROGRAM_OPTIONS_LIBRARY}")
+FIND_PACKAGE(Boost COMPONENTS serialization REQUIRED)
+MESSAGE(STATUS "Boost serialization : ${Boost_SERIALIZATION_LIBRARY}")
+include_directories(${Boost_INCLUDE_DIR})
+set(LIBS ${LIBS} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
+
 # Detect PNL
 find_package(Pnl REQUIRED)
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
@@ -28,20 +50,24 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
 
-# Detect Boost
-set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-message(STATUS "Boost include directory ${Boost_INCLUDE_DIR}")
+# Detect OPM
+FIND_PACKAGE(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_CXX_FLAGS ${CMAKE_CXX_CFLAGS} ${OpenMP_CXX_FLAGS})
+    message(STATUS "OpenMP found.")
+else (OPENMP_FOUND)
+    message(STATUS "OpenMP not found.")
+endif (OPENMP_FOUND)
+
 
 # Add math lib
 set(LIBS ${LIBS} m Pricer Options)
 
 # Add jlparser
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-add_subdirectory(3rdparty/jlparser)
+#set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_EXTENSIONS OFF)
+#add_subdirectory(3rdparty/jlparser)
 
 #set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
@@ -53,20 +79,13 @@ add_subdirectory(3rdparty/jlparser)
 # target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Executable Product
-add_executable(pricer src/pricer.cpp)
-target_link_libraries(pricer jl_parser ${LIBS})
+#add_executable(pricer src/pricer.cpp)
+#target_link_libraries(pricer jl_parser ${LIBS})
 
 # For DLL, but unrecognised in ENSIMAG's machines
 # set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
-# Print compiler flags
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
-message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_LINKER_EXE_FLAGS}" )
-else()
-    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
-endif()
+
 
 # Include
 include_directories(include include/AssetModel include/Delta include/Hedge include/InterestModel include/MonteCarlo include/Option include/DataProvider) # include/Rnd )
@@ -83,5 +102,5 @@ add_library(Options src/Option/Option.cpp include/Option/Option.hpp src/Option/C
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(Test)
-# add_subdirectory(doc)
+add_subdirectory(doc)
 enable_testing()

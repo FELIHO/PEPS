@@ -5,10 +5,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "DataSelecter.hpp"
-#include "ParameterEstimation.hpp"
-#include "BlackScholesModel.hpp"
-#include "MonteCarlo.hpp"
-#include "Kozei.hpp"
+#include "HistoricalDataProvider.hpp"
 #include <assert.h>
 #include <sstream>
 #include <string>
@@ -40,32 +37,26 @@ int main(){
   const char *cstr = str3.c_str();
   PnlMat *allData = pnl_mat_create_from_file(cstr);
 
-  ParameterEstimation pe;
-  //PnlMat* corr = pe.getCorrelationMatrix(&allData);
-  //PnlVect* sigma = pe.getVolatilitiesVector(&allData);
-  PnlMat* logMatrix = pe.getLogRendementMatrix(allData);
-  //PnlMat* covMatrix = pe.getCovarianceMatrix(&allData);
+  str4 = str4+"DataFeeds/kozei_IndexdataFeed.dat";
+  const char *cstr2 = str4.c_str();
+  PnlVectInt *dateIndexes = pnl_vect_int_create_from_file(cstr2);
 
+  str5 = str5+"DataFeeds/kozei_Constatation.dat";
+  const char *cstr3 = str5.c_str();
+  PnlVectInt *constationDate = pnl_vect_int_create_from_file(cstr3);
 
-  pnl_mat_print(logMatrix);
-  bool missedValue = false;
+  DataSelecter ds = DataSelecter(constationDate);
 
-  for (int j = 0; j < logMatrix->m; j++) {
-    for (int i = 0; i < logMatrix->n; i++){
-      if (pnl_mat_get(logMatrix, j, i) < -1000){
-        missedValue = true;
-      }
-    }
-  }
+  int firstIndexDate = ds.getIndexSpotDate(dateIndexes);
 
-assert(!missedValue);
+  double r = 0.05;
 
+  HistoricalDataProvider* hdp = new HistoricalDataProvider(allData, r, 2021, 180, firstIndexDate);
 
+  pnl_mat_print(hdp->DataFeed_);
 
   pnl_mat_free(&allData);
-  //pnl_mat_free(&corr);
-  pnl_mat_free(&logMatrix);
-  //pnl_mat_free(&covMatrix);
-  //pnl_vect_free(&sigma);
+  pnl_vect_int_free(&constationDate);
+  pnl_vect_int_free(&dateIndexes);
 
 }

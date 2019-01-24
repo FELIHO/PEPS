@@ -1,3 +1,4 @@
+
 ######################################################
 ################# Pricer MonteCarlo ##################
 ######################################################
@@ -10,6 +11,8 @@
 
 ENSIMAG Machines :
     cmake3 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
+In my case (c compiler is not needed in this project) :
+	cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=/home/ubu/Documents/DevTools/pnl-1.9.6/build ..
 
     make
 
@@ -23,11 +26,11 @@ ENSIMAG Machines :
 # run ./price as demanded
   # without -c option with only option data file
 
-    ./price ../data-soutenance.call.dat
+    ./pricer ../data-soutenance/call.dat
 
   # with -c option with both market and option data files
 
-    ./price -c ../data-soutenance/market_call.dat ../data-soutenance.call.dat
+    ./pricer -c ../market-soutenance/market_call.dat ../data-soutenance/call.dat
 
 # Tests
 make test permet d'executer tous les tests à la suite.
@@ -37,5 +40,4 @@ Pour tester:
 - se placer dans le dossier /build/test
 - ouvrir un terminal 
 - taper la commande: ./nom_du_test
-
 
