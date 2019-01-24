@@ -43,8 +43,8 @@ double Kozei::payoff(const PnlMat *path) {
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	pnl_mat_get_row(niveaux_initaux, path, 0);
 
-	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
-	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
+	PnlMat* Performance_t = pnl_mat_create(nbTimeSteps_ ,size_);
+	PnlVect* PerformancePanier = pnl_vect_create(nbTimeSteps_);
 	double Perfmoyenne;
 
 
