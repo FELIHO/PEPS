@@ -39,7 +39,7 @@ namespace Computations {
 		*/
 		PnlMat * getPast(const PnlMat *allData, const PnlVectInt *dateIndexes, const int Date);
 
-		PnlMat * getPath(const PnlMat *FullData, int nbTimeSteps);
+		PnlMat * getApproximatePath(const PnlMat *FullData, int nbTimeSteps);
 
 		/** Methode calculant le vecteur de volatilités des Log-Rendements à partir d'une matrice path avec un nombre de dates(lignes) > 1
 		* @param[in] allData les cours journaliers de plusieurs actifs financiers

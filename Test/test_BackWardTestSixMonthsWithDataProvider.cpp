@@ -65,7 +65,7 @@ int main(){
 
   Kozei *kozei_test = new Kozei(inv_init);
   HistoricalDataProvider* hdp = new HistoricalDataProvider(kozei_test, allData, r, nbDates, timeEstimation, indexFirstSpot);
-  PnlMat* dataFeeds = ds.getPath(hdp->DataFeed_, 17);
+  PnlMat* dataFeeds = ds.getApproximatePath(hdp->DataFeed_, 17);
   HedgePortfolio *hedgePortfolio = new HedgePortfolio(dataFeeds, hdp->mc_);
   double PL = hedgePortfolio->HedgeError(dataFeeds);
 
