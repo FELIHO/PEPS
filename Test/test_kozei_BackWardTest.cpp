@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-
 #include <ctime>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"

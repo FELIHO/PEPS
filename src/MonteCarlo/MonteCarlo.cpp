@@ -2,6 +2,7 @@
 #include "Option.hpp"
 #include "BlackScholesModel.hpp"
 #include <math.h>
+#include <omp.h>
 using namespace std;
 using namespace Computations;
 
@@ -68,12 +69,20 @@ void MonteCarlo::price(double &prix, double &ic)
   double sommePayoffCarre = 0;
   PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, mod_->size_);
 
-  for (int i = 0; i < nbSamples_; i++) {
-    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng_);
-    payoff = opt_->payoff(pathCourant);
-    sommePayoff += payoff;
-    sommePayoffCarre += payoff*payoff;
-  }
+	#pragma omp parallel
+	{
+		double payoff;
+		PnlRng *rng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(rng, 0);
+		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
+	  for (int i = 0; i < nbSamples_; i++) {
+	    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng);
+	    payoff = opt_->payoff(pathCourant);
+	    sommePayoff += payoff;
+	    sommePayoffCarre += payoff*payoff;
+	  }
+	}
+	
   double moyennePayoff = sommePayoff/nbSamples_;
   double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
 
