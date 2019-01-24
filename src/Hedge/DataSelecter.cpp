@@ -67,7 +67,7 @@ PnlMat * DataSelecter::getPast(const PnlMat *allData, const PnlVectInt *dateInde
 
 }
 
-PnlMat * DataSelecter::getPath(const PnlMat *FullData, int nbTimeSteps) {
+PnlMat * DataSelecter::getApproximatePath(const PnlMat *FullData, int nbTimeSteps) {
   int timeSteps = FullData->n / nbTimeSteps;
   PnlMat *resultPath = pnl_mat_create(nbTimeSteps + 1, FullData->n);
   PnlVect *dataFeed = pnl_vect_new();

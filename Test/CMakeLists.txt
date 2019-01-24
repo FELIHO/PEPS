@@ -154,6 +154,10 @@ add_executable (test_BackWardTest test_BackWardTest.cpp)
 target_link_libraries(test_BackWardTest jl_parser ${LIBS})
 add_test(test_BackWardTest test_BackWardTest)
 
-add_executable (test_BackWardTestSixMonths test_BackWardTestSixMonths.cpp)
-target_link_libraries(test_BackWardTestSixMonths jl_parser ${LIBS})
-add_test(test_BackWardTestSixMonths test_BackWardTestSixMonths)
+add_executable (test_BackWardTestSixMonthsWithDataProvider test_BackWardTestSixMonthsWithDataProvider.cpp)
+target_link_libraries(test_BackWardTestSixMonthsWithDataProvider jl_parser ${LIBS})
+add_test(test_BackWardTestSixMonthsWithDataProvider test_BackWardTestSixMonthsWithDataProvider)
+
+add_executable (test_kozei_BackWardTest test_kozei_BackWardTest.cpp)
+target_link_libraries(test_kozei_BackWardTest jl_parser ${LIBS})
+add_test(test_kozei_BackWardTest test_kozei_BackWardTest)
