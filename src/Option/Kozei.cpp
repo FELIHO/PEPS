@@ -43,19 +43,16 @@ double Kozei::payoff(const PnlMat *path) {
 	PnlVect *niveaux_initaux = pnl_vect_create(size_);
 	pnl_mat_get_row(niveaux_initaux, path, 0);
 
-	PnlMat* Performance_t = pnl_mat_create(T_ * 2,size_);
-	PnlVect* PerformancePanier = pnl_vect_create(T_ * 2);
+	PnlVect* PerformancePanier = pnl_vect_create(nbTimeSteps_);
 	double Perfmoyenne;
-
-
-	for (int t = 0; t < nbTimeSteps_; t++) {
-		double S_0 = 0.0;
-		double Perf_Panier_t = 0.0;
-		double Perf_acti = 0.0;
+	double S_0 = 0.0;
+	double Perf_Panier_t = 0.0;
+	double Perf_acti = 0.0;
+	
+	for (int t = 0; t < nbTimeSteps_; t++) {	
 		for (int act = 0; act < size_; act++) {
-			S_0 = pnl_vect_get(niveaux_initaux, act);
+			S_0 = pnl_vect_get(niveaux_initaux, act);		
 			Perf_acti = (pnl_mat_get(path, t , act) - S_0) / S_0;
-			pnl_mat_set(Performance_t, t, act, Perf_acti);
 			Perf_Panier_t += Perf_acti;
 		}
 
@@ -65,7 +62,6 @@ double Kozei::payoff(const PnlMat *path) {
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
 
 	pnl_vect_free(&niveaux_initaux);
-	pnl_mat_free(&Performance_t);
 	pnl_vect_free(&PerformancePanier);
 
 
