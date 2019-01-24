@@ -13,7 +13,7 @@ Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 }
 
-Kozei::Kozei( double inv_init) : Option(8 + 11.0/252, 16, 30)  {
+Kozei::Kozei( double inv_init) : Option(2021.0/252.6, 16, 30)  {
 	inv_init_ = inv_init;
 }
 
@@ -64,8 +64,9 @@ double Kozei::payoff(const PnlMat *path) {
 	pnl_vect_free(&niveaux_initaux);
 	pnl_vect_free(&PerformancePanier);
 
+	double payoff = inv_init_ * (0.9 + Perfmoyenne); 
 
-	return inv_init_ * (0.9 + Perfmoyenne);
+	return payoff;
 
 
 
