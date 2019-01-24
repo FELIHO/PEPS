@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     //utilisation de asset pour t>0
     blackScholesModel->asset(path, 1, T, nbTimeSteps, rng, past);
 
-
+    
     //pnl_mat_print(path);
 
     pnl_mat_free(&path);

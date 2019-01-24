@@ -69,3 +69,7 @@ add_test(test_BackWardTestSixMonthsWithDataProvider test_BackWardTestSixMonthsWi
 add_executable (test_kozei_BackWardTest test_kozei_BackWardTest.cpp)
 target_link_libraries(test_kozei_BackWardTest ${LIBS})
 add_test(test_kozei_BackWardTest test_kozei_BackWardTest)
+
+add_executable (test_mem_Kozei test_mem_Kozei.cpp)
+target_link_libraries(test_mem_Kozei ${LIBS})
+add_test(test_mem_Kozei test_mem_Kozei)
