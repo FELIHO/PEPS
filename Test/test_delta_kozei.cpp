@@ -52,23 +52,13 @@ int main(){
 
 
 
-  int date;
-  cout << "Entrez une date comprise entre 01/01/1998(19980101) et la 07/01/2019(20190107) par défaut si vous prenez 20180515 le test donne une matrice de taille 10(spot + nbDate de constation): " << endl;
-  cin >> date;
-  // Normally we have 10 size
+  int date = 20180515;
   PnlMat *past = ds.getPast(allData, dateIndexes, date);
-  cout << "voici votre matrice past" << endl;
-  pnl_mat_print(past);
-  cout<< past->m << endl;
 
 
-  double inv_init;
-  cout << "Entrez un investissement de départ : " << endl;
-  cin >> inv_init;
+  double inv_init = 100;
 
-  int timeEstimation;
-  cout << "Entrez une durée fenêtre d'estimation un entier, en nombre de jour: " << endl;
-  cin >> timeEstimation;
+  int timeEstimation = 365;
 
   ParameterEstimation pe;
   PnlMat window = ds.getWindowPreviousEstimation(allData, dateIndexes, date, timeEstimation);
@@ -80,10 +70,7 @@ int main(){
   PnlVect* spot = pnl_vect_new();
   pnl_mat_get_row(spot, past, 0);
 
-
-  double r;
-  cout << "choisissez un taux d'intérêt zéro coupon européen (plus tard il faudrait avoir cette donnée sous forme de vecteur dans nos data): " << endl;
-  cin >> r;
+  double r = 0.01;
 
   PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
   pnl_rng_sseed(rng, time(NULL));
@@ -97,29 +84,21 @@ int main(){
   Kozei *kozei_test = new Kozei(inv_init);
   MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
 
-  PnlVect *delta = pnl_vect_create_from_scalar(past->n, 0.0);
+  PnlVect *delta = pnl_vect_create_from_scalar(past->n, 1.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(past->n, 0.0);
 
   double prix_ent = 0.0;
   double prix_0 = 0.0;
 
   double ic_ent = 0.0;
-  double ic_0 = 0.0;
-
-  mc_test->price(prix_0,ic_0);
-  mc_test->price(past, t, prix_ent, ic_ent);
-  mc_test->delta(past, t, delta, icdelta);
+  double ic_0 = 0.0;    
+  pnl_mat_print(past);
+  mc_test->delta(past, 0.0, delta, icdelta);
 
   cout << "Delta :" << endl;
   pnl_vect_print_asrow(delta);
   cout << "IC Delta :" << endl;
   pnl_vect_print_asrow(icdelta);
-
-  cout<<"Prix calculer par la fct price(0) :"<<prix_0<<endl;
-  cout<<"Prix calculer par la fct price(t) :"<<prix_ent<<endl;
-
-  cout<<"IC par la fct price(0) :"<<ic_0<<endl;
-  cout<<"IC par la fct price(t) :"<<ic_ent<<endl;
 
   pnl_mat_free(&allData);
   pnl_vect_int_free(&constationDate);

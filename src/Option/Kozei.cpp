@@ -56,7 +56,6 @@ double Kozei::payoff(const PnlMat *path) {
 			Perf_Panier_t += Perf_acti;
 		}
 
-		pnl_vect_set(PerformancePanier, t, std::max(Perf_Panier_t /size_,0.0) );
 	}
 
 	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;

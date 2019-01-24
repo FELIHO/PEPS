@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "jlparser/parser.hpp"
 #include <ctime>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
@@ -102,6 +101,7 @@ int main(){
 
   PnlMat* path = pnl_mat_new();
   bc->asset(path, t, T, kozei_test->nbTimeSteps_, rng, past);
+  pnl_mat_print(path);
   HedgePortfolio* hedgePortfolio = new HedgePortfolio(path, mc_test);
   double PL = hedgePortfolio->HedgeError(path);
 

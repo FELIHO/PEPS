@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "jlparser/parser.hpp"
 #include <ctime>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
@@ -99,7 +98,7 @@ int main(){
 
     PnlMat *DataSimu = pnl_mat_create(17,30);
 
-    
+
     bc->asset(DataSimu, T, 16, rng);
     pnl_mat_print(DataSimu);
     HedgePortfolio *hedgePortfolio = new HedgePortfolio(DataSimu, mc_test);

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "jlparser/parser.hpp"
 #include <ctime>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
@@ -65,7 +64,7 @@ int main(){
 
   Kozei *kozei_test = new Kozei(inv_init);
   HistoricalDataProvider* hdp = new HistoricalDataProvider(kozei_test, allData, r, nbDates, timeEstimation, indexFirstSpot);
-  PnlMat* dataFeeds = ds.getApproximatePath(hdp->DataFeed_, 17);
+  PnlMat* dataFeeds = ds.getApproximatePath(hdp->DataFeed_, 32);
   HedgePortfolio *hedgePortfolio = new HedgePortfolio(dataFeeds, hdp->mc_);
   double PL = hedgePortfolio->HedgeError(dataFeeds);
 
