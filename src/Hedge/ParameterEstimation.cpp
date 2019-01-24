@@ -109,3 +109,7 @@ PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {
 	}
 	return volatilitiesVector;
 }
+
+PnlVect* ParameterEstimation::getTrend(const PnlMat *path) {
+	return pnl_vect_create_from_double(path->n, 0.3);
+}

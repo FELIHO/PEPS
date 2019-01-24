@@ -52,6 +52,8 @@ namespace Computations {
 		*/
 		static double getCorrelation(const PnlVect* shareX, const PnlVect* shareY);
 
+		static PnlVect* getTrend(const PnlMat *path);
+
 	private:
 	};
 
