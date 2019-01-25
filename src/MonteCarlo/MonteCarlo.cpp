@@ -1,6 +1,8 @@
-#include "RandomGen.hpp"
 #include "MonteCarlo.hpp"
-
+#include "Option.hpp"
+#include "BlackScholesModel.hpp"
+#include <math.h>
+#include <omp.h>
 using namespace std;
 
 /* Constructeur par défault */
@@ -85,14 +87,24 @@ void MonteCarlo::price(double &prix, double &ic)
   double payoff;
   double sommePayoff = 0;
   double sommePayoffCarre = 0;
-  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
+  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, mod_->size_);
 
-  for (int i = 0; i < nbSamples_; i++) {
-    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng_);
-    payoff = opt_->payoff(pathCourant);
-    sommePayoff += payoff;
-    sommePayoffCarre += payoff*payoff;
-  }
+	#pragma omp parallel
+	{
+		double payoff;
+		PnlRng *pnlRng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(pnlRng, time(NULL));
+    RandomGen *rng = new PnlRnd(pnlRng);
+		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
+	  for (int i = 0; i < nbSamples_; i++) {
+	    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng);
+	    payoff = opt_->payoff(pathCourant);
+	    sommePayoff += payoff;
+	    sommePayoffCarre += payoff*payoff;
+	  }
+	}
+
+
   double moyennePayoff = sommePayoff/nbSamples_;
   double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
 
@@ -101,58 +113,32 @@ void MonteCarlo::price(double &prix, double &ic)
   prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
 
   pnl_mat_free(&pathCourant);
-
 }
-
-// void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
-// {
-//   double sommePayoff = 0;
-//   double sommePayoffCarre = 0;
-//   PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
-
-// 	#pragma omp parallel
-// 	{
-// 		double payoff;
-// 		PnlRng *rng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
-// 		pnl_rng_sseed(rng, 0);
-// 		RandomGen* rngG = new PnlRnd(rng);
-// 		std::cout << "Le numéro du thread : " << omp_get_thread_num() << endl;
-// 		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
-// 	  for (int i = 0; i < nbSamples_; i++) {
-// 	    mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rngG, past);
-// 	    payoff = opt_->payoff(pathCourant);
-// 	    sommePayoff += payoff;
-// 	    sommePayoffCarre += payoff*payoff;
-// 	  }
-// 		pnl_rng_free(&rng);
-// 	}
-//   double moyennePayoff = sommePayoff/nbSamples_;
-//   double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
-
-//   double ksiCarreM = exp(-2*mod_->r_*opt_->T_)*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
-
-//   ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
-
-//   prix = exp(-mod_->r_*(opt_->T_-t))*moyennePayoff;
-
-//   pnl_mat_free(&pathCourant);
-// }
 
 void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 {
-  double payoff;
   double sommePayoff = 0;
   double sommePayoffCarre = 0;
-  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
 
-  for (int i = 0; i < nbSamples_; i++) {
-    mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-    payoff = opt_->payoff(pathCourant);
-    sommePayoff += payoff;
-    sommePayoffCarre += payoff*payoff;
-  }
-  double moyennePayoff = sommePayoff/nbSamples_;
-  double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
+	#pragma omp parallel
+	{
+		double payoff;
+		PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
+		PnlRng *pnlRng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(pnlRng, time(NULL));
+		RandomGen *rng = new PnlRnd(pnlRng);
+		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
+	  for (int i = 0; i < nbSamples_; i++) {
+	    mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng, past);
+	    payoff = opt_->payoff(pathCourant);
+	    sommePayoff += payoff;
+	    sommePayoffCarre += payoff*payoff;
+	  }
+		pnl_rng_free(&pnlRng);
+		pnl_mat_free(&pathCourant);
+	}
+	  double moyennePayoff = sommePayoff/nbSamples_;
+	  double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
 
   double ksiCarreM = exp(-2*mod_->r_*opt_->T_)*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
 
@@ -160,33 +146,47 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 
   prix = exp(-mod_->r_*(opt_->T_-t))*moyennePayoff;
 
-  pnl_mat_free(&pathCourant);
-}
 
+}
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
   pnl_vect_resize(delta, opt_->size_);
-  PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
-  PnlMat *shift_path_plus = pnl_mat_new();
-  PnlMat *shift_path_minus = pnl_mat_new();
+	#pragma omp parallel
+	{
+	  PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
+	  PnlMat *shift_path_plus = pnl_mat_new();
+	  PnlMat *shift_path_minus = pnl_mat_new();
 
-  double timestep = opt_->T_/opt_->nbTimeSteps_;
-  double Diff = 0;
-  PnlVect *vectDiff = pnl_vect_create(opt_->size_);
+	  double timestep = opt_->T_/opt_->nbTimeSteps_;
+	  double Diff = 0;
+	  PnlVect *vectDiff = pnl_vect_create(opt_->size_);
 
-  for (int i = 0; i < nbSamples_; i++){
-    mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-    for (int d = 0; d<opt_->size_; d++) {
-      mod_->shiftAsset(shift_path_plus, path, d, fdStep_ , t, timestep);
-      mod_->shiftAsset(shift_path_minus, path, d, -fdStep_, t, timestep);
-      Diff = opt_->payoff(shift_path_plus) - opt_->payoff(shift_path_minus);
-      pnl_vect_set(vectDiff,d,Diff);
+		PnlRng *pnlRng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(pnlRng, time(NULL));
+		RandomGen *rng = new PnlRnd(pnlRng);
 
-    }
-    pnl_vect_plus_vect(delta, vectDiff);
+		#pragma omp for
+	  for (int i = 0; i < nbSamples_; i++){
+	    mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng, past);
+	    for (int d = 0; d<opt_->size_; d++) {
+	      mod_->shiftAsset(shift_path_plus, path, d, fdStep_ , t, timestep);
+	      mod_->shiftAsset(shift_path_minus, path, d, -fdStep_, t, timestep);
+	      Diff = opt_->payoff(shift_path_plus) - opt_->payoff(shift_path_minus);
+	      pnl_vect_set(vectDiff,d,Diff);
 
-  }
+	    }
+			#pragma omp critical
+			{
+	    	pnl_vect_plus_vect(delta, vectDiff);
+			}
 
+	  }
+		pnl_rng_free(&pnlRng);
+		pnl_mat_free(&path);
+		pnl_mat_free(&shift_path_plus);
+		pnl_mat_free(&shift_path_minus);
+		pnl_vect_free(&vectDiff);
+	}
 
   double scal = exp(-mod_->r_*(opt_->T_-t))/(2*nbSamples_*fdStep_);
   pnl_vect_mult_scalar(delta, scal);
@@ -197,11 +197,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
 
 
   pnl_vect_free(&s_t);
-  pnl_vect_free(&vectDiff);
 
-  pnl_mat_free(&path);
-  pnl_mat_free(&shift_path_plus);
-  pnl_mat_free(&shift_path_minus);
+
+
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_delta) {
