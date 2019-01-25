@@ -25,7 +25,7 @@ int main() {
 
     Kozei *test_kozei = new Kozei(100);
 
-    PnlMat* mat_s0 = pnl_mat_create_from_double(size,19,100);
+    PnlMat* mat_s0 = pnl_mat_create_from_double(19,size,100);
     PnlVect* niveaux_initaux = pnl_vect_create(test_kozei->size_);
     PnlMat* past = pnl_mat_create(mat_s0->m - 2, mat_s0->n);
     PnlMat* path = pnl_mat_create(17, size);
@@ -33,7 +33,9 @@ int main() {
 
         pnl_vect_set(niveaux_initaux, i, 1.0 / 3 * (pnl_mat_get(mat_s0, 0, i) + pnl_mat_get(mat_s0, 1, i) + pnl_mat_get(mat_s0, 2, i)));
     }
+    
     pnl_mat_set_row(past, niveaux_initaux, 0);
+    
 
     PnlVect *vect_i = pnl_vect_create(mat_s0->n);
     for (int i = 3;i < mat_s0->m;i++) {
