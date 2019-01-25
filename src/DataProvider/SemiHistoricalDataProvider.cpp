@@ -25,7 +25,6 @@ SemiHistoricalDataProvider& SemiHistoricalDataProvider::operator= (const SemiHis
 SemiHistoricalDataProvider::~SemiHistoricalDataProvider(){
 	delete(mod_);
 	delete(rng_);
-	delete(fileData_);
 }
 
 SemiHistoricalDataProvider::SemiHistoricalDataProvider(RandomGen *rng, char const *fileData){

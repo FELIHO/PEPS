@@ -166,11 +166,25 @@ int main(int argc,char **argv){
   else // option -c given
   {
 
+    float time;
+    clock_t t0,tf;
+
+    t0 = clock();
+
     HedgePortfolio hedgePortfolio = HedgePortfolio(past, mc_pricer);
     double PL = hedgePortfolio.HedgeError(past);
+
+    tf = clock();
+
     cout << "#################" << endl;
     cout << "# PROFIT & LOSS #   =   "<< PL << endl;
     cout << "#################" << endl;
+
+    time = (double) (tf - t0) / CLOCKS_PER_SEC;
+    cout << endl;
+    cout << "#####################" << endl;
+    cout << "# TEMPS D'EXECUTION #   =   " << time << endl;
+    cout << "#####################" << endl << endl;
   }
 
 
