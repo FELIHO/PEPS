@@ -40,9 +40,10 @@ int main(int argc, char **argv)
     monteCarlo->price(past, 0, prix, ic);
     cout << "prix" << endl;
     cout << prix << endl;
+    cout << "delta" <<endl;
     pnl_vect_print(delta);
     cout << endl;
 
-    // pnl_mat_free(&past);
-    // pnl_vect_free(&delta);
+    pnl_mat_free(&past);
+    pnl_vect_free(&delta);
 }

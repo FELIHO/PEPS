@@ -49,24 +49,26 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, RandomGen *rng, doub
 
 void MonteCarlo::price(double &prix, double &ic)
 {
-  double payoff;
   double sommePayoff = 0;
   double sommePayoffCarre = 0;
-  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, mod_->size_);
+  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
 
 	#pragma omp parallel
 	{
 		double payoff;
-		PnlRng *pnlRng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
-		pnl_rng_sseed(pnlRng, 0);
-    RandomGen *rng = new PnlRnd(pnlRng);
+		PnlRng *rng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(rng, 0);
+		RandomGen* rngG = new PnlRnd(rng);
+		std::cout << "Le numéro du thread : " << omp_get_thread_num() << endl;
 		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
 	  for (int i = 0; i < nbSamples_; i++) {
-	    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng);
+
+	    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rngG);
 	    payoff = opt_->payoff(pathCourant);
 	    sommePayoff += payoff;
 	    sommePayoffCarre += payoff*payoff;
 	  }
+		pnl_rng_free(&rng);
 	}
 
   double moyennePayoff = sommePayoff/nbSamples_;
@@ -77,21 +79,31 @@ void MonteCarlo::price(double &prix, double &ic)
   prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
 
   pnl_mat_free(&pathCourant);
+
 }
 
 void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 {
-  double payoff;
   double sommePayoff = 0;
   double sommePayoffCarre = 0;
   PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
 
-  for (int i = 0; i < nbSamples_; i++) {
-    mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-    payoff = opt_->payoff(pathCourant);
-    sommePayoff += payoff;
-    sommePayoffCarre += payoff*payoff;
-  }
+	#pragma omp parallel
+	{
+		double payoff;
+		PnlRng *rng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(rng, 0);
+		RandomGen* rngG = new PnlRnd(rng);
+		std::cout << "Le numéro du thread : " << omp_get_thread_num() << endl;
+		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
+	  for (int i = 0; i < nbSamples_; i++) {
+	    mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rngG, past);
+	    payoff = opt_->payoff(pathCourant);
+	    sommePayoff += payoff;
+	    sommePayoffCarre += payoff*payoff;
+	  }
+		pnl_rng_free(&rng);
+	}
   double moyennePayoff = sommePayoff/nbSamples_;
   double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
 
