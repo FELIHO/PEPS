@@ -31,21 +31,18 @@ SemiHistoricalDataProvider::SemiHistoricalDataProvider(RandomGen *rng, char cons
 	rng_ = rng->clone();
 	fileData_ = fileData;
 	PnlMat* Data = pnl_mat_create_from_file(fileData_);
-	// ParameterEstimation pe ;
-	// PnlVect* sigma = pe.getVolatilitiesVector(Data);
-	// PnlMat* rho = pe.getCorrelationMatrix(Data);
-	// PnlVect* spot = pnl_vect_create_from_double(Data->n, 100);
-	// PnlVect* trend = pe.getTrend(Data);
-	// mod_ =  new BlackScholesModel(spot->size, pnl_vect_sum(trend)/(trend->size) , rho, sigma, spot, trend);
-	// pnl_mat_free(&rho);
-	// pnl_vect_free(&sigma);
-	// pnl_vect_free(&spot);
+	ParameterEstimation pe ;
+	PnlVect* sigma = pe.getVolatilitiesVector(Data);
+	PnlMat* rho = pe.getCorrelationMatrix(Data);
+	PnlVect* spot = pnl_vect_create_from_double(Data->n, 100);
+	PnlVect* trend = pe.getTrend(Data);
+	
+	mod_ =  new BlackScholesModel(spot->size, pnl_vect_sum(trend)/(trend->size) , rho, sigma, spot, trend);
 
-	PnlVect *spot = pnl_vect_create_from_scalar(Data->n, 100);
-  	PnlVect *sigma = pnl_vect_create_from_scalar(Data->n, 0.4);
-
-	mod_ = new BlackScholesModel(Data->n, 0.03, 0.1, sigma, spot);
-
+	pnl_mat_free(&rho);
+	pnl_vect_free(&sigma);
+	pnl_vect_free(&spot);
+	pnl_vect_free(&trend);
 	pnl_mat_free(&Data);
 
 }
@@ -68,6 +65,7 @@ PnlMat* SemiHistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int
 			pnl_mat_set_row(SimData, &V, 0);
 		}
 	}
+	//simule avec le trend
 	mod_->simulateAsset(SimData, T/H, H - nbAvailableHistData +1 , rng_, mod_->trend_);
 
 	mod_->concatenationMatrice( marketData , HistData, SimData );
@@ -75,7 +73,9 @@ PnlMat* SemiHistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int
 	pnl_mat_free(&HistData);
 	pnl_mat_free(&SimData);
 
-	return marketData;
+	PnlMat* marketDataEuro = multiplyChangeRate(marketData);
+	pnl_mat_free(&marketData);
+	return marketDataEuro;
 }
 
 
@@ -102,7 +102,9 @@ PnlMat* SemiHistoricalDataProvider::getDailyMarketData(double T){
 	pnl_mat_free(&HistData);
 	pnl_mat_free(&SimData);
 
-	return marketData;
+	PnlMat* marketDataEuro = multiplyChangeRate(marketData);
+	pnl_mat_free(&marketData);
+	return marketDataEuro;
 }
 
 
@@ -115,4 +117,35 @@ PnlMat* SemiHistoricalDataProvider::getWeeklyMarketData(double T, int nbTimeStep
 PnlMat* SemiHistoricalDataProvider::getMonthlyMarketData(double T, int nbTimeSteps){
 	int nbRebalancementPerStep = (T*12)/nbTimeSteps;
 	return getMarketData(T, nbTimeSteps, nbRebalancementPerStep);
+}
+
+
+PnlMat* SemiHistoricalDataProvider::multiplyChangeRate(PnlMat* marketData){
+	ParameterEstimation pe_Assets;
+
+	PnlVect* changeRate_USD = pnl_vect_create_from_double(marketData->m,0.88);
+    PnlVect* changeRate_JPY = pnl_vect_create_from_double(marketData->m,0.0080);
+    PnlVect* changeRate_GBP = pnl_vect_create_from_double(marketData->m,1.15);
+    PnlVect* changeRate_CHF = pnl_vect_create_from_double(marketData->m,0.88);
+    PnlVect* changeRate_BRL = pnl_vect_create_from_double(marketData->m,0.23);
+
+    PnlMat *changeRates = pnl_mat_create(marketData->m,5);
+
+    pnl_mat_set_col(changeRates,changeRate_USD,0);
+    pnl_mat_set_col(changeRates,changeRate_JPY,1);
+    pnl_mat_set_col(changeRates,changeRate_GBP,2);
+    pnl_mat_set_col(changeRates,changeRate_CHF,3);
+    pnl_mat_set_col(changeRates,changeRate_BRL,4);
+
+	pnl_vect_free(&changeRate_USD);
+    pnl_vect_free(&changeRate_JPY);
+    pnl_vect_free(&changeRate_GBP);
+    pnl_vect_free(&changeRate_CHF);
+    pnl_vect_free(&changeRate_BRL);
+
+	PnlMat* result = pe_Assets.getDomesticAssetPrices(marketData,changeRates);
+
+	pnl_mat_free(&changeRates);
+
+	return result;
 }
