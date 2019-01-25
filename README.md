@@ -10,22 +10,25 @@
 # in /build , type in the following commands :
 
 ENSIMAG Machines :
-    cmake3 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
-In my case (c compiler is not needed in this project) :
-	cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=/home/ubu/Documents/DevTools/pnl-1.9.6/build ..
+    cmake3 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
+(c compiler is not needed in this project)
 
     make
 
+<<<<<<< HEAD
     make doc
 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
 
+=======
+>>>>>>> 9a8ffe9109fcec3e8c498e1e8f6aa9996aa9c098
 # View the Doxygen Documentation
 
+    make doc
     firefox doc/html/index.html
 
 
-# run ./price as demanded
+# run ./pricer as demanded
   # without -c option with only option data file
 
     ./pricer ../data-soutenance/call.dat
