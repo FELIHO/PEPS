@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc,char **argv){
 
   //Variables
-  char const *fileData = "market_kozei.dat";
+  char const *fileData = "hist_kozei.dat";
   double r = 0.03;
   double rho = 0.1;
   double sigmaValue = 0.4;
@@ -35,7 +35,6 @@ int main(int argc,char **argv){
   SemiHistoricalDataProvider* SHDP = new SemiHistoricalDataProvider(rng, fileData);
 
   PnlMat* marketData = SHDP->getMarketData(K->T_, K->nbTimeSteps_, nbRebalancementPerStep);
-  pnl_mat_print(marketData);
 
   // Initialisation du modèle de BlackScholes
   BlackScholesModel *bs_model = new BlackScholesModel(K->size_, r, rho, sigma, spot);
@@ -89,11 +88,11 @@ int main(int argc,char **argv){
 
 
 
-  // HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
-  // double PL = hedgePortfolio.HedgeError(marketData);
-  // cout << "#################" << endl;
-  // cout << "# PROFIT & LOSS #   =   "<< PL << endl;
-  // cout << "#################" << endl;
+  HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
+  double PL = hedgePortfolio.HedgeError(marketData);
+  cout << "#################" << endl;
+  cout << "# PROFIT & LOSS #   =   "<< PL << endl;
+  cout << "#################" << endl;
 
 
 

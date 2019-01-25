@@ -159,22 +159,6 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
-//Value Computed by CMake
-JLParser_BINARY_DIR:STATIC=/home/mouhcine/PEPS/build/3rdparty/jlparser
-
-//Value Computed by CMake
-JLParser_SOURCE_DIR:STATIC=/home/mouhcine/PEPS/3rdparty/jlparser
-
-//Semicolon-separated list of tests to build.      Possible values
-// are `mpark`, and `libc++`.
-MPARK_VARIANT_INCLUDE_TESTS:STRING=
-
-//Value Computed by CMake
-MPark.Variant_BINARY_DIR:STATIC=/home/mouhcine/PEPS/build/3rdparty/jlparser/3rdparty/variant
-
-//Value Computed by CMake
-MPark.Variant_SOURCE_DIR:STATIC=/home/mouhcine/PEPS/3rdparty/jlparser/3rdparty/variant
-
 //CXX compiler flags for OpenMP parallelization
 OpenMP_CXX_FLAGS:STRING=-fopenmp
 
@@ -290,7 +274,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

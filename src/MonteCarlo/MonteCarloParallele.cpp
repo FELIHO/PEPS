@@ -8,26 +8,22 @@ using namespace std;
 /* Constructeur par défault */
 MonteCarlo::MonteCarlo(){
 	mod_ = new BlackScholesModel();
-  mod_ChangeRate_ = new BlackScholesModel();
-	opt_ = new Option();
-	rng_ = pnl_rng_create(PNL_RNG_MERSENNE);
+	opt_ = new Call();
+	rng_ = new FakeRnd(0.2);
   fdStep_ = 0;
   nbSamples_= 0;
  }
 
-
 MonteCarlo::MonteCarlo(const MonteCarlo &MC){
   mod_ = new BlackScholesModel(*MC.mod_);
-  mod_ChangeRate_ = new BlackScholesModel(*MC.mod_ChangeRate_);
   opt_ = MC.opt_->clone();
-	rng_ = pnl_rng_copy(MC.rng_);
+	rng_ = MC.rng_->clone();
   fdStep_ = MC.fdStep_;
   nbSamples_ = MC.nbSamples_;
 }
 
 MonteCarlo& MonteCarlo::operator= (const MonteCarlo &MC) {
   mod_ = MC.mod_;
-  mod_ChangeRate_ = MC.mod_ChangeRate_;
   opt_ = MC.opt_;
   rng_ = MC.rng_;
   fdStep_ = MC.fdStep_;
@@ -37,31 +33,18 @@ MonteCarlo& MonteCarlo::operator= (const MonteCarlo &MC) {
 
 MonteCarlo::~MonteCarlo() {
   delete(mod_);
-  delete(mod_ChangeRate_);
   delete(opt_);
-  pnl_rng_free(&rng_);
+  delete(rng_);
 }
 
-MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples)
+MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, RandomGen *rng, double fdStep, int nbSamples)
 {
   mod_ = new BlackScholesModel(*mod);
-  mod_ChangeRate_ = new BlackScholesModel();
   opt_ = opt->clone();
-	rng_ = pnl_rng_copy(rng);
+	rng_ = rng->clone();
   fdStep_ = fdStep;
   nbSamples_ = nbSamples;
 }
-
-MonteCarlo::MonteCarlo(BlackScholesModel *mod, BlackScholesModel *mod_ChangeRate, Option *opt, PnlRng *rng, double fdStep, int nbSamples)
-{
-  mod_ = new BlackScholesModel(*mod);
-  mod_ChangeRate_ = new BlackScholesModel(*mod_ChangeRate);
-  opt_ = opt->clone();
-	rng_ = pnl_rng_copy(rng);
-  fdStep_ = fdStep;
-  nbSamples_ = nbSamples;
-}
-
 
 
 void MonteCarlo::price(double &prix, double &ic)
@@ -74,8 +57,9 @@ void MonteCarlo::price(double &prix, double &ic)
 	#pragma omp parallel
 	{
 		double payoff;
-		PnlRng *rng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
-		pnl_rng_sseed(rng, 0);
+		PnlRng *pnlRng = pnl_rng_dcmt_create_id(omp_get_thread_num(), 1234);
+		pnl_rng_sseed(pnlRng, 0);
+    RandomGen *rng = new PnlRnd(pnlRng);
 		#pragma omp for reduction(+:sommePayoff) reduction(+:sommePayoffCarre)
 	  for (int i = 0; i < nbSamples_; i++) {
 	    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng);
@@ -92,34 +76,7 @@ void MonteCarlo::price(double &prix, double &ic)
   ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
   prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
 
-	pnl_rng_free(rng);
   pnl_mat_free(&pathCourant);
-}
-
-void MonteCarlo::price(double &prix, double &ic, const PnlVect *currency)
-{
-  double payoff;
-  double sommePayoff = 0;
-  double sommePayoffCarre = 0;
-  PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, mod_->size_);
-  PnlMat *pathCourantChangeRate = pnl_mat_create(opt_->nbTimeSteps_+1, mod_ChangeRate_->size_);
-
-  for (int i = 0; i < nbSamples_; i++) {
-    mod_->asset(pathCourant, opt_->T_, opt_->nbTimeSteps_, rng_);
-    mod_->asset(pathCourantChangeRate, opt_->T_, opt_->nbTimeSteps_, rng_);
-    payoff = opt_->payoff(pathCourant,pathCourantChangeRate,currency);
-    sommePayoff += payoff;
-    sommePayoffCarre += payoff*payoff;
-  }
-  double moyennePayoff = sommePayoff/nbSamples_;
-  double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
-
-  double ksiCarreM = exp(-2*mod_->r_*opt_->T_)*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
-  ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
-  prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
-
-  pnl_mat_free(&pathCourant);
-  pnl_mat_free(&pathCourantChangeRate);
 }
 
 void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
@@ -145,34 +102,6 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
   prix = exp(-mod_->r_*(opt_->T_-t))*moyennePayoff;
 
   pnl_mat_free(&pathCourant);
-}
-
-void MonteCarlo::price(const PnlMat *past, const PnlMat *pastChangeRate , const PnlVect *currency , double t, double &prix, double &ic)
-{
-	double payoff;
-	double sommePayoff = 0;
-	double sommePayoffCarre = 0;
-	PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_ + 1, opt_->size_);
-	PnlMat *pathCourantChangeRate = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_ChangeRate_->size_);
-
-	for (int i = 0; i < nbSamples_; i++) {
-		mod_->asset(pathCourant, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-		mod_->asset(pathCourantChangeRate, t, opt_->T_, opt_->nbTimeSteps_, rng_, pastChangeRate);
-		payoff = opt_->payoff(pathCourant, pastChangeRate, currency);
-		sommePayoff += payoff;
-		sommePayoffCarre += payoff * payoff;
-	}
-	double moyennePayoff = sommePayoff / nbSamples_;
-	double moyennePayoffCarre = sommePayoffCarre / nbSamples_;
-
-	double ksiCarreM = exp(-2 * mod_->r_*opt_->T_)*(moyennePayoffCarre - moyennePayoff * moyennePayoff);
-
-	ic = 1.96*sqrt(ksiCarreM / nbSamples_) * 2;
-
-	prix = exp(-mod_->r_ * (opt_->T_ - t))*moyennePayoff;
-
-	pnl_mat_free(&pathCourant);
-  pnl_mat_free(&pathCourantChangeRate);
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
@@ -201,9 +130,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
 
   double scal = exp(-mod_->r_*(opt_->T_-t))/(2*nbSamples_*fdStep_);
   pnl_vect_mult_scalar(delta, scal);
-  int nbRowsPast = past->m;
+
   PnlVect* s_t = pnl_vect_new();
-  pnl_mat_get_row(s_t, past , nbRowsPast-1);
+  pnl_mat_get_row(s_t, past , past->m-1);
   pnl_vect_div_vect_term(delta,s_t); // Division par s_t
 
 
@@ -213,7 +142,6 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
   pnl_mat_free(&path);
   pnl_mat_free(&shift_path_plus);
   pnl_mat_free(&shift_path_minus);
-  pnl_vect_free(&vectDiff);
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_delta) {

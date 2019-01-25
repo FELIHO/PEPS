@@ -16,7 +16,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 # Release or Debug
 if (NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Setting build type to 'Debug' as none was specified.")
+    message(STATUS "Setting build type to 'Release' as none was specified.")
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 endif ()
 
@@ -48,16 +48,16 @@ endif (OPENMP_FOUND)
 set(LIBS ${LIBS} m Pricer Options)
 
 # Add jlparser
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-add_subdirectory(3rdparty/jlparser)
+#set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_EXTENSIONS OFF)
+#add_subdirectory(3rdparty/jlparser)
 
 #set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
 # Executable Product
-add_executable(pricer src/pricer.cpp)
-target_link_libraries(pricer jl_parser ${LIBS})
+#add_executable(pricer src/pricer.cpp)
+#target_link_libraries(pricer jl_parser ${LIBS})
 
 # Executable Product
 add_executable(forwardTest src/ForwardTest.cpp)

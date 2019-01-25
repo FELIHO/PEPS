@@ -180,14 +180,15 @@ void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeS
   /////pnl_mat_rng_normal(MBS, nbTimeSteps, size_,rng);
   rng->mat_normal(MBS, nbTimeSteps, size_);
   PnlVect* V = pnl_vect_new();
-
+  PnlVect *temp = pnl_vect_new();
+  
   for (int t = 0; t < nbTimeSteps; t++) {
       //deuxièmeTerme = sigma * sqrt( t_(i+1) - t_(i) ) * choleskyFactor.MBS_t
       pnl_mat_get_row(V, MBS, t);
 
-      PnlVect *temp = pnl_mat_mult_vect(chol_, V);
+      pnl_mat_mult_vect_inplace(temp,chol_, V);
       pnl_vect_clone(V, temp);
-      pnl_vect_free(&temp);
+      
 
       pnl_vect_mult_scalar(V, sqrt(timestep));
       pnl_vect_mult_vect_term(V, sigma_);
@@ -198,6 +199,7 @@ void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeS
       pnl_mat_set_row(path, V , t + 1 );// S_(t+1)= ...
       pnl_vect_clone(S_previous, V); // S_t
   }
+  pnl_vect_free(&temp);
   pnl_mat_free(&MBS);
   pnl_vect_free(&S_previous);
   pnl_vect_free(&V);
