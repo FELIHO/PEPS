@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   PnlMat* dataSimul = pnl_mat_new();
   bs_model->simul_market(dataSimul, T, 365, rng);
 
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, call, rng, 1, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, call, 1, n_samples);
   HedgePortfolio *hedgePortfolio = new HedgePortfolio(dataSimul, mc_pricer);
 
   double PL = hedgePortfolio->HedgeError(dataSimul);

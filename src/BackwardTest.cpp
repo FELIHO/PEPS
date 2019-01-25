@@ -40,7 +40,7 @@ int main(int argc,char **argv){
   BlackScholesModel *bs_model = new BlackScholesModel(K->size_, r, rho, sigma, spot);
 
   // Initialisation du modèle de MonteCarlo
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, K , rng, fdStep, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, K, fdStep, n_samples);
 
   // Matrix
   PnlMat *path = pnl_mat_create(K->nbTimeSteps_ + 1, K->size_);

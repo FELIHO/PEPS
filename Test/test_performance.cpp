@@ -71,7 +71,7 @@ int main(int argc, char **argv)
   payoff = test_Performance->payoff(path);
 
   // TEST : Monte-Carlo
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, test_Performance, rng, 1, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, test_Performance, 1, n_samples);
   mc_pricer->price(prix,ic);
 
   cout << endl << "##### Testing the Pricer for " << "perf.dat" << " file input #####" << endl;

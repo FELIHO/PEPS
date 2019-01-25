@@ -26,7 +26,7 @@ class MonteCarlo
 		/**
 		 * pointeur sur le générateur
 		 */
-		RandomGen *rng_;
+		//RandomGen *rng_;
 		/**
 		 * pas de différence finie
 		 */
@@ -69,7 +69,9 @@ class MonteCarlo
 		 * @param[in] fdStep pas de différence finie
 		 * @param[in] nbSamples nombre de tirages Monte Carlo
 		 */
-		MonteCarlo(BlackScholesModel *mod, Option *opt,	RandomGen *rng, double fdStep, int nbSamples);
+		//MonteCarlo(BlackScholesModel *mod, Option *opt,	RandomGen *rng, double fdStep, int nbSamples);
+
+		MonteCarlo(BlackScholesModel *mod, Option *opt, double fdStep, int nbSamples);
 
 		/**
 		 * Calcule le prix de l'option à la date 0

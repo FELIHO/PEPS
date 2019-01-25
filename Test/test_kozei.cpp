@@ -85,8 +85,6 @@ int main(){
   cout << "choisissez un taux d'intérêt zéro coupon européen (plus tard il faudrait avoir cette donnée sous forme de vecteur dans nos data): " << endl;
   cin >> r;
 
-  PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
   size_t n_samples = 50000;
   double h = 0.1;
   // Maturité from 0 is 8 year and 11 day
@@ -95,7 +93,7 @@ int main(){
 
   BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
   Kozei *kozei_test = new Kozei(inv_init);
-  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
+  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, h, n_samples);
 
   PnlVect *delta = pnl_vect_create_from_scalar(past->n, 0.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(past->n, 0.0);
@@ -130,6 +128,5 @@ int main(){
   pnl_vect_free(&sigma);
   pnl_mat_free(&corr);
   pnl_vect_free(&spot);
-  pnl_rng_free(&rng);
 
 }

@@ -78,6 +78,10 @@ target_link_libraries(test_pnl ${LIBS})
 add_test (test_pnl test_pnl)
 
 
+add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
+target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
+add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
+
 #test unitaire avec des assertions
 
 add_executable (test_unit_asset_t0 test_unit_asset_t0.cpp)

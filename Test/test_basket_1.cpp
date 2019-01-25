@@ -54,17 +54,10 @@ int main(int argc, char **argv)
   // Initializing Option
   Basket *test_Basket_1 = new Basket(T, nbTimeSteps, size, strike, weights);
 
-  // Initializing Random Number Generator
-  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(pnlRng, time(NULL));
-  RandomGen* rng = new PnlRnd(pnlRng);
-
 
   BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, sigma, spot);
-  // bs_model->asset(path, T, nbTimeSteps, rng); // Simulating the path from spot t=0 only
-  // payoff = test_Basket_1->payoff(path);
 
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, test_Basket_1, rng, 1, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, test_Basket_1, 1, n_samples);
   mc_pricer->price(prix, ic);
 
   // Initializing the past with the spot

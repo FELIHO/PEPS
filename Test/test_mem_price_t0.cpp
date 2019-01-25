@@ -29,14 +29,10 @@ int main(int argc, char **argv)
     PnlVect *weights =  pnl_vect_create_from_scalar(size, 0.25);
     Basket *option_Basket = new Basket(T, nbTimeSteps, size, strike, weights);
 
-    //RandomGen* rng = new FakeRnd(0.2);
-    PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(pnlRng, time(NULL));
-    RandomGen* rng = new PnlRnd(pnlRng);
-    pnl_rng_free(&pnlRng);
+
     
     int n_samples = 50000;
-    MonteCarlo *mc_pricer = new MonteCarlo(blackScholesModel, option_Basket, rng, 1, n_samples);
+    MonteCarlo *mc_pricer = new MonteCarlo(blackScholesModel, option_Basket, 1, n_samples);
 
     double price;
     double ic;
@@ -51,7 +47,6 @@ int main(int argc, char **argv)
     delete(blackScholesModel);
     pnl_vect_free(&weights);
     delete(option_Basket);
-    delete(rng);
     delete(mc_pricer);
 
 }

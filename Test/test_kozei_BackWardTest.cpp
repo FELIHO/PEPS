@@ -97,7 +97,7 @@ int main(){
 
   BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
   Kozei *kozei_test = new Kozei(inv_init);
-  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
+  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, h, n_samples);
 
   PnlMat* path = pnl_mat_new();
   bc->asset(path, t, T, kozei_test->nbTimeSteps_, rng, past);
