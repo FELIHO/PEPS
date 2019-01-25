@@ -1,20 +1,29 @@
 #pragma once
-#include "pch.h"
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
 #include "DataProvider.hpp"
+#include "BlackScholesModel.hpp"
+#include "RandomGen.hpp"
 
-namespace Computations {
+class SimulatedDataProvider : public DataProvider
+{
+public:
 
-	class SimulatedDataProvider : public DataProvider
-	{
-	public:
-		SimulatedDataProvider(PnlVect* spot, double sigma, double r , double rho, int nbDates);
-    SimulatedDataProvider(PnlVect* spot, PnlVect* volatilities, double r , double rho, int nbDates);
-    ~SimulatedDataProvider();
-		SimulatedDataProvider(const SimulatedDataProvider& D);
-		SimulatedDataProvider& operator=(const SimulatedDataProvider &D);
-	};
+	BlackScholesModel *mod_;
+	RandomGen *rng_;
 
-}
+	SimulatedDataProvider();
+	SimulatedDataProvider(const SimulatedDataProvider &DP);
+	SimulatedDataProvider& operator=(const SimulatedDataProvider &DP);
+	~SimulatedDataProvider();
+
+	SimulatedDataProvider(RandomGen *rng, PnlVect* spot, double r , double rho, double sigma);
+	SimulatedDataProvider(RandomGen *rng, PnlVect* spot, PnlVect* trend , PnlMat* rho ,PnlVect* sigma, PnlVect* dividend);
+	
+	PnlMat* getMarketData(double T, int nbTimeSteps, int nbRebalancementPerStep);
+	PnlMat* getDailyMarketData(double T);
+	PnlMat* getWeeklyMarketData(double T, int nbTimeSteps);
+	PnlMat* getMonthlyMarketData(double T, int nbTimeSteps);
+};

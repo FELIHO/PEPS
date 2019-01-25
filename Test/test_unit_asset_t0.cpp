@@ -2,14 +2,13 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
 
-//#include "RandomGen.hpp"
-//#include "FakeRnd.cpp"
-//#include "PnlRand.cpp"
+#include "RandomGen.hpp"
+#include "FakeRnd.hpp"
+#include "PnlRnd.hpp"
 
 #include "BlackScholesModel.hpp"
 
 using namespace std;
-using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -26,16 +25,12 @@ int main(int argc, char **argv)
 
     PnlMat* path = pnl_mat_create(nbTimeSteps+1, size);
 
-    //FakeRnd* rng = new FakeRnd(0.3);
-    PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
-
+    FakeRnd* rng = new FakeRnd(0.3);
     blackScholesModel->asset(path, T, nbTimeSteps, rng);
 
     PnlVect* B = pnl_vect_new();
     pnl_mat_sum_vect(B, blackScholesModel->chol_,'c');
-    //pnl_vect_mult_scalar(B,rng->val_);
-    pnl_vect_mult_scalar(B,0.3);
+    pnl_vect_mult_scalar(B,rng->val_);
 
     PnlMat* pathCal = pnl_mat_create_from_zero(nbTimeSteps+1, size);
     pnl_mat_set_row(pathCal, spots, 0);
@@ -55,7 +50,6 @@ int main(int argc, char **argv)
     pnl_mat_free(&path);
     pnl_mat_free(&pathCal);
     delete(blackScholesModel);
-    delete(rng);
 
     assert(b = true);
 

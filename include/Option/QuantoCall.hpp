@@ -7,7 +7,6 @@
 #include <cmath>
 #include <assert.h>
 
-namespace Computations {
 	class QuantoCall : public QuantoBasket
 	{
 
@@ -42,5 +41,3 @@ namespace Computations {
 		virtual QuantoCall* clone();
 
 	};
-
-}

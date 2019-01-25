@@ -1,6 +1,5 @@
 #include "Option/QuantoCall.hpp"
-#include "pch.h"
-using namespace Computations;
+
 
 
 

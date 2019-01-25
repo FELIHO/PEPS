@@ -1,7 +1,7 @@
 
-#include "Option/Basket.hpp"
+#include "Basket.hpp"
 #include "HedgePortfolio.hpp"
-#include "MonteCarlo/MonteCarlo.hpp"
+#include "MonteCarlo.hpp"
 
 #include <iostream>
 #include <string>
@@ -9,7 +9,6 @@
 #include <ctime>
 
 using namespace std;
-using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -22,10 +21,10 @@ int main(int argc, char **argv)
   PnlVect *spot = pnl_vect_create_from_double(size, 3);
   PnlVect *weights = pnl_vect_create_from_double(size, 1/size);
 
+  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(pnlRng, time(NULL));
+  RandomGen* rng = new PnlRnd(pnlRng);
   //FakeRnd* rng = new FakeRnd(0.3);
-  PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
-
 
   double fdStep = 1;
   int nbSamples = 50000;
@@ -42,12 +41,10 @@ int main(int argc, char **argv)
   HedgePortfolio *hedgePortfolio = new HedgePortfolio(Data, monteCarlo);
   double PL = hedgePortfolio->HedgeError(Data);
 
-  cout << "prix = " << hedgePortfolio->prix_ << endl;
   cout << "P&L = " << PL << endl;
 
   delete(BMS);
   delete(monteCarlo);
   delete(hedgePortfolio);
-  delete(rng);
 
 }

@@ -1,43 +1,69 @@
 #include "SimulatedDataProvider.hpp"
-#include "BlackScholesModel.hpp"
-
-using namespace Computations;
 
 
-SimulatedDataProvider::SimulatedDataProvider(PnlVect* spot, double sigma, double r , double rho, int nbDates){
-	indexFirstSpot_ = 0;
-	PnlVect* volatilities = pnl_vect_create_from_scalar(spot->size, sigma);
-	BlackScholesModel *bsm = new BlackScholesModel(spot->size, r , rho, volatilities, spot);
-	PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-	pnl_rng_sseed(rng, time(NULL));
-	bsm->asset(DataFeed_, (nbDates + 0.0)/252.6, nbDates, rng);
-	pnl_rng_free(&rng);
-	delete(bsm);
+
+SimulatedDataProvider::SimulatedDataProvider() {
+  mod_ = new BlackScholesModel();
+  rng_ = new FakeRnd(0.1);
 }
 
-SimulatedDataProvider::SimulatedDataProvider(PnlVect* spot, PnlVect* volatilities, double r , double rho, int nbDates)
-{
-	indexFirstSpot_ = 0;
-	BlackScholesModel *bsm = new BlackScholesModel(spot->size, r , rho, volatilities, spot);
-	PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-	pnl_rng_sseed(rng, time(NULL));
-	bsm->asset(DataFeed_, (nbDates+0.0)/252.6, nbDates, rng);
-	pnl_rng_free(&rng);
-	delete(bsm);
+
+SimulatedDataProvider::SimulatedDataProvider(const SimulatedDataProvider &SDP) {
+  mod_ = new BlackScholesModel(*SDP.mod_);
+  rng_ = SDP.rng_->clone();
+}
+
+SimulatedDataProvider& SimulatedDataProvider::operator= (const SimulatedDataProvider &SDP) {
+  mod_ = SDP.mod_;
+  rng_ = SDP.rng_;
+  return *this;
 }
 
 SimulatedDataProvider::~SimulatedDataProvider(){
-	pnl_mat_free(&DataFeed_);
+	delete(mod_);
+	delete(rng_);
 }
 
-SimulatedDataProvider::SimulatedDataProvider(const SimulatedDataProvider& D) {
-  DataFeed_ = pnl_mat_copy(D.DataFeed_);
-  indexFirstSpot_ = D.indexFirstSpot_;
+SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, PnlVect* spot, double r , double rho, double sigma){
+	PnlVect* vectSigma = pnl_vect_create_from_scalar(spot->size, sigma);
+	mod_ =  new BlackScholesModel(spot->size, r , rho, vectSigma, spot);
+	rng_ = rng->clone();
+	pnl_vect_free(&vectSigma);
+}
+
+SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, PnlVect* spot,  PnlVect* trend , PnlMat *rho, PnlVect* sigma, PnlVect* dividend)
+{
+	mod_ =  new BlackScholesModel(spot->size, pnl_vect_sum(trend)/(trend->size) , rho, sigma, spot, trend, dividend );
+	rng_ = rng->clone();
 }
 
 
-SimulatedDataProvider& SimulatedDataProvider::operator=(const SimulatedDataProvider &D) {
-  DataFeed_ = D.DataFeed_;
-  indexFirstSpot_ = D.indexFirstSpot_;
-	return *this;
+PnlMat* SimulatedDataProvider::getMarketData(double T, int nbTimeSteps, int nbRebalancementPerStep){
+	int H = nbRebalancementPerStep*nbTimeSteps;
+	PnlMat* marketData = pnl_mat_new();
+	mod_->simul_market(marketData, T, H, rng_);
+	return marketData;
+}
+
+PnlMat* SimulatedDataProvider::getDailyMarketData(double T){
+	int H = T*260;
+	PnlMat* marketData = pnl_mat_new();
+	mod_->simul_market(marketData, T, T*260, rng_);
+	return marketData;
+}
+
+PnlMat* SimulatedDataProvider::getWeeklyMarketData(double T, int nbTimeSteps){
+	int H = T*52;
+	H -=  H%nbTimeSteps;
+	PnlMat* marketData = pnl_mat_new();
+	mod_->simul_market(marketData, T, H, rng_);
+	return marketData;
+}
+
+PnlMat* SimulatedDataProvider::getMonthlyMarketData(double T, int nbTimeSteps){
+	PnlMat* marketData = pnl_mat_new();
+	int H = T*12;
+	H -=  H%nbTimeSteps;
+	mod_->simul_market(marketData, T, H, rng_);
+	return marketData;
 }

@@ -1,14 +1,15 @@
-#pragma once
+#ifndef MONTECARLO_HPP
+#define MONTECARLO_HPP
+
 #include "Option.hpp"
+#include "Call.hpp"
 #include "BlackScholesModel.hpp"
-#include "Delta.hpp"
-#include "pnl/pnl_random.h"
-#include <iostream>
-#include <string>
 
 
-namespace Computations {
-	class MonteCarlo
+/** \class MonteCarlo
+ * \brief Méthode de MonteCarlo
+ */
+class MonteCarlo
 	{
 	public:
 		/**
@@ -16,18 +17,13 @@ namespace Computations {
 		 */
 		BlackScholesModel *mod_;
 		/**
-		 * pointeur vers le modèle des taux de change si besoin
-		 * en particulier si la formule du payoff comporte le taux de change
-		 */
-		BlackScholesModel *mod_ChangeRate_; 
-		/**
 		 * pointeur sur l'option
 		 */
 		Option *opt_;
 		/**
 		 * pointeur sur le générateur
 		 */
-		PnlRng *rng_;
+		RandomGen *rng_;
 		/**
 		 * pas de différence finie
 		 */
@@ -70,19 +66,7 @@ namespace Computations {
 		 * @param[in] fdStep pas de différence finie
 		 * @param[in] nbSamples nombre de tirages Monte Carlo
 		 */
-		MonteCarlo(BlackScholesModel *mod, Option *opt,	PnlRng *rng, double fdStep, int nbSamples);
-
-		/**
-		 * Constructeur de la classe MonteCarlo
-		 *
-		 * @param[in] mod Modèle de BlackScholes employé pour pricer
-		 * @param[in] mod_ChangeRate Modèle de BlackScholes employé pour les taux de changes
-		 * @param[in] opt Option à pricer
-		 * @param[in] rng Générateur de nombres aléatoires
-		 * @param[in] fdStep pas de différence finie
-		 * @param[in] nbSamples nombre de tirages Monte Carlo
-		 */
-		MonteCarlo(BlackScholesModel *mod, BlackScholesModel *mod_ChangeRate, Option *opt, PnlRng *rng, double fdStep, int nbSamples);
+		MonteCarlo(BlackScholesModel *mod, Option *opt,	RandomGen *rng, double fdStep, int nbSamples);
 
 		/**
 		 * Calcule le prix de l'option à la date 0
@@ -91,15 +75,6 @@ namespace Computations {
 		 * @param[out] ic largeur de l'intervalle de confiance
 		 */
 		 void price(double &prix, double &ic);
-
-		/**
-		 * Calcule le prix de l'option à la date 0
-		 *
-		 * @param[in] currency contient la devise de chaque sous-jacent
-		 * @param[out] prix valeur de l'estimateur Monte Carlo
-		 * @param[out] ic largeur de l'intervalle de confiance
-		 */
-		 void price(double &prix, double &ic, const PnlVect *currency);
 
 		/**
 		 * Calcule le prix de l'option à la date t
@@ -113,22 +88,6 @@ namespace Computations {
 		 */
 		 void price(const PnlMat *past, double t, double &prix, double &ic);
 
-		
-		/**
-		 * Calcule le prix de l'option à la date t
-		 *
-		 * @param[in]  past contient la trajectoire du sous-jacent
-		 * jusqu'à l'instant t
-		 * @param[in]  past contient la trajectoire du taux de change
-		 * jusqu'à l'instant t
-		 * @param[in] currency contient la devise de chaque sous-jacent
-		 * @param[in] t date à laquelle le calcul est fait
-		 * @param[out] prix contient le prix
-		 * @param[out] ic contient la largeur de l'intervalle
-		 * de confiance sur le calcul du prix
-		 */
-		 void price(const PnlMat *past, const PnlMat *pastChangeRate , const PnlVect *currency , double t, double &prix, double &ic);
-		 
 		/**
 		 * Calcule le delta de l'option à la date t
 		 *
@@ -151,9 +110,6 @@ namespace Computations {
 		 */
 		 void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
 
-
-		// void Profit_and_loss(const PnlMat*past, double &PL, const int H);
-
-		//MonteCarlo(DeltaCompute *delta, BlackScholesModel *mod, Option *opt, int nbSamples, PnlRng *rng, double fdStep);
 	};
-}
+
+#endif

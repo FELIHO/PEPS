@@ -6,8 +6,6 @@
 #include "BlackScholesModel.hpp"
 #include "Option.hpp"
 
-using namespace Computations;
-
 DeltaPW::DeltaPW() {
 
 }

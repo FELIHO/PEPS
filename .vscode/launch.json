@@ -8,6 +8,25 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
+            "program": "${workspaceFolder}/build/backwardTest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
             "program": "${workspaceFolder}/build/pricer",
             "args": ["-c", "${workspaceFolder}/market-soutenance/market_basket.dat" ,"${workspaceFolder}/data-soutenance/basket.dat"],
             "stopAtEntry": false,

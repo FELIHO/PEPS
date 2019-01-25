@@ -2,14 +2,13 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
 
-//#include "RandomGen.hpp"
-//#include "FakeRnd.cpp"
-//#include "PnlRand.cpp"
+#include "RandomGen.hpp"
+#include "FakeRnd.hpp"
+#include "PnlRnd.hpp"
 
 #include "BlackScholesModel.hpp"
 
 using namespace std;
-using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -26,10 +25,8 @@ int main(int argc, char **argv)
     BlackScholesModel* blackScholesModel = new BlackScholesModel(size, r, rho, sigma, spots);
 
     //Controle du rng
-    //FakeRnd* rng = new FakeRnd(0.3);
-    PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
-    
+    FakeRnd* rng = new FakeRnd(0.3);
+
     //construction de past: [[5, 5][2, 2]]
     double duree_past = 2;
     PnlMat* past = pnl_mat_create_from_scalar(duree_past, size, 2);
@@ -43,10 +40,8 @@ int main(int argc, char **argv)
 
     //Calcule "à la main"
     PnlVect* B = pnl_vect_new();
-    //pnl_mat_sum_vect(B, blackScholesModel->choleskyFactor,'c');
     pnl_mat_sum_vect(B, blackScholesModel->chol_,'c');
-    //pnl_vect_mult_scalar(B,rng->val_);
-    pnl_vect_mult_scalar(B,0.3);
+    pnl_vect_mult_scalar(B,rng->val_);
 
     PnlMat* pathCal = pnl_mat_create_from_zero(nbTimeSteps+1, size);
     for (int i = 0; i < duree_past; i++) {

@@ -7,7 +7,6 @@
 #include "Basket.hpp"
 #include <cmath>
 
-namespace Computations {
 	class Call : public Basket
 	{
 
@@ -42,5 +41,3 @@ namespace Computations {
 		virtual Call* clone();
 
 	};
-
-}

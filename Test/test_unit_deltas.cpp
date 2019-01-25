@@ -2,15 +2,14 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
 
-//#include "RandomGen.hpp"
-//#include "FakeRnd.cpp"
-//#include "PnlRand.cpp"
+#include "RandomGen.hpp"
+#include "FakeRnd.hpp"
+#include "PnlRnd.hpp"
 
-#include "MonteCarlo/MonteCarlo.hpp"
-#include "Option/Basket.hpp"
+#include "MonteCarlo.hpp"
+#include "Basket.hpp"
 
 using namespace std;
-using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -25,10 +24,7 @@ int main(int argc, char **argv)
 
 
     BlackScholesModel* blackScholesModel = new BlackScholesModel(size, r, rho, sigma, spots);
-    //FakeRnd* rng = new FakeRnd(0.3);
-    PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
-    
+    FakeRnd* rng = new FakeRnd(0.3);
     PnlVect *weights = pnl_vect_create_from_scalar(size, 0.5);
     Basket* opt = new Basket(T, nbTimeSteps, size, 0.5, weights);
     MonteCarlo* monteCarlo = new MonteCarlo(blackScholesModel, opt, rng, 0.001, 100);

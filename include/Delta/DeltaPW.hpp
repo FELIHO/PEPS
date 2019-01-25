@@ -4,7 +4,6 @@
 #include "Delta.hpp"
 
 
-namespace Computations {
 	class DeltaPW : public Delta {
 	public:
 		DeltaPW();
@@ -23,4 +22,3 @@ namespace Computations {
 		 */
 		void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples);
 	};
-}

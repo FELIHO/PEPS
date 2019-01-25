@@ -7,7 +7,6 @@
 #include <cmath>
 #include <assert.h>
 
-namespace Computations {
 	class QuantoBasket : public Option
 	{
 
@@ -60,5 +59,3 @@ namespace Computations {
 	virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect * currency);
 
 	};
-
-}

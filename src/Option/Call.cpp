@@ -1,6 +1,4 @@
 #include "Call.hpp"
-#include "pch.h"
-using namespace Computations;
 
 
 

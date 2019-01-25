@@ -4,7 +4,6 @@
 #include "Option.hpp"
 
 
-namespace Computations {
 	class Kozei : public Option {
 	public:
 		double inv_init_; //investissement initial
@@ -16,4 +15,3 @@ namespace Computations {
 		double payoff(const PnlMat *path);
 		virtual Kozei* clone();
 	};
-}

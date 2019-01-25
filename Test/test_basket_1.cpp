@@ -1,5 +1,5 @@
-#include "Option/Basket.hpp"
-#include "MonteCarlo/MonteCarlo.hpp"
+#include "Basket.hpp"
+#include "MonteCarlo.hpp"
 
 #include <iostream>
 #include <string>
@@ -7,7 +7,6 @@
 #include <ctime>
 
 using namespace std;
-using namespace Computations;
 
 int main(int argc, char **argv)
 {
@@ -56,9 +55,9 @@ int main(int argc, char **argv)
   Basket *test_Basket_1 = new Basket(T, nbTimeSteps, size, strike, weights);
 
   // Initializing Random Number Generator
-  PnlRng* rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
-  //RandomGen* rng = new PnlRand(pnlRng);
+  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(pnlRng, time(NULL));
+  RandomGen* rng = new PnlRnd(pnlRng);
 
 
   BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, sigma, spot);
@@ -121,7 +120,6 @@ int main(int argc, char **argv)
   pnl_vect_free(&relative_error_vect);
 
   delete(bs_model);
-  delete(rng);
   delete(mc_pricer);
   delete P;
   delete(test_Basket_1);

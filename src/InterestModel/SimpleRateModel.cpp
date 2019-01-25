@@ -1,18 +1,16 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "pch.h"
 #include "InterestRateModel.hpp"
 #include "SimpleRateModel.hpp"
-#define DLLEXP   __declspec( dllexport )
-using namespace Computations;
+
 
 SimpleRateModel::SimpleRateModel(): InterestRateModel()
 {
 }
 
 SimpleRateModel::SimpleRateModel(int size, double r) : InterestRateModel(size, r)
-{		
+{
 }
 
 SimpleRateModel::SimpleRateModel(PnlVect *size, PnlVect *r) : InterestRateModel(size, r)
@@ -24,7 +22,7 @@ SimpleRateModel::SimpleRateModel(const SimpleRateModel &SRM) : InterestRateModel
 }
 
 SimpleRateModel::~SimpleRateModel()
-{	
+{
 	pnl_vect_free(&size_);
 	pnl_vect_free(&rSpot_);
 }

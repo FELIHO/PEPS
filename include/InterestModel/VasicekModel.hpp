@@ -5,7 +5,6 @@
 #include "InterestRateModel.hpp"
 
 
-namespace Computations {
 	class VasicekModel : public InterestRateModel
 	{
 	public:
@@ -48,7 +47,6 @@ namespace Computations {
 	private :
 		PnlMat *chol_;
 	};
-}
 
 /**
  * Calcule le premier drift de la trajectoire � entre t et ti+1

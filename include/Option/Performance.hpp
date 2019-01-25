@@ -4,7 +4,6 @@
 #include "Option.hpp"
 
 
-namespace Computations {
 	/** \class Performance
 	 * \brief Option Performance
 	 */
@@ -65,4 +64,3 @@ namespace Computations {
 	virtual Performance* clone();
 
 	};
-}

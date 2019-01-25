@@ -3,9 +3,9 @@
 #include "pch.h"
 #include "DeltaLH.hpp"
 
-#include "AssetModel/BlackScholesModel.hpp"
-#include "Option/Option.hpp"
-using namespace Computations;
+#include "BlackScholesModel.hpp"
+#include "Option.hpp"
+
 
 DeltaLH::DeltaLH() {
 

@@ -5,7 +5,6 @@
 #include "InterestRateModel.hpp"
 
 
-namespace Computations {
 	class SimpleRateModel : public InterestRateModel
 	{
 	public:
@@ -42,4 +41,3 @@ namespace Computations {
 		void interest(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
 
 	};
-}

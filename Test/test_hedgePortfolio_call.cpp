@@ -1,11 +1,10 @@
 #include "HedgePortfolio.hpp"
 #include "Basket.hpp"
 #include "MonteCarlo.hpp"
-#include "BlackScholesModel.hpp"
 
 #include <iostream>
 #include <string>
-#include "jlparser/parser.hpp"
+
 #include <ctime>
 #include <stdio.h>
 #include <fstream>
@@ -67,7 +66,7 @@ int main(int argc, char **argv)
   // Initializing Random Number Generator
   PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
   pnl_rng_sseed(pnlRng, time(NULL));
-  RandomGen* rng = new PnlRand(pnlRng);
+  RandomGen* rng = new PnlRnd(pnlRng);
 
 
   BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, sigma, spot, trend);

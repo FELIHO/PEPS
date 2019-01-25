@@ -1,11 +1,8 @@
-#include "pch.h"
 #include "ParameterEstimation.hpp"
 #include <math.h>
 #include <algorithm>
 #include <iostream>
 #include <assert.h>
-
-using namespace Computations;
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
@@ -108,4 +105,73 @@ PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {
 		pnl_vect_set(volatilitiesVector, j, sqrt(pnl_mat_get(covMatrix, j, j)));
 	}
 	return volatilitiesVector;
+}
+
+PnlMat* ParameterEstimation::getDomesticAssetPrices(const PnlMat *pricesforeigncurr,const PnlMat* exchangerates){
+	PnlMat* Domesticprices =  pnl_mat_copy(pricesforeigncurr);
+	PnlVect* Asset = pnl_vect_create(pricesforeigncurr->m);
+	PnlVect* USD_Exchange_Rates = pnl_vect_create(exchangerates->m);
+	pnl_mat_get_col(USD_Exchange_Rates,exchangerates,0);
+	for(int s = 0;s<=16;s++ ){
+
+		pnl_mat_get_col(Asset,pricesforeigncurr,s);
+		pnl_vect_mult_vect_term (Asset, USD_Exchange_Rates);
+		pnl_mat_set_col(Domesticprices,Asset,s);
+
+	}
+
+	PnlVect* JPY_Exchange_Rates = pnl_vect_create(exchangerates->m);
+	pnl_mat_get_col(JPY_Exchange_Rates,exchangerates,1);
+	for(int s = 17;s<=18;s++ ){
+		pnl_mat_get_col(Asset,pricesforeigncurr,s);
+		pnl_vect_mult_vect_term (Asset, JPY_Exchange_Rates);
+		pnl_mat_set_col(Domesticprices,Asset,s);
+
+	}
+
+	PnlVect* GBP_Exchange_Rates = pnl_vect_create(exchangerates->m);
+	pnl_mat_get_col(GBP_Exchange_Rates,exchangerates,2);
+	for(int s = 19;s<=20;s++ ){
+		pnl_mat_get_col(Asset,pricesforeigncurr,s);
+		pnl_vect_mult_vect_term (Asset, GBP_Exchange_Rates);
+		pnl_mat_set_col(Domesticprices,Asset,s);
+
+	}
+
+	PnlVect* CHF_Exchange_Rates = pnl_vect_create(exchangerates->m);
+	pnl_mat_get_col(CHF_Exchange_Rates,exchangerates,3);
+	pnl_mat_get_col(Asset,pricesforeigncurr,28);
+	pnl_vect_mult_vect_term (Asset, CHF_Exchange_Rates);
+	pnl_mat_set_col(Domesticprices,Asset,28);
+
+	PnlVect* BRL_Exchange_Rates = pnl_vect_create(exchangerates->m);
+	pnl_mat_get_col(BRL_Exchange_Rates,exchangerates,4);
+	pnl_mat_get_col(Asset,pricesforeigncurr,29);
+	pnl_vect_mult_vect_term (Asset, BRL_Exchange_Rates);
+	pnl_mat_set_col(Domesticprices,Asset,29);
+
+	pnl_vect_free(&USD_Exchange_Rates);
+	pnl_vect_free(&JPY_Exchange_Rates);
+	pnl_vect_free(&GBP_Exchange_Rates);
+	pnl_vect_free(&CHF_Exchange_Rates);
+	pnl_vect_free(&BRL_Exchange_Rates);
+	pnl_vect_free(&Asset);
+
+	return Domesticprices;
+}
+
+PnlVect* ParameterEstimation::getTrend(const PnlMat *path){
+	PnlVect* TrendVector = pnl_vect_create(path->n);
+	PnlMat* logrendementMatrix = getLogRendementMatrix(path);
+	PnlVect* logrendementVect_s = pnl_vect_create(logrendementMatrix->m);
+	double trend = 0.0;
+	for(int s=0;s<path->n;s++){
+		pnl_mat_get_col(logrendementVect_s,logrendementMatrix,s);
+		trend = pnl_vect_sum(logrendementVect_s)/logrendementVect_s->size;
+		pnl_vect_set(TrendVector,s,trend);
+	}
+	pnl_mat_free(&logrendementMatrix);
+	pnl_vect_free(&logrendementVect_s);
+
+	return TrendVector;
 }

@@ -1,14 +1,8 @@
-#include "pch.h"
-#include <algorithm>
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
 
-/// \brief Classe Option abstraite
-#include "Option.hpp"
 #include "Asian.hpp"
 
+using namespace std;
 
-using namespace Computations;
 
 Asian::Asian(){
   weights_ = pnl_vect_new();
@@ -18,7 +12,7 @@ Asian::Asian(){
   strike_ = 0;
 }
 
-Asian::Asian(const Asian& source) 
+Asian::Asian(const Asian& source)
 {
   weights_ = pnl_vect_copy(source.weights_);
   T_ = source.T_;

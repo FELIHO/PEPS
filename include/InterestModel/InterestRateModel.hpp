@@ -4,7 +4,6 @@
 #include "pnl/pnl_matrix.h"
 
 
-namespace Computations {
 	class InterestRateModel
 	{
 	public:
@@ -50,7 +49,6 @@ namespace Computations {
 		void makeCompletePathInterest(PnlMat *pathInterest);
 
 	};
-}
 
 /**
  * Calcule fonction utile pour retourner le carr� d'un vecteur

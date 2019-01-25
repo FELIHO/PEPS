@@ -1,11 +1,10 @@
-#include "pch.h"
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include <algorithm>
-#include "Performance.hpp"
-using namespace Computations;
 
-Performance::Performance() 
+#include "Performance.hpp"
+
+using namespace std;
+
+
+Performance::Performance()
 {
   weights_ = pnl_vect_new();
   T_ = 0;
@@ -13,7 +12,7 @@ Performance::Performance()
   size_ = 0;
 }
 
-Performance::Performance(const Performance& source) 
+Performance::Performance(const Performance& source)
 {
   weights_ = pnl_vect_copy(source.weights_);
   T_ = source.T_;

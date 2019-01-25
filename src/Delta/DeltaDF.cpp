@@ -2,7 +2,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pch.h"
 #include "DeltaDF.hpp"
-using namespace Computations;
+
 double DFTrendtimeSteps;
 
 DeltaDF::DeltaDF(double fdStep) {
