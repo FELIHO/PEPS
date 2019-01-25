@@ -56,8 +56,8 @@ set(LIBS ${LIBS} m Pricer Options)
 #set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
 # Executable Product
-add_executable(pricer src/pricer.cpp)
-target_link_libraries(pricer jl_parser ${LIBS})
+#add_executable(pricer src/pricer.cpp)
+#target_link_libraries(pricer jl_parser ${LIBS})
 
 # Executable Product
 add_executable(forwardTest src/ForwardTest.cpp)

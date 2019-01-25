@@ -19,8 +19,6 @@ int main(int argc,char **argv){
   double fdStep = 0.1;
   int nbRebalancementPerStep = 1;
 
-  double debut = omp_get_wtime();
-
   // Initialisaton du Kozei
   Kozei *K = new Kozei(inv_init);
 
@@ -65,7 +63,6 @@ int main(int argc,char **argv){
   mc_pricer->delta(past,0.0,delta);
 
   double fin = omp_get_wtime();
-  printf("Computation time: %f\n", fin - debut);
 
   cout << endl;
   cout << "#####################" << endl;
@@ -86,13 +83,21 @@ int main(int argc,char **argv){
 
 
 
-
+  double debut_2 = omp_get_wtime();
 
   HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
   double PL = hedgePortfolio.HedgeError(marketData);
+
+  double fin_2 = omp_get_wtime();
+
+  cout << endl;
   cout << "#################" << endl;
   cout << "# PROFIT & LOSS #   =   "<< PL << endl;
   cout << "#################" << endl;
+  cout << endl;
+  cout << "#####################" << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << fin_2-debut_2 << endl;
+  cout << "#####################" << endl << endl;
 
 
 
