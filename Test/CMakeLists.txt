@@ -43,7 +43,6 @@ set(LIBS ${LIBS} Pricer Options)
 #target_link_libraries(test_hedgePortfolio_Kozei ${LIBS})
 #add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
 
-
 #add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
 #target_link_libraries(test_HistoricalDataProvider ${LIBS})
 #add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
@@ -79,6 +78,10 @@ target_link_libraries(test_pnl ${LIBS})
 add_test (test_pnl test_pnl)
 
 
+add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
+target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
+add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
+
 #test unitaire avec des assertions
 
 add_executable (test_unit_asset_t0 test_unit_asset_t0.cpp)
@@ -104,11 +107,6 @@ add_test(test_unit_shift test_unit_shift)
 add_executable (test_hedgePortfolio test_hedgePortfolio.cpp)
 target_link_libraries(test_hedgePortfolio ${LIBS})
 add_test(test_hedgePortfolio test_hedgePortfolio)
-
-add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
-target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
-add_test(test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
-
 
 add_executable (test_unit_deltas test_unit_deltas.cpp)
 target_link_libraries(test_unit_deltas ${LIBS})

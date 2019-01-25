@@ -115,16 +115,6 @@ int main(){
     
     cout<<" La matrice Path simulée :"<<endl;
     pnl_mat_print(path);
-
-    pnl_vect_free(&spot);
-    pnl_vect_free(&interestRates);
-    pnl_vect_int_free(&dateIndexes);
-    pnl_vect_int_free(&constationDate);
-    pnl_mat_free(&path);
-    pnl_mat_free(&past);
-    pnl_mat_free(&allExchangeData);
-    pnl_rng_free(&rng);
-
     
 
 
