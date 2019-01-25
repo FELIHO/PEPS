@@ -25,9 +25,13 @@ int main(int argc, char **argv)
 
     BlackScholesModel* blackScholesModel = new BlackScholesModel(size, r, rho, sigma, spots);
     FakeRnd* rng = new FakeRnd(0.3);
+    // PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
+    // pnl_rng_sseed(pnlRng, time(NULL));
+    // RandomGen* rng = new PnlRnd(pnlRng);
+
     PnlVect *weights = pnl_vect_create_from_scalar(size, 0.5);
     Basket* opt = new Basket(T, nbTimeSteps, size, 0.5, weights);
-    MonteCarlo* monteCarlo = new MonteCarlo(blackScholesModel, opt, rng, 0.001, 100);
+    MonteCarlo* monteCarlo = new MonteCarlo(blackScholesModel, opt, rng, 0.001, 100000);
 
     PnlMat* past = pnl_mat_create_from_scalar(1, size, 0);
     pnl_mat_set_row(past, spots, 0);
