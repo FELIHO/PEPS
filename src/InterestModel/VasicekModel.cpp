@@ -3,12 +3,9 @@
 #include "pnl/pnl_matrix.h"
 #include <math.h>
 #include <stdexcept>
-#include "pch.h"
 #include "VasicekModel.hpp"
 #include "InterestRateModel.hpp"
 
-#define DLLEXP   __declspec( dllexport )
-using namespace Computations;
 using namespace std;
 
 double VCMFirstTimeSteps;
@@ -63,7 +60,7 @@ VasicekModel::~VasicekModel()
 
 VasicekModel& VasicekModel::operator = (const VasicekModel &VCM)
 {
-	size_ = VCM.size_; 
+	size_ = VCM.size_;
 	rSpot_ = VCM.rSpot_;
 	speedReversion_ = pnl_vect_copy(VCM.speedReversion_);
 	longTermMean_ = pnl_vect_copy(VCM.longTermMean_);
@@ -72,7 +69,7 @@ VasicekModel& VasicekModel::operator = (const VasicekModel &VCM)
 }
 
 void VasicekModel::initalizeChol() {
-	
+
 	/** Validation de la matrice de corr�lation */
 	PnlVect *eigenValues = pnl_vect_create(rSpot_->size);
 	PnlMat *eigenVectors = pnl_mat_create(rSpot_->size, rSpot_->size);
@@ -111,7 +108,7 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 	pnl_vect_map(drift_, speedReversion_, &VCMdrift); // exp(-speedRversion * (ti - ti-1)
 	pnl_vect_map(doubledrift_, drift_, &squared); // exp(-2*speedRversion * (ti - ti-1)
 	pnl_vect_map_inplace(doubledrift_, &oneUnaryMinus); //  1 - exp(-2*speedRversion * (ti - ti-1)
-	
+
 	for (int i = 1; i < nbTimeSteps + 1; i++) {
 		pnl_vect_rng_normal(G, rSpot_->size, rng);
 
@@ -143,11 +140,11 @@ void VasicekModel::interest(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng
 
 
 void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past)
-{	
+{
 	pnl_mat_resize(path, nbTimeSteps + 1, rSpot_->size);
 	pnl_mat_set_subblock(path, past, 0, 0);
 	VCMFirstTimeSteps  = computeFirstTimeSteps(T / nbTimeSteps, t);
-	
+
 
 	PnlVect *V = pnl_vect_new();
 	PnlVect *U = pnl_vect_new();
@@ -178,7 +175,7 @@ void VasicekModel::interest(PnlMat *path, double t, double T, int nbTimeSteps, P
 		pnl_vect_mult_vect_term(U, pnl_mat_mult_vect(chol_, G)); // (Ld | Gi) * sqrt((sigma� / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
 
 		pnl_vect_plus_vect(V, U); // V + (rti - 1 - V) * exp(-speedRversion * (ti - t) + epsilon * sqrt((sigma� / 2k) * (1 - exp(-2*speedRversion * (ti - t)))
-		
+
 		pnl_mat_set_row(path, rSpot_, past->m - 1);
 
 

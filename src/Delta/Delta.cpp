@@ -3,8 +3,7 @@
 #include "pch.h"
 
 /// \brief Classe Delta abstraite
-#include "Delta/Delta.hpp"
-using namespace Computations;
+#include "Delta.hpp"
 
 Delta::Delta() {
 

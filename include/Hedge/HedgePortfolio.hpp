@@ -1,14 +1,16 @@
 #pragma once
-#include "pch.h"
+
+#ifndef HEDGEPORTFOLIO_HPP
+#define HEDGEPORTFOLIO_HPP
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "MonteCarlo.hpp"
 
-namespace Computations {
-  /** \class HedgePortfolio
-   * \brief Portefeuille de Couverture
-   */
-  class HedgePortfolio
+/** \class HedgePortfolio
+ * \brief Portefeuille de Couverture
+ */
+class HedgePortfolio
   {
   public:
 	 /**
@@ -27,25 +29,16 @@ namespace Computations {
 	   * cours à la date courante
 	  */
 	 PnlVect* S_current;
-	 /**
-	 * date courante
-	 */
-    //double currentDate_;
+	   /**
+	  * date courante
+	  */
     int currentRebalancingIndex_;
-    /**
-     * Prix calculé par Monte Carlo
-     */
-    double prix_;
-    /**
-     * Intervalle de confiance
-     */
-    double ic_;
     /**
      * Taux sans risque
      */
     double investTauxSansRisque_;
     /**
-     * nombre de dates de constatations
+     * nombre de dates de rebalancement
      */
     double H_;
 
@@ -56,7 +49,7 @@ namespace Computations {
 		*/
 		HedgePortfolio();
 
-    
+
     /**
      * \brief Constructeur par copie de la classe HedgePortfolio
      *
@@ -110,5 +103,6 @@ namespace Computations {
     */
     void updatePast(PnlMat* marketData,int indexRebalancement,int indexToUpdate);
   };
-}
 
+
+#endif

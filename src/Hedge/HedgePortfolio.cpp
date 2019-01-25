@@ -1,41 +1,35 @@
 #include "HedgePortfolio.hpp"
-#include "MonteCarlo.hpp"
-
 using namespace std;
-using namespace Computations;
+
 
 HedgePortfolio::HedgePortfolio(){
   currentRebalancingIndex_ = 0;
   monteCarlo_ = new MonteCarlo();
-  prix_ = 0;
-  ic_ = 0;
   past_ = pnl_mat_new();
   delta_ = pnl_vect_new();
   S_current = pnl_vect_new();
   investTauxSansRisque_ = 0;
+  H_= 0;
 }
 
 HedgePortfolio::HedgePortfolio(const HedgePortfolio &HPF){
   currentRebalancingIndex_ = HPF.currentRebalancingIndex_;
   monteCarlo_ = new MonteCarlo(*HPF.monteCarlo_);
-  prix_ = HPF.prix_;
-  ic_ = HPF.ic_;
   past_ = pnl_mat_copy(HPF.past_);
   delta_ = pnl_vect_copy(HPF.delta_);
   S_current = pnl_vect_copy(HPF.S_current);
   investTauxSansRisque_ = HPF.investTauxSansRisque_;
-
+  H_ = HPF.H_;
 }
 
 HedgePortfolio& HedgePortfolio::operator= (const HedgePortfolio &HPF) {
   currentRebalancingIndex_ = HPF.currentRebalancingIndex_;
   monteCarlo_ = HPF.monteCarlo_;
-  prix_ = HPF.prix_;
-  ic_ = HPF.ic_;
   past_ = HPF.past_;
   delta_ = HPF.delta_;
   S_current = HPF.S_current;
   investTauxSansRisque_ = HPF.investTauxSansRisque_;
+  H_ = HPF.H_;
   return *this;
 }
 
@@ -51,8 +45,8 @@ HedgePortfolio::HedgePortfolio(PnlMat* marketData, MonteCarlo* monteCarlo){
   currentRebalancingIndex_= 0;
   monteCarlo_ = new MonteCarlo(*monteCarlo);
   H_ = marketData->m;
-  prix_ = 0;
-  ic_ = 0;
+  double prix_0;
+  double ic;
 
   past_ = pnl_mat_create(monteCarlo_->opt_->nbTimeSteps_+1,monteCarlo_->opt_->size_);
 
@@ -60,14 +54,14 @@ HedgePortfolio::HedgePortfolio(PnlMat* marketData, MonteCarlo* monteCarlo){
 
   PnlMat pastTronq = pnl_mat_wrap_mat_rows(past_,0,0);
 
-  monteCarlo_->price(&pastTronq, 0, prix_, ic_);
+  monteCarlo_->price(&pastTronq, 0, prix_0, ic);
 
   delta_ = pnl_vect_new();
   monteCarlo->delta(&pastTronq,0,delta_);
 
   S_current = pnl_vect_new();
   pnl_mat_get_row(S_current,marketData,0);
-  investTauxSansRisque_ = prix_ - pnl_vect_scalar_prod(delta_, S_current);
+  investTauxSansRisque_ = prix_0 - pnl_vect_scalar_prod(delta_, S_current);
 
 }
 
@@ -77,8 +71,6 @@ void HedgePortfolio::updateCompo(PnlMat* marketData){
   updatePast(marketData,currentRebalancingIndex_,indexToUpdate);
 
   PnlMat pastTronq = pnl_mat_wrap_mat_rows(past_,0,indexToUpdate);
-
-  monteCarlo_->price(&pastTronq, currentDate, prix_, ic_);
 
   PnlVect* delta_anterieure = pnl_vect_new();
   pnl_vect_clone(delta_anterieure, delta_);

@@ -1,11 +1,9 @@
-/// \brief Classe Option abstraite
-#include "Option.hpp"
-#include "Basket.hpp"
-#include "pch.h"
-#include <algorithm>
-using namespace Computations;
 
-Basket::Basket() 
+#include "Basket.hpp"
+
+using namespace std;
+
+Basket::Basket()
 {
   weights_ = pnl_vect_new();
   T_ = 0;
@@ -14,7 +12,7 @@ Basket::Basket()
   strike_ = 0;
 }
 
-Basket::Basket(const Basket& source) 
+Basket::Basket(const Basket& source)
 {
   weights_ = pnl_vect_copy(source.weights_);
   T_ = source.T_;

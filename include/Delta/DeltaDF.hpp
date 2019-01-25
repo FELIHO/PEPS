@@ -4,7 +4,6 @@
 #include "Delta.hpp"
 
 
-namespace Computations {
 	class DeltaDF : public Delta {
 	public:
 		double fdStep_;
@@ -24,4 +23,3 @@ namespace Computations {
 		 */
 		void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples);
 	};
-}

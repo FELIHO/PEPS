@@ -1,8 +1,5 @@
-#include "pch.h"
 #include "DataSelecter.hpp"
 #include <math.h>
-
-using namespace Computations;
 
 DataSelecter::DataSelecter(PnlVectInt *ConstationDate) {
   ConstationDate_ = ConstationDate;

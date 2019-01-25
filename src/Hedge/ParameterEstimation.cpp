@@ -1,11 +1,8 @@
-#include "pch.h"
 #include "ParameterEstimation.hpp"
 #include <math.h>
 #include <algorithm>
 #include <iostream>
 #include <assert.h>
-
-using namespace Computations;
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
@@ -110,9 +107,6 @@ PnlVect* ParameterEstimation::getVolatilitiesVector(const PnlMat *path) {
 	return volatilitiesVector;
 }
 
-PnlVect* ParameterEstimation::getTrend(const PnlMat *path) {
-	return pnl_vect_create_from_double(path->n, 0.3);
-}
 PnlMat* ParameterEstimation::getDomesticAssetPrices(const PnlMat *pricesforeigncurr,const PnlMat* exchangerates){
 	PnlMat* Domesticprices =  pnl_mat_copy(pricesforeigncurr);
 	PnlVect* Asset = pnl_vect_create(pricesforeigncurr->m);
@@ -165,6 +159,7 @@ PnlMat* ParameterEstimation::getDomesticAssetPrices(const PnlMat *pricesforeignc
 
 	return Domesticprices;
 }
+
 PnlVect* ParameterEstimation::getTrend(const PnlMat *path){
 	PnlVect* TrendVector = pnl_vect_create(path->n);
 	PnlMat* logrendementMatrix = getLogRendementMatrix(path);

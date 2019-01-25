@@ -1,6 +1,4 @@
 #include "Option/QuantoBasket.hpp"
-#include "pch.h"
-using namespace Computations;
 
 
 

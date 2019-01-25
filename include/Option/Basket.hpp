@@ -5,7 +5,6 @@
 
 
 
-namespace Computations {
 
 	/** \class Basket
 	 * \brief Option Vanille
@@ -70,4 +69,3 @@ namespace Computations {
 	virtual Basket* clone();
 
 	};
-}

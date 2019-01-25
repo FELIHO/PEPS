@@ -1,8 +1,15 @@
 #pragma once
+
+#ifndef OPTION_HPP
+#define OPTION_HPP
+
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
-namespace Computations {
+#include <iostream>
+#include <stdio.h>
+
 
 
 /*! \class Option abstraite
@@ -24,14 +31,6 @@ public:
    */
     int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
 
-
-
-    Option();
-    Option(double T, double nbTimeSteps, double size);
-    Option(const Option &C);
-    Option& operator=(const Option &C);
-
-
     /**
      * \brief Calcule la valeur du payoff sur la trajectoire
      *
@@ -40,9 +39,7 @@ public:
      * par la fonction asset.
      * @return phi(trajectoire)
      */
-    virtual double payoff(const PnlMat *path);
-    virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect *currency);
-
+    virtual double payoff(const PnlMat *path) = 0;
 
 /* ######################################################################## */
 /* ######################################################################## */
@@ -50,10 +47,11 @@ public:
   /*!
    *  \brief Destructeur virtuel de la classe mère Option
    */
-    virtual ~Option();
+    virtual ~Option() {};
 
-    virtual Option* clone();
+    virtual Option* clone() = 0;
 
 };
 
-}
+
+#endif

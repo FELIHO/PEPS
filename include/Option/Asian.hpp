@@ -4,8 +4,6 @@
 #include "Option.hpp"
 
 
-namespace Computations {
-
 	/** \class Asian
 	 * \brief Option Asiatique
 	 */
@@ -70,5 +68,3 @@ namespace Computations {
 	virtual Asian* clone();
 
 	};
-
-}

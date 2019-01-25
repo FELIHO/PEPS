@@ -1,9 +1,8 @@
 #pragma once
-#include "pch.h"
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
-namespace Computations {
 
 	class DataSelecter
 	{
@@ -68,7 +67,3 @@ namespace Computations {
 
 	private:
 	};
-
-
-
-}

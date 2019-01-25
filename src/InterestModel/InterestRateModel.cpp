@@ -3,7 +3,6 @@
 #include <iostream>
 #include <stdexcept>
 using namespace std;
-using namespace Computations;
 
 /**
 Constructeur par d�faut
@@ -28,7 +27,7 @@ InterestRateModel::InterestRateModel(int size, double r)
 Constructeur complet
 */
 InterestRateModel::InterestRateModel(PnlVect *size, PnlVect *r)
-{	
+{
 	if (size_->size != rSpot_->size) {
 		throw length_error("size_ attribute and rSpot_ attribute must be the same");
 	}

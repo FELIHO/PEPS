@@ -5,7 +5,7 @@
 #include "Option.hpp"
 #include "BlackScholesModel.hpp"
 
-namespace Computations {
+
 	class Delta
 	{
 	public:
@@ -36,4 +36,3 @@ namespace Computations {
 		virtual void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic, BlackScholesModel *mod, Option *opt, PnlRng *rng, int nbSamples) = 0;
 
 	};
-}

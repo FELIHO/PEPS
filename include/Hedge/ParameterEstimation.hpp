@@ -1,9 +1,7 @@
 #pragma once
-#include "pch.h"
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-
-namespace Computations {
 
 	class ParameterEstimation
 	{
@@ -54,14 +52,11 @@ namespace Computations {
 
 		static PnlVect* getTrend(const PnlMat *path);
 
-		static PnlMat* getDomesticAssetPrices(const PnlMat *pricesforeigncurr,const PnlMat* exchangerates); 
+		static PnlMat* getDomesticAssetPrices(const PnlMat *pricesforeigncurr,const PnlMat* exchangerates);
 
 	private:
 	};
 
-
-
-}
 
 
 double makeLogonAllElements(double vectorElement);

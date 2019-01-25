@@ -6,7 +6,7 @@
 #include "BlackScholesModel.hpp"
 
 using namespace std;
-using namespace Computations;
+
 
 int main(int argc, char **argv)
 {
