@@ -1,4 +1,4 @@
-directory <- "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/ExchangeRates/"
+directory <- "/user/8/felihol/Desktop/PEPS/DataFeeds/ExchangeRates/"
 
 file <- paste(directory,"USD", sep= "")
 file <- paste(file,".csv", sep= "")
@@ -30,7 +30,7 @@ rownames(MyData) <- seq( 1,nrow(MyData) ,by=1)
 for ( i in seq(nrow(MyData), 1, by=-1)){
   counter = 0
   for(j in MyData[i, ]){
-    if (is.na(j)) {
+    if ((is.na(j)) | (as.numeric(j) == 0)) {
       counter = counter +1
     }
   }
@@ -71,5 +71,5 @@ MyData <- MyData[which(as.Date(MyData$timestamp) > as.Date.character("2009-12-31
 #prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character("2014-04-11"),as.Date.character("2014-04-14"),as.Date.character("2014-04-15"),as.Date.character("2014-10-13"),as.Date.character("2015-04-13"),as.Date.character("2015-10-12"),as.Date.character("2016-04-11"),as.Date.character("2016-10-11"),as.Date.character("2017-04-11"),as.Date.character("2017-10-11"),as.Date.character("2018-04-11"),as.Date.character("2018-10-11"))), ]
 
 
-write.table(MyData[,-1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/kozei_dataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)
-write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "C:/Users/lione/Desktop/Ensimag/PEPS/PepsBeta/p.e.p.s/DataFeeds/kozei_IndexdataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(MyData[,-1], file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_dataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_IndexdataExchangeRates.dat", sep = " ",row.names = FALSE,col.names = FALSE)

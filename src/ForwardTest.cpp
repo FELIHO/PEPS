@@ -3,6 +3,7 @@
 #include "Kozei.hpp"
 #include "SimulatedDataProvider.hpp"
 #include <ctime>
+#include <omp.h>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ int main(int argc,char **argv){
   double fdStep = 0.1;
   int nbRebalancementPerStep = 1;
 
+  double debut = omp_get_wtime();
 
   // Initialisaton du Kozei
   Kozei *K = new Kozei(inv_init);
@@ -51,10 +53,8 @@ int main(int argc,char **argv){
   double prix;
   double ic;
 
-  float time;
-  clock_t t0,tf;
+  double debut = omp_get_wtime();
 
-  t0 = clock();
 
   mc_pricer->price(prix,ic);
 
@@ -64,12 +64,12 @@ int main(int argc,char **argv){
 
   mc_pricer->delta(past,0.0,delta);
 
-  tf = clock();
+  double fin = omp_get_wtime();
+  printf("Computation time: %f\n", fin - debut);
 
-  time = (double) (tf - t0) / CLOCKS_PER_SEC;
   cout << endl;
   cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << time << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << fin-debut << endl;
   cout << "#####################" << endl << endl;
   cout << "###############" << endl;
   cout << "# DELTA à t=0 #   =   "<< endl << endl;
@@ -93,6 +93,8 @@ int main(int argc,char **argv){
   cout << "#################" << endl;
   cout << "# PROFIT & LOSS #   =   "<< PL << endl;
   cout << "#################" << endl;
+
+
 
 
 
