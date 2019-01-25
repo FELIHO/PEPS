@@ -54,6 +54,8 @@ namespace Computations {
 
 		static PnlVect* getTrend(const PnlMat *path);
 
+		static PnlMat* getDomesticAssetPrices(const PnlMat *pricesforeigncurr,const PnlMat* exchangerates); 
+
 	private:
 	};
 
