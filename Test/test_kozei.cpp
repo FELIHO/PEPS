@@ -85,8 +85,10 @@ int main(){
   cout << "choisissez un taux d'intérêt zéro coupon européen (plus tard il faudrait avoir cette donnée sous forme de vecteur dans nos data): " << endl;
   cin >> r;
 
-  PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
+  PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(Pnlrng, time(NULL));
+  RandomGen *rng = new PnlRnd(Pnlrng); 
+
   size_t n_samples = 50000;
   double h = 0.1;
   // Maturité from 0 is 8 year and 11 day

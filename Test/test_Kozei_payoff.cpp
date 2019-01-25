@@ -17,8 +17,9 @@ using namespace std;
 		pnl_mat_set_id(rho);
 		double sigma = 0.2;
 
-		PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-		pnl_rng_sseed(pnlRng, time(NULL));
+	    PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+    	pnl_rng_sseed(Pnlrng, time(NULL));
+    	RandomGen *rng = new PnlRnd(Pnlrng); 
 
 
 
@@ -41,8 +42,8 @@ using namespace std;
 		}
 
 
-		BlackScholesModel *bs_model = new BlackScholesModel(size, pnl_vect_create_from_double(size, r), rho, pnl_vect_create_from_double(size, sigma), niveaux_initaux);
-		bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, pnlRng, past);
+		BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, pnl_vect_create_from_double(size, sigma), niveaux_initaux);
+		bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, rng, past);
 
 		double payoff_kozei = test_kozei->payoff(path);
 

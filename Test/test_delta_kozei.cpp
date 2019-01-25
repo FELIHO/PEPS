@@ -71,10 +71,12 @@ int main(){
   pnl_mat_get_row(spot, past, 0);
 
   double r = 0.01;
+  double n_samples = 50000;
 
-  PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(rng, time(NULL));
-  size_t n_samples = 50000;
+  PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(Pnlrng, time(NULL));
+  RandomGen *rng = new PnlRnd(Pnlrng); 
+
   double h = 0.1;
   // Maturité from 0 is 8 year and 11 day
   double T = 8.0 + 11.0/365;
@@ -109,6 +111,5 @@ int main(){
   pnl_vect_free(&sigma);
   pnl_mat_free(&corr);
   pnl_vect_free(&spot);
-  pnl_rng_free(&rng);
 
 }
