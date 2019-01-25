@@ -99,10 +99,11 @@ int main(){
     PnlMat *correlationmatrix = pe.getCorrelationMatrix(&window); 
     PnlVect *volatiliesmatrix = pe.getVolatilitiesVector(&window);
 
-    BlackScholesModel *bc = new BlackScholesModel(size,r,interestRates,correlationmatrix,volatiliesmatrix,spot);
+    BlackScholesModel *bc = new BlackScholesModel(size,r,correlationmatrix,volatiliesmatrix,spot,pnl_vect_create_from_double(30,r),interestRates);
     
-    PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
+    PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+    pnl_rng_sseed(Pnlrng, time(NULL));
+    RandomGen *rng = new PnlRnd(Pnlrng); 
     //17 correspond aux dates de constations + la date initiale  
     
 

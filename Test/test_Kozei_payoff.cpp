@@ -10,21 +10,23 @@
 using namespace std;
 
 
-	int payoff_test_Kozei() {
+	int main() {
 		int size = 30;
 		double r = 0.1;
 		PnlMat *rho = pnl_mat_create(size, size);
 		pnl_mat_set_id(rho);
 		double sigma = 0.2;
 
-		PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-		pnl_rng_sseed(pnlRng, time(NULL));
+	    PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+    	pnl_rng_sseed(Pnlrng, time(NULL));
+    	RandomGen *rng = new PnlRnd(Pnlrng); 
 
 
 
 		Kozei *test_kozei = new Kozei(100);
 
-		PnlMat* mat_s0 = pnl_mat_create_from_file("matrice.txt");
+		//on doit se positionner sur le repertoire build/Test
+		PnlMat* mat_s0 = pnl_mat_create_from_file("../../Test/matrice.txt");
 		PnlVect* niveaux_initaux = pnl_vect_create(test_kozei->size_);
 		PnlMat* past = pnl_mat_create(mat_s0->m - 2, mat_s0->n);
 		PnlMat* path = pnl_mat_create(17, size);
@@ -41,8 +43,8 @@ using namespace std;
 		}
 
 
-		BlackScholesModel *bs_model = new BlackScholesModel(size, pnl_vect_create_from_double(size, r), rho, pnl_vect_create_from_double(size, sigma), niveaux_initaux);
-		bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, pnlRng, past);
+		BlackScholesModel *bs_model = new BlackScholesModel(size, r, rho, pnl_vect_create_from_double(size, sigma), niveaux_initaux);
+		bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, rng, past);
 
 		double payoff_kozei = test_kozei->payoff(path);
 

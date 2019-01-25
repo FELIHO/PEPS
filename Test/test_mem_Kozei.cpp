@@ -17,14 +17,15 @@ int main() {
     pnl_mat_set_id(rho);
     double sigma = 0.2;
 
-    PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(pnlRng, time(NULL));
+    PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
+    pnl_rng_sseed(Pnlrng, time(NULL));
+    RandomGen *rng = new PnlRnd(Pnlrng); 
 
 
 
     Kozei *test_kozei = new Kozei(100);
 
-    PnlMat* mat_s0 = pnl_mat_create_from_double(size,19,100);
+    PnlMat* mat_s0 = pnl_mat_create_from_double(19,size,100);
     PnlVect* niveaux_initaux = pnl_vect_create(test_kozei->size_);
     PnlMat* past = pnl_mat_create(mat_s0->m - 2, mat_s0->n);
     PnlMat* path = pnl_mat_create(17, size);
@@ -32,7 +33,9 @@ int main() {
 
         pnl_vect_set(niveaux_initaux, i, 1.0 / 3 * (pnl_mat_get(mat_s0, 0, i) + pnl_mat_get(mat_s0, 1, i) + pnl_mat_get(mat_s0, 2, i)));
     }
+    
     pnl_mat_set_row(past, niveaux_initaux, 0);
+    
 
     PnlVect *vect_i = pnl_vect_create(mat_s0->n);
     for (int i = 3;i < mat_s0->m;i++) {
@@ -42,12 +45,12 @@ int main() {
 
 
     BlackScholesModel *bs_model = new BlackScholesModel(size, r , rho, pnl_vect_create_from_double(size, sigma), niveaux_initaux);
-    bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, pnlRng, past);
+    bs_model->asset(path, 9.0 / 2, test_kozei->T_, 16, rng, past);
 
     double payoff_kozei = test_kozei->payoff(path);
 
     pnl_mat_free(&rho);
-    pnl_rng_free(&pnlRng);
+    pnl_rng_free(&Pnlrng);
     delete(test_kozei);
     pnl_mat_free(&mat_s0);
     pnl_vect_free(&niveaux_initaux);
