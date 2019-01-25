@@ -109,5 +109,5 @@ add_library(Options include/Option/Option.hpp src/Option/Call.cpp include/Option
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(Test)
-# add_subdirectory(doc)
+add_subdirectory(doc)
 enable_testing()
