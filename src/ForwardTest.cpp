@@ -51,7 +51,10 @@ int main(int argc,char **argv){
   double prix;
   double ic;
 
-  double debut = omp_get_wtime();
+  float time;
+  clock_t t0,tf;
+
+  t0 = omp_get_wtime();
 
 
   mc_pricer->price(prix,ic);
@@ -62,12 +65,13 @@ int main(int argc,char **argv){
 
   mc_pricer->delta(past,0.0,delta);
 
-  double fin = omp_get_wtime();
+  tf = omp_get_wtime();
 
   cout << endl;
   cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << fin-debut << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
   cout << "#####################" << endl << endl;
+  cout << endl;
   cout << "###############" << endl;
   cout << "# DELTA à t=0 #   =   "<< endl << endl;
   pnl_vect_print(delta);
@@ -83,20 +87,21 @@ int main(int argc,char **argv){
 
 
 
-  double debut_2 = omp_get_wtime();
+  t0 = omp_get_wtime();
 
   HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
   double PL = hedgePortfolio.HedgeError(marketData);
 
-  double fin_2 = omp_get_wtime();
+  tf = omp_get_wtime();
 
   cout << endl;
   cout << "#################" << endl;
   cout << "# PROFIT & LOSS #   =   "<< PL << endl;
   cout << "#################" << endl;
+
   cout << endl;
   cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << fin_2-debut_2 << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
   cout << "#####################" << endl << endl;
 
 
