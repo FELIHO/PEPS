@@ -94,12 +94,12 @@ int main(){
 
     BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
     Kozei *kozei_test = new Kozei(inv_init);
-    MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
+    MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng,h, n_samples);
 
     PnlMat *DataSimu = pnl_mat_create(17,30);
 
 
-    bc->asset(DataSimu, T, 16, rng);
+    bc->asset(DataSimu, T, 16,rng);
     pnl_mat_print(DataSimu);
     HedgePortfolio *hedgePortfolio = new HedgePortfolio(DataSimu, mc_test);
     double PL = hedgePortfolio->HedgeError(DataSimu);
