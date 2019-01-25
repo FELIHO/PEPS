@@ -20,28 +20,6 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 endif ()
 
-#include(CheckCXXCompilerFlag)
-#CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-#CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-#IF(COMPILER_SUPPORTS_CXX11)
-#    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#ELSEIF(COMPILER_SUPPORTS_CXX0X)
-#    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-#ELSE()
-#    MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-#ENDIF()
-
-#include_directories(${PROJECT_SOURCE_DIR})
-# Detect Boost
-#set(Boost_NO_BOOST_CMAKE ON)
-#find_package(Boost COMPONENTS program_options REQUIRED)
-#message(STATUS "Boost program_options component: ${Boost_PROGRAM_OPTIONS_LIBRARY}")
-#FIND_PACKAGE(Boost COMPONENTS serialization REQUIRED)
-#MESSAGE(STATUS "Boost serialization : ${Boost_SERIALIZATION_LIBRARY}")
-#include_directories(${Boost_INCLUDE_DIR})
-#set(LIBS ${LIBS} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-
-
 # Detect PNL
 find_package(Pnl REQUIRED)
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
@@ -49,6 +27,12 @@ include_directories(${PNL_INCLUDE_DIRS})
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
+
+# Detect Boost
+set(Boost_NO_BOOST_CMAKE ON)
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+message(STATUS "Boost include directory ${Boost_INCLUDE_DIR}")
 
 # Detect OPM
 FIND_PACKAGE(OpenMP)
@@ -59,11 +43,6 @@ else (OPENMP_FOUND)
     message(STATUS "OpenMP not found.")
 endif (OPENMP_FOUND)
 
-# Detect Boost
-set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-message(STATUS "Boost include directory ${Boost_INCLUDE_DIR}")
 
 # Add math lib
 set(LIBS ${LIBS} m Pricer Options)
@@ -77,8 +56,8 @@ add_subdirectory(3rdparty/jlparser)
 #set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 
 # Executable Product
-#add_executable(pricer src/pricer.cpp)
-#target_link_libraries(pricer jl_parser ${LIBS})
+add_executable(pricer src/pricer.cpp)
+target_link_libraries(pricer jl_parser ${LIBS})
 
 # Executable Product
 add_executable(forwardTest src/ForwardTest.cpp)
@@ -102,8 +81,11 @@ include_directories(include include/AssetModel include/Delta include/Hedge inclu
 
 
 # Adding our own libraries
-add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp include/Rnd/RandomGen.hpp src/Rnd/PnlRnd.cpp include/Rnd/PnlRnd.hpp src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp include/DataProvider/DataProvider.hpp src/DataProvider/SimulatedDataProvider.cpp include/DataProvider/SimulatedDataProvider.hpp src/DataProvider/SemiHistoricalDataProvider.cpp include/DataProvider/SemiHistoricalDataProvider.hpp  src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp src/Hedge/DataSelecter.cpp include/Hedge/DataSelecter.hpp )
+add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp include/Rnd/RandomGen.hpp src/Rnd/PnlRnd.cpp include/Rnd/PnlRnd.hpp src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp include/DataProvider/DataProvider.hpp src/DataProvider/SimulatedDataProvider.cpp include/DataProvider/SimulatedDataProvider.hpp src/DataProvider/SemiHistoricalDataProvider.cpp include/DataProvider/SemiHistoricalDataProvider.hpp  src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp) # src/Hedge/DataSelecter.cpp include/Hedge/DataSelecter.hpp)
 add_library(Options include/Option/Option.hpp src/Option/Call.cpp include/Option/Call.hpp src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp src/Option/Kozei.cpp include/Option/Kozei.hpp)
+
+# src/AssetModel/BlackScholesMertonModel.cpp include/AssetModel/BlackScholesMertonModel.hpp src/Delta/Delta.cpp include/Delta/Delta.hpp src/Delta/DeltaDF.cpp include/Delta/DeltaDF.hpp src/Delta/DeltaLH.cpp include/Delta/DeltaLH.hpp src/Delta/DeltaPW.cpp include/Delta/DeltaPW.hpp )
+
 
 # Adding subdirectories
 add_subdirectory(include)
@@ -111,3 +93,4 @@ add_subdirectory(src)
 add_subdirectory(Test)
 # add_subdirectory(doc)
 enable_testing()
+

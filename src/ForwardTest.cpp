@@ -4,7 +4,7 @@
 #include "SimulatedDataProvider.hpp"
 #include <ctime>
 
-using namespace std; 
+using namespace std;
 
 int main(int argc,char **argv){
 
@@ -36,7 +36,7 @@ int main(int argc,char **argv){
 
   PnlMat* marketData = Simulator->getMarketData(K->T_, K->nbTimeSteps_, nbRebalancementPerStep);
 
-  // Initialisation du modèle de BlackScholes 
+  // Initialisation du modèle de BlackScholes
   BlackScholesModel *bs_model = new BlackScholesModel(K->size_, r, rho, sigma, spot);
 
   // Initialisation du modèle de MonteCarlo
@@ -53,19 +53,19 @@ int main(int argc,char **argv){
 
   float time;
   clock_t t0,tf;
-  
+
   t0 = clock();
 
   mc_pricer->price(prix,ic);
-  
+
   // Variables temporaires
   PnlVect *delta = pnl_vect_create_from_scalar(K->size_,0);
   PnlMat* past = pnl_mat_create_from_scalar(1,K->size_ , 100) ;
-  
+
   mc_pricer->delta(past,0.0,delta);
-  
+
   tf = clock();
-  
+
   time = (double) (tf - t0) / CLOCKS_PER_SEC;
   cout << endl;
   cout << "#####################" << endl;
@@ -83,19 +83,19 @@ int main(int argc,char **argv){
   cout << "###########################" << endl;
   cout << "# INTERVALLE DE CONFIANCE #   =   "<< ic << endl;
   cout << "###########################" << endl << endl;
-  
-  
-  
 
-    
+
+
+
+
   HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
   double PL = hedgePortfolio.HedgeError(marketData);
   cout << "#################" << endl;
   cout << "# PROFIT & LOSS #   =   "<< PL << endl;
   cout << "#################" << endl;
-  
-  
-  
+
+
+
   delete(K);
   delete(rng);
   pnl_rng_free(&pnlRng);
@@ -109,7 +109,5 @@ int main(int argc,char **argv){
   pnl_vect_free(&delta);
   pnl_mat_free(&past);
 
-  return 0; 
+  return 0;
 }
- 
-  

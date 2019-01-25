@@ -1,10 +1,13 @@
 #pragma once
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include "Option.hpp"
+
+#ifndef ASIAN_HPP
+#define ASIAN_HPP
 
 
-	/** \class Asian
+#include "Option.hpp" //including superclass
+
+
+/** \class Asian
 	 * \brief Option Asiatique
 	 */
 	class Asian : public Option
@@ -68,3 +71,5 @@
 	virtual Asian* clone();
 
 	};
+
+#endif

@@ -18,6 +18,8 @@ In my case (c compiler is not needed in this project) :
 
     make doc
 
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
+
 # View the Doxygen Documentation
 
     firefox doc/html/index.html

@@ -1,6 +1,5 @@
 
 #include "MonteCarlo.hpp"
-#include <omp.h>
 
 using namespace std;
 
@@ -52,7 +51,7 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, RandomGen *rng, doub
 //   double sommePayoff = 0;
 //   double sommePayoffCarre = 0;
 //   PnlMat *pathCourant = pnl_mat_create(opt_->nbTimeSteps_+1, mod_->size_);
-//
+
 // 	#pragma omp parallel
 // 	{
 // 		double payoff;
@@ -67,14 +66,14 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, RandomGen *rng, doub
 // 	    sommePayoffCarre += payoff*payoff;
 // 	  }
 // 	}
-//
+
 //   double moyennePayoff = sommePayoff/nbSamples_;
 //   double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
-//
+
 //   double ksiCarreM = exp(-2*mod_->r_*opt_->T_)*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
 //   ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
 //   prix = exp(-mod_->r_*opt_->T_)*moyennePayoff;
-//
+
 //   pnl_mat_free(&pathCourant);
 // }
 
