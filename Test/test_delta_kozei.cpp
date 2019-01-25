@@ -71,12 +71,12 @@ int main(){
   pnl_mat_get_row(spot, past, 0);
 
   double r = 0.01;
-  double n_samples = 50000;
 
   PnlRng *Pnlrng = pnl_rng_create(PNL_RNG_MERSENNE);
   pnl_rng_sseed(Pnlrng, time(NULL));
   RandomGen *rng = new PnlRnd(Pnlrng); 
 
+  size_t n_samples = 50000;
   double h = 0.1;
   // Maturité from 0 is 8 year and 11 day
   double T = 8.0 + 11.0/365;
@@ -84,7 +84,7 @@ int main(){
 
   BlackScholesModel *bc = new BlackScholesModel(past->n, r, corr, sigma, spot);
   Kozei *kozei_test = new Kozei(inv_init);
-  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, rng, h, n_samples);
+  MonteCarlo *mc_test = new MonteCarlo(bc , kozei_test, h, n_samples);
 
   PnlVect *delta = pnl_vect_create_from_scalar(past->n, 1.0);
   PnlVect *icdelta = pnl_vect_create_from_scalar(past->n, 0.0);

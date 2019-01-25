@@ -43,6 +43,11 @@ add_executable (test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei.cpp)
 target_link_libraries(test_hedgePortfolio_Kozei ${LIBS})
 add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
 
+add_executable (test_Kozei_payoff test_Kozei_payoff.cpp)
+target_link_libraries(test_Kozei_payoff ${LIBS})
+add_test(test_Kozei_payoff test_Kozei_payoff)
+
+
 #add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
 #target_link_libraries(test_HistoricalDataProvider ${LIBS})
 #add_test(test_HistoricalDataProvider test_HistoricalDataProvider)
@@ -79,10 +84,6 @@ add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_rate
 target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
 add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
 
-
-add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
-target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
-add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
 
 #test unitaire avec des assertions
 

@@ -13,25 +13,22 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    int size = 2;
+    int size = 20;
     double r = 0.05;
     double rho = 0.2;
     double T = 8;
     int nbTimeSteps = 8;
     double pas = T/nbTimeSteps;
     PnlVect *sigma =  pnl_vect_create_from_scalar(size, 1);
-    PnlVect *spots = pnl_vect_create_from_scalar(size, 5);
+    PnlVect *spots = pnl_vect_create_from_scalar(size, 10);
 
 
     BlackScholesModel* blackScholesModel = new BlackScholesModel(size, r, rho, sigma, spots);
-    //FakeRnd* rng = new FakeRnd(0.3);
-    PnlRng * pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(pnlRng, time(NULL));
-    RandomGen* rng = new PnlRnd(pnlRng);
-    
-    PnlVect *weights = pnl_vect_create_from_scalar(size, 0.5);
+
+
+    PnlVect *weights = pnl_vect_create_from_scalar(size, 1.0/size);
     Basket* opt = new Basket(T, nbTimeSteps, size, 0.5, weights);
-    MonteCarlo* monteCarlo = new MonteCarlo(blackScholesModel, opt, rng, 0.001, 100000);
+    MonteCarlo* monteCarlo = new MonteCarlo(blackScholesModel, opt, 0.001, 1000000);
 
     PnlMat* past = pnl_mat_create_from_scalar(1, size, 0);
     pnl_mat_set_row(past, spots, 0);

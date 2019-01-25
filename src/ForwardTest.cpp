@@ -17,7 +17,7 @@ int main(int argc,char **argv){
   double inv_init = 100;
   size_t n_samples = 50000;
   double fdStep = 0.1;
-  int nbRebalancementPerStep = 1;
+  int nbRebalancementPerStep = 26;
 
   // Initialisaton du Kozei
   Kozei *K = new Kozei(inv_init);
@@ -40,7 +40,7 @@ int main(int argc,char **argv){
   BlackScholesModel *bs_model = new BlackScholesModel(K->size_, r, rho, sigma, spot);
 
   // Initialisation du modèle de MonteCarlo
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, K , rng, fdStep, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, K, fdStep, n_samples);
 
   // Matrix
   PnlMat *path = pnl_mat_create(K->nbTimeSteps_ + 1, K->size_);

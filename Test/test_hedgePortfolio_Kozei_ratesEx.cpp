@@ -86,7 +86,7 @@ int main(){
     BlackScholesModel *bc_Assets = new BlackScholesModel(past->n, r, corr_Assets, sigma_Assets, spot);
 
     Kozei *kozei_test = new Kozei(inv_init);
-    MonteCarlo *mc_test = new MonteCarlo(bc_Assets , kozei_test, rng,h, n_samples);
+    MonteCarlo *mc_test = new MonteCarlo(bc_Assets , kozei_test, h, n_samples);
 
     PnlMat *DataSimu = pnl_mat_create(17,30);
     //Taux de change de la date 25/01/2019

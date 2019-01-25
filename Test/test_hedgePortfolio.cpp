@@ -19,12 +19,7 @@ int main(int argc, char **argv)
   double rho = 0;
   PnlVect *sigma = pnl_vect_create_from_double(size, 0.2);
   PnlVect *spot = pnl_vect_create_from_double(size, 3);
-  PnlVect *weights = pnl_vect_create_from_double(size, 1/size);
-
-  PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
-  pnl_rng_sseed(pnlRng, time(NULL));
-  RandomGen* rng = new PnlRnd(pnlRng);
-  //FakeRnd* rng = new FakeRnd(0.3);
+  PnlVect *weights = pnl_vect_create_from_double(size, 1.0/size);
 
   double fdStep = 1;
   int nbSamples = 50000;
@@ -32,7 +27,7 @@ int main(int argc, char **argv)
 
   Basket* call = new Basket(T, nbTimeSteps, size, strike, weights);
   BlackScholesModel* BMS = new BlackScholesModel(size, r, rho, sigma, spot);
-  MonteCarlo* monteCarlo = new MonteCarlo(BMS, call, rng, fdStep, nbSamples);
+  MonteCarlo* monteCarlo = new MonteCarlo(BMS, call, fdStep, nbSamples);
 
   PnlMat* Data = pnl_mat_create_from_scalar(365, size, 100);
 

@@ -123,7 +123,7 @@ int main(int argc,char **argv){
   }
 
 
-  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, opt, rng, fdStep, n_samples);
+  MonteCarlo *mc_pricer = new MonteCarlo(bs_model, opt, fdStep, n_samples);
 
   if (strcmp(argument, char_c)) // option -c not given
   {
@@ -131,7 +131,7 @@ int main(int argc,char **argv){
     float time;
     clock_t t0,tf;
 
-    t0 = clock();
+    t0 =  omp_get_wtime();
 
     mc_pricer->price(prix,ic);
 
@@ -141,12 +141,11 @@ int main(int argc,char **argv){
 
     mc_pricer->delta(past,0.0,delta);
 
-    tf = clock();
+    tf =  omp_get_wtime();
 
-    time = (double) (tf - t0) / CLOCKS_PER_SEC;
     cout << endl;
     cout << "#####################" << endl;
-    cout << "# TEMPS D'EXECUTION #   =   " << time << endl;
+    cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
     cout << "#####################" << endl << endl;
     cout << "###############" << endl;
     cout << "# DELTA à t=0 #   =   "<< endl << endl;
@@ -169,21 +168,20 @@ int main(int argc,char **argv){
     float time;
     clock_t t0,tf;
 
-    t0 = clock();
+    t0 = omp_get_wtime();
 
     HedgePortfolio hedgePortfolio = HedgePortfolio(past, mc_pricer);
     double PL = hedgePortfolio.HedgeError(past);
 
-    tf = clock();
+    tf = omp_get_wtime();
 
     cout << "#################" << endl;
     cout << "# PROFIT & LOSS #   =   "<< PL << endl;
     cout << "#################" << endl;
 
-    time = (double) (tf - t0) / CLOCKS_PER_SEC;
     cout << endl;
     cout << "#####################" << endl;
-    cout << "# TEMPS D'EXECUTION #   =   " << time << endl;
+    cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
     cout << "#####################" << endl << endl;
   }
 
