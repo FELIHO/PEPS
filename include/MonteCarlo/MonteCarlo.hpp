@@ -1,9 +1,12 @@
+#pragma once
+
 #ifndef MONTECARLO_HPP
 #define MONTECARLO_HPP
 
 #include "Option.hpp"
 #include "Call.hpp"
 #include "BlackScholesModel.hpp"
+#include <omp.h>
 
 
 /** \class MonteCarlo

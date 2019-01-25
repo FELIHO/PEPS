@@ -15,6 +15,13 @@ ENSIMAG Machines :
 
     make
 
+<<<<<<< HEAD
+    make doc
+
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=<YourPathToPnlBuild> ..
+
+=======
+>>>>>>> 9a8ffe9109fcec3e8c498e1e8f6aa9996aa9c098
 # View the Doxygen Documentation
 
     make doc

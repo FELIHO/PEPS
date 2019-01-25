@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef DATAPROVIDER_HPP
+#define DATAPROVIDER_HPP
+
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
@@ -14,3 +17,5 @@ public:
 	virtual PnlMat* getDailyMarketData(double T)= 0;
 
 };
+
+#endif
