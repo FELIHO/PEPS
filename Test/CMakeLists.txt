@@ -158,5 +158,5 @@ add_executable (test_mem_Kozei test_mem_Kozei.cpp)
 target_link_libraries(test_mem_Kozei ${LIBS})
 add_test(test_mem_Kozei test_mem_Kozei)
 
-add_executable(runTests unit_test/test1.cpp)
-target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
+add_executable(unit_test unit_test/test1.cpp)
+target_link_libraries(unit_test ${GTEST_LIBRARIES} pthread)
