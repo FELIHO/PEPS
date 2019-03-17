@@ -1,4 +1,4 @@
-directory <- "/user/8/felihol/Desktop/PEPS/DataFeeds/Daily/Csv/"
+directory <- "C:/Users/lione/Desktop/Ensimag/PEPS/PEPS/DataFeeds/Daily/Csv/"
 
 file <- paste(directory,"AWK", sep= "")
 file <- paste(file,".csv", sep= "")
@@ -31,7 +31,7 @@ rownames(MyData) <- seq( 1,nrow(MyData) ,by=1)
 for ( i in seq(nrow(MyData), 1, by=-1)){
   counter = 0
   for(j in MyData[i, ]){
-    if ((is.na(j)) | (as.numeric(j) == 0)) {
+    if (is.na(j) | (as.numeric(j) == 0.00)) {
       counter = counter +1
     }
   }
@@ -53,10 +53,10 @@ for ( i in seq(nrow(MyData)-1, 1, by=-1)){
   dataFeedOld = as.vector(c(MyData[i,]))
   for(j in seq(1, ncol(MyData), by=1)){
     if (is.na(dataFeedOld[j])) {
-      if (is.na(dataFeedYoung[j])){
+      if ((is.na(dataFeedYoung[j])) | (as.numeric(dataFeedYoung[j])) == 0.000){
         k = as.numeric(i)
         print(k)
-        while (is.na(as.numeric(MyData[k,j]))) {
+        while ((is.na(as.numeric(MyData[k,j]))) | (as.numeric(MyData[k,j]) == 0.000) ) {
           k = k +1
         }
         dataFeedYoung[j] = MyData[k,j]
@@ -67,9 +67,22 @@ for ( i in seq(nrow(MyData)-1, 1, by=-1)){
   dataFeedYoung = as.vector(c(dataFeedOld))
 }
 
+for (j in seq(2, 31, by=1)){
+for ( i in seq(nrow(MyData)- 1, 1, by=-1)){
+  data = MyData[i,j]
+  if (as.numeric(data) == 0) {
+    print(i)
+    MyData[i,j] = MyData[i + 1,j]
+  }
+}
+}
+
 
 #prix_dates_constation <-  x_remplie[ which(x$timestamp %in% c(as.Date.character("2014-04-11"),as.Date.character("2014-04-14"),as.Date.character("2014-04-15"),as.Date.character("2014-10-13"),as.Date.character("2015-04-13"),as.Date.character("2015-10-12"),as.Date.character("2016-04-11"),as.Date.character("2016-10-11"),as.Date.character("2017-04-11"),as.Date.character("2017-10-11"),as.Date.character("2018-04-11"),as.Date.character("2018-10-11"))), ]
 
 
-write.table(MyData[,-1], file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
-write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "/user/8/felihol/Desktop/PEPS/DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(MyData[,-1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/PEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(as.numeric(format(MyData[,1],"%Y%m%d")), file = "C:/Users/lione/Desktop/Ensimag/PEPS/PEPS/DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+
+
+
