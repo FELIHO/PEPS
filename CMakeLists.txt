@@ -43,6 +43,10 @@ else (OPENMP_FOUND)
     message(STATUS "OpenMP not found.")
 endif (OPENMP_FOUND)
 
+# Detect GTest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 
 # Add math lib
 set(LIBS ${LIBS} m Pricer Options)
@@ -91,6 +95,6 @@ add_library(Options include/Option/Option.hpp src/Option/Call.cpp include/Option
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(Test)
-# add_subdirectory(doc)
+add_subdirectory(doc)
 enable_testing()
 

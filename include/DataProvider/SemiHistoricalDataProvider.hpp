@@ -34,6 +34,8 @@ public:
 	PnlMat* getDailyMarketData(double T);
 	PnlMat* getWeeklyMarketData(double T, int nbTimeSteps);
 	PnlMat* getMonthlyMarketData(double T, int nbTimeSteps);
+
+	PnlMat* multiplyChangeRate(PnlMat* marketData);
 };
 
 #endif

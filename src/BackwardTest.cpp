@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc,char **argv){
 
   //Variables
-  char const *fileData = "hist_kozei.dat";
+  char const *fileData = "../Hist_kozei/hist_kozei.dat";
   double r = 0.03;
   double rho = 0.1;
   double sigmaValue = 0.4;
@@ -17,7 +17,7 @@ int main(int argc,char **argv){
   double spotValue = 100;
   size_t n_samples = 50000;
   double fdStep = 0.1;
-  int nbRebalancementPerStep = 1;
+  int nbRebalancementPerStep = 3;
 
 
   // Initialisaton du Kozei
@@ -64,13 +64,13 @@ int main(int argc,char **argv){
 
   mc_pricer->delta(past,0.0,delta);
 
-  tf = clock();
+  tf = omp_get_wtime();
 
-  time = (double) (tf - t0) / CLOCKS_PER_SEC;
   cout << endl;
   cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << time << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
   cout << "#####################" << endl << endl;
+  cout << endl;
   cout << "###############" << endl;
   cout << "# DELTA à t=0 #   =   "<< endl << endl;
   pnl_vect_print(delta);
@@ -86,14 +86,22 @@ int main(int argc,char **argv){
 
 
 
-
+  t0 = omp_get_wtime();
 
   HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
   double PL = hedgePortfolio.HedgeError(marketData);
+
+  tf = omp_get_wtime();
+
+  cout << endl;
   cout << "#################" << endl;
   cout << "# PROFIT & LOSS #   =   "<< PL << endl;
   cout << "#################" << endl;
 
+  cout << endl;
+  cout << "#####################" << endl;
+  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
+  cout << "#####################" << endl << endl;
 
 
   delete(K);

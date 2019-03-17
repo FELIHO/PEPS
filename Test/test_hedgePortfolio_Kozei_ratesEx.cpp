@@ -90,23 +90,23 @@ int main(){
 
     PnlMat *DataSimu = pnl_mat_create(17,30);
     //Taux de change de la date 25/01/2019
-    PnlVect* interestRate_USD = pnl_vect_create_from_double(DataSimu->m,0.88);
-    PnlVect* interestRate_JPY = pnl_vect_create_from_double(DataSimu->m,0.0080);
-    PnlVect* interestRate_GBP = pnl_vect_create_from_double(DataSimu->m,1.15);
-    PnlVect* interestRate_CHF = pnl_vect_create_from_double(DataSimu->m,0.88);
-    PnlVect* interestRate_BRL = pnl_vect_create_from_double(DataSimu->m,0.23);
+    PnlVect* changeRate_USD = pnl_vect_create_from_double(DataSimu->m,0.88);
+    PnlVect* changeRate_JPY = pnl_vect_create_from_double(DataSimu->m,0.0080);
+    PnlVect* changeRate_GBP = pnl_vect_create_from_double(DataSimu->m,1.15);
+    PnlVect* changeRate_CHF = pnl_vect_create_from_double(DataSimu->m,0.88);
+    PnlVect* changeRate_BRL = pnl_vect_create_from_double(DataSimu->m,0.23);
 
-    PnlMat *InterestRates = pnl_mat_create(DataSimu->m,5);
+    PnlMat *changeRates = pnl_mat_create(DataSimu->m,5);
 
-    pnl_mat_set_col(InterestRates,interestRate_USD,0);
-    pnl_mat_set_col(InterestRates,interestRate_JPY,1);
-    pnl_mat_set_col(InterestRates,interestRate_GBP,2);
-    pnl_mat_set_col(InterestRates,interestRate_CHF,3);
-    pnl_mat_set_col(InterestRates,interestRate_BRL,4);
+    pnl_mat_set_col(changeRates,changeRate_USD,0);
+    pnl_mat_set_col(changeRates,changeRate_JPY,1);
+    pnl_mat_set_col(changeRates,changeRate_GBP,2);
+    pnl_mat_set_col(changeRates,changeRate_CHF,3);
+    pnl_mat_set_col(changeRates,changeRate_BRL,4);
 
     bc_Assets->asset(DataSimu, T, 16,rng);
 
-    PnlMat* DomesticAssets = pe_Assets.getDomesticAssetPrices(DataSimu,InterestRates);
+    PnlMat* DomesticAssets = pe_Assets.getDomesticAssetPrices(DataSimu,changeRates);
     pnl_mat_print(DataSimu);
     cout<<" "<<endl;
     pnl_mat_print(DomesticAssets);
@@ -117,12 +117,12 @@ int main(){
 
     pnl_mat_free(&corr_Assets);
     pnl_vect_free(&sigma_Assets);
-    pnl_vect_free(&interestRate_USD);
-    pnl_vect_free(&interestRate_JPY);
-    pnl_vect_free(&interestRate_GBP);
-    pnl_vect_free(&interestRate_CHF);
-    pnl_vect_free(&interestRate_BRL);
-    pnl_mat_free(&InterestRates);
+    pnl_vect_free(&changeRate_USD);
+    pnl_vect_free(&changeRate_JPY);
+    pnl_vect_free(&changeRate_GBP);
+    pnl_vect_free(&changeRate_CHF);
+    pnl_vect_free(&changeRate_BRL);
+    pnl_mat_free(&changeRates);
 
     delete(kozei_test);
     delete(bc_Assets);
