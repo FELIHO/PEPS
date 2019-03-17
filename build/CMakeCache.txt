@@ -23,23 +23,20 @@ Boost_INCLUDE_DIR:PATH=/usr/include
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-//Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
-// CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
+//Choose the type of build.
 CMAKE_BUILD_TYPE:STRING=Release
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
-//CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+//No help, variable specified on the command line.
+CMAKE_CXX_COMPILER:UNINITIALIZED=clang++
 
-//A wrapper around 'ar' adding the appropriate '--plugin' option
-// for the GCC compiler
-CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-7
+//LLVM archiver
+CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/llvm-ar-6.0
 
-//A wrapper around 'ranlib' adding the appropriate '--plugin' option
-// for the GCC compiler
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-7
+//Generate index for LLVM archive
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/llvm-ranlib-6.0
 
 //Flags used by the compiler during all build types.
 CMAKE_CXX_FLAGS:STRING=
@@ -109,7 +106,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //No help, variable specified on the command line.
-CMAKE_PREFIX_PATH:UNINITIALIZED=/home/jmari/pnl/src/
+CMAKE_PREFIX_PATH:UNINITIALIZED=/home/jmari/ENSIMAG/3A/pnl
 
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=mc-pricer
@@ -169,14 +166,29 @@ DOXYGEN_DOT_EXECUTABLE:FILEPATH=DOXYGEN_DOT_EXECUTABLE-NOTFOUND
 //Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=/usr/bin/doxygen
 
+//Path to a file.
+GTEST_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+GTEST_LIBRARY:FILEPATH=/usr/lib/libgtest.a
+
+//Path to a library.
+GTEST_LIBRARY_DEBUG:FILEPATH=GTEST_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTEST_MAIN_LIBRARY:FILEPATH=/usr/lib/libgtest_main.a
+
+//Path to a library.
+GTEST_MAIN_LIBRARY_DEBUG:FILEPATH=GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND
+
 //CXX compiler flags for OpenMP parallelization
-OpenMP_CXX_FLAGS:STRING=-fopenmp
+OpenMP_CXX_FLAGS:STRING=-fopenmp=libomp
 
 //CXX compiler libraries for OpenMP parallelization
-OpenMP_CXX_LIB_NAMES:STRING=gomp;pthread
+OpenMP_CXX_LIB_NAMES:STRING=omp;pthread
 
-//Path to the gomp library for OpenMP
-OpenMP_gomp_LIBRARY:FILEPATH=/usr/lib/gcc/x86_64-linux-gnu/7/libgomp.so
+//Path to the omp library for OpenMP
+OpenMP_omp_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libomp.so
 
 //Path to the pthread library for OpenMP
 OpenMP_pthread_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpthread.so
@@ -185,7 +197,7 @@ OpenMP_pthread_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpthread.so
 Options_LIB_DEPENDS:STATIC=
 
 //The directory containing a CMake configuration file for Pnl.
-Pnl_DIR:PATH=/home/jmari/pnl/src
+Pnl_DIR:PATH=/home/jmari/ENSIMAG/3A/pnl/lib/cmake/pnl
 
 //Dependencies for target
 Pricer_LIB_DEPENDS:STATIC=
@@ -259,6 +271,10 @@ CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have symbol pthread_create
+CMAKE_HAVE_LIBC_CREATE:INTERNAL=1
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s
@@ -328,24 +344,36 @@ DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Doxygen
 FIND_PACKAGE_MESSAGE_DETAILS_Doxygen:INTERNAL=[/usr/bin/doxygen][cfound components:  doxygen missing components:  dot][v1.8.13()]
+//Details about finding GTest
+FIND_PACKAGE_MESSAGE_DETAILS_GTest:INTERNAL=[/usr/lib/libgtest.a][/usr/include][/usr/lib/libgtest_main.a][v()]
 //Details about finding OpenMP
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][c ][v4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][c ][v()]
 //Details about finding OpenMP_CXX
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp][/usr/lib/gcc/x86_64-linux-gnu/7/libgomp.so][/usr/lib/x86_64-linux-gnu/libpthread.so][v4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp][/usr/lib/x86_64-linux-gnu/libomp.so][/usr/lib/x86_64-linux-gnu/libpthread.so][v()]
 //Details about finding Pnl
-FIND_PACKAGE_MESSAGE_DETAILS_Pnl:INTERNAL=[/home/lib/libpnl.so][/home/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_Pnl:INTERNAL=[/home/jmari/ENSIMAG/3A/pnl/lib/libpnl.so][/home/jmari/ENSIMAG/3A/pnl/include][v()]
+//ADVANCED property for variable: GTEST_INCLUDE_DIR
+GTEST_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_LIBRARY
+GTEST_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_LIBRARY_DEBUG
+GTEST_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_MAIN_LIBRARY
+GTEST_MAIN_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_MAIN_LIBRARY_DEBUG
+GTEST_MAIN_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //Result of TRY_COMPILE
-OpenMP_COMPILE_RESULT_CXX_fopenmp:INTERNAL=TRUE
+OpenMP_COMPILE_RESULT_CXX_fopenmplibomp:INTERNAL=TRUE
 //ADVANCED property for variable: OpenMP_CXX_FLAGS
 OpenMP_CXX_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenMP_CXX_LIB_NAMES
 OpenMP_CXX_LIB_NAMES-ADVANCED:INTERNAL=1
 //CXX compiler's OpenMP specification date
-OpenMP_CXX_SPEC_DATE:INTERNAL=201511
+OpenMP_CXX_SPEC_DATE:INTERNAL=201107
 //Result of TRY_COMPILE
 OpenMP_SPECTEST_CXX_:INTERNAL=TRUE
-//ADVANCED property for variable: OpenMP_gomp_LIBRARY
-OpenMP_gomp_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OpenMP_omp_LIBRARY
+OpenMP_omp_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenMP_pthread_LIBRARY
 OpenMP_pthread_LIBRARY-ADVANCED:INTERNAL=1
 //Components requested for this build tree.
