@@ -10,6 +10,21 @@ set(LIBS ${LIBS} Pricer Options)
 ################## PEPS  ####################
 #############################################
 
+############ test unitaire ##############
+
+add_executable(test1 unit_test/test1.cpp)
+target_link_libraries(test1 ${GTEST_LIBRARIES} pthread)
+
+add_executable(tools unit_test/tools.cpp)
+target_link_libraries(tools ${LIBS} ${GTEST_LIBRARIES} pthread)
+
+
+############ test de mémoire ##############
+
+add_executable(resize memory_test/resize.cpp)
+target_link_libraries(resize ${LIBS})
+
+########## ancien #####################
 #add_executable (test_kozei test_kozei.cpp)
 #add_test(test_kozei test_kozei)
 #target_link_libraries(test_kozei ${LIBS})
@@ -43,9 +58,9 @@ set(LIBS ${LIBS} Pricer Options)
 #target_link_libraries(test_hedgePortfolio_Kozei ${LIBS})
 #add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
 
-add_executable (test_Kozei_payoff test_Kozei_payoff.cpp)
-target_link_libraries(test_Kozei_payoff ${LIBS})
-add_test(test_Kozei_payoff test_Kozei_payoff)
+#add_executable (test_Kozei_payoff test_Kozei_payoff.cpp)
+#target_link_libraries(test_Kozei_payoff ${LIBS})
+#add_test(test_Kozei_payoff test_Kozei_payoff)
 
 
 #add_executable (test_HistoricalDataProvider test_HistoricalDataProvider.cpp)
@@ -76,9 +91,9 @@ add_test(test_Kozei_payoff test_Kozei_payoff)
 
 # My Tests
 
-add_executable (test_pnl test_pnl.cpp)
-target_link_libraries(test_pnl ${LIBS})
-add_test (test_pnl test_pnl)
+#add_executable (test_pnl test_pnl.cpp)
+#target_link_libraries(test_pnl ${LIBS})
+#add_test (test_pnl test_pnl)
 
 #add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
 #target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
@@ -87,76 +102,74 @@ add_test (test_pnl test_pnl)
 
 #test unitaire avec des assertions
 
-add_executable (test_unit_asset_t0 test_unit_asset_t0.cpp)
-target_link_libraries(test_unit_asset_t0 ${LIBS})
-add_test(test_unit_asset_t0 test_unit_asset_t0)
+#add_executable (test_unit_asset_t0 test_unit_asset_t0.cpp)
+#target_link_libraries(test_unit_asset_t0 ${LIBS})
+#add_test(test_unit_asset_t0 test_unit_asset_t0)
 
-add_executable (test_unit_asset_ti test_unit_asset_ti.cpp)
-target_link_libraries(test_unit_asset_ti ${LIBS})
-add_test(test_unit_asset_ti test_unit_asset_ti)
+#add_executable (test_unit_asset_ti test_unit_asset_ti.cpp)
+#target_link_libraries(test_unit_asset_ti ${LIBS})
+#add_test(test_unit_asset_ti test_unit_asset_ti)
 
-add_executable (test_unit_asset_t test_unit_asset_t.cpp)
-target_link_libraries(test_unit_asset_t ${LIBS})
-add_test(test_unit_asset_t test_unit_asset_t)
+#add_executable (test_unit_asset_t test_unit_asset_t.cpp)
+#target_link_libraries(test_unit_asset_t ${LIBS})
+#add_test(test_unit_asset_t test_unit_asset_t)
 
-add_executable (test_unit_concatenationMatrice test_unit_concatenationMatrice.cpp)
-target_link_libraries(test_unit_concatenationMatrice ${LIBS})
-add_test(test_unit_concatenationMatrice test_unit_concatenationMatrice)
+#add_executable (test_unit_concatenationMatrice test_unit_concatenationMatrice.cpp)
+#target_link_libraries(test_unit_concatenationMatrice ${LIBS})
+#add_test(test_unit_concatenationMatrice test_unit_concatenationMatrice)
 
-add_executable (test_unit_shift test_unit_shift.cpp)
-target_link_libraries(test_unit_shift ${LIBS})
-add_test(test_unit_shift test_unit_shift)
+#add_executable (test_unit_shift test_unit_shift.cpp)
+#target_link_libraries(test_unit_shift ${LIBS})
+#add_test(test_unit_shift test_unit_shift)
 
-add_executable (test_hedgePortfolio test_hedgePortfolio.cpp)
-target_link_libraries(test_hedgePortfolio ${LIBS})
-add_test(test_hedgePortfolio test_hedgePortfolio)
+#add_executable (test_hedgePortfolio test_hedgePortfolio.cpp)
+#target_link_libraries(test_hedgePortfolio ${LIBS})
+#add_test(test_hedgePortfolio test_hedgePortfolio)
 
-add_executable (test_unit_deltas test_unit_deltas.cpp)
-target_link_libraries(test_unit_deltas ${LIBS})
-add_test(test_unit_deltas test_unit_deltas)
+#add_executable (test_unit_deltas test_unit_deltas.cpp)
+#target_link_libraries(test_unit_deltas ${LIBS})
+#add_test(test_unit_deltas test_unit_deltas)
 
 
 #test unitaire de mémoire à utiliser avec valgrind
 
-add_executable (test_mem_asset_t0 test_mem_asset_t0.cpp)
-target_link_libraries(test_mem_asset_t0 ${LIBS})
-add_test(test_mem_asset_t0 test_mem_asset_t0)
+#add_executable (test_mem_asset_t0 test_mem_asset_t0.cpp)
+#target_link_libraries(test_mem_asset_t0 ${LIBS})
+#add_test(test_mem_asset_t0 test_mem_asset_t0)
 
-add_executable (test_mem_asset_t test_mem_asset_t.cpp)
-target_link_libraries(test_mem_asset_t ${LIBS})
-add_test(test_mem_asset_t test_mem_asset_t)
+#add_executable (test_mem_asset_t test_mem_asset_t.cpp)
+#target_link_libraries(test_mem_asset_t ${LIBS})
+#add_test(test_mem_asset_t test_mem_asset_t)
 
-add_executable (test_mem_asset_ti test_mem_asset_ti.cpp)
-target_link_libraries(test_mem_asset_ti ${LIBS})
-add_test(test_mem_asset_ti test_mem_asset_ti)
+#add_executable (test_mem_asset_ti test_mem_asset_ti.cpp)
+#target_link_libraries(test_mem_asset_ti ${LIBS})
+#add_test(test_mem_asset_ti test_mem_asset_ti)
 
-add_executable (test_mem_shift test_mem_shift.cpp)
-target_link_libraries(test_mem_shift ${LIBS})
-add_test(test_mem_shift test_mem_shift)
+#add_executable (test_mem_shift test_mem_shift.cpp)
+#target_link_libraries(test_mem_shift ${LIBS})
+#add_test(test_mem_shift test_mem_shift)
 
-add_executable (test_mem_price_t0 test_mem_price_t0.cpp)
-target_link_libraries(test_mem_price_t0 ${LIBS})
-add_test(test_mem_price_t0 test_mem_price_t0)
+#add_executable (test_mem_price_t0 test_mem_price_t0.cpp)
+#target_link_libraries(test_mem_price_t0 ${LIBS})
+#add_test(test_mem_price_t0 test_mem_price_t0)
 
-add_executable (test_mem_price_t test_mem_price_t.cpp)
-target_link_libraries(test_mem_price_t ${LIBS})
-add_test(test_mem_price_t test_mem_price_t)
+#add_executable (test_mem_price_t test_mem_price_t.cpp)
+#target_link_libraries(test_mem_price_t ${LIBS})
+#add_test(test_mem_price_t test_mem_price_t)
 
-add_executable (test_mem_price_ti test_mem_price_ti.cpp)
-target_link_libraries(test_mem_price_ti ${LIBS})
-add_test(test_mem_price_ti test_mem_price_ti)
+#add_executable (test_mem_price_ti test_mem_price_ti.cpp)
+#target_link_libraries(test_mem_price_ti ${LIBS})
+#add_test(test_mem_price_ti test_mem_price_ti)
 
-add_executable (test_mem_delta_t test_mem_delta_t.cpp)
-target_link_libraries(test_mem_delta_t ${LIBS})
-add_test(test_mem_delta_t test_mem_delta_t)
+#add_executable (test_mem_delta_t test_mem_delta_t.cpp)
+#target_link_libraries(test_mem_delta_t ${LIBS})
+#add_test(test_mem_delta_t test_mem_delta_t)
 
-add_executable (test_mem_delta_ti test_mem_delta_ti.cpp)
-target_link_libraries(test_mem_delta_ti ${LIBS})
-add_test(test_mem_delta_ti test_mem_delta_ti)
+#add_executable (test_mem_delta_ti test_mem_delta_ti.cpp)
+#target_link_libraries(test_mem_delta_ti ${LIBS})
+#add_test(test_mem_delta_ti test_mem_delta_ti)
 
-add_executable (test_mem_Kozei test_mem_Kozei.cpp)
-target_link_libraries(test_mem_Kozei ${LIBS})
-add_test(test_mem_Kozei test_mem_Kozei)
+#add_executable (test_mem_Kozei test_mem_Kozei.cpp)
+#target_link_libraries(test_mem_Kozei ${LIBS})
+#add_test(test_mem_Kozei test_mem_Kozei)
 
-add_executable(unit_test unit_test/test1.cpp)
-target_link_libraries(unit_test ${GTEST_LIBRARIES} pthread)

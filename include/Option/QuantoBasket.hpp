@@ -5,7 +5,6 @@
 #include "pnl/pnl_cdf.h"
 #include "Basket.hpp"
 #include <cmath>
-#include <assert.h>
 
 	class QuantoBasket : public Option
 	{

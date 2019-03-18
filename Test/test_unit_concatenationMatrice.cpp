@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     PnlMat *mat2 = pnl_mat_create_from_scalar(2, size, 5);
     PnlMat *res = pnl_mat_create_from_zero(4, size);
 
-    blackScholesModel->concatenationMatrice(res, mat1, mat2);
+    Tools::concatenationMatrice(res, mat1, mat2);
 
     PnlMat *resCal = pnl_mat_create_from_zero(4, size);
     for (int i = 0; i < 2; i++) {

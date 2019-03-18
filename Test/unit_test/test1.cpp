@@ -1,5 +1,7 @@
-#include "Kozei.hpp"
 #include <gtest/gtest.h>
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+
 
 TEST(KozeiTest,equal) { 
     ASSERT_EQ(6, 6.0);

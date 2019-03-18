@@ -3,9 +3,14 @@
 #ifndef PARAMETERESTIMATION_HPP
 #define PARAMETERESTIMATION_HPP
 
-
+#include <math.h>
+#include <algorithm>
+#include <iostream>
+#include <stdexcept>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+
+using namespace std;
 
 class ParameterEstimation
 {

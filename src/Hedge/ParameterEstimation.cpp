@@ -1,8 +1,5 @@
 #include "ParameterEstimation.hpp"
-#include <math.h>
-#include <algorithm>
-#include <iostream>
-#include <assert.h>
+
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
@@ -88,7 +85,10 @@ double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double 
 }
 
 double ParameterEstimation::getCorrelation(const PnlVect* shareX, const PnlVect* shareY) {
-	assert(shareX->size == shareY->size);
+	//assert(shareX->size == shareY->size);
+	if(shareX->size != shareY->size){
+    	throw new length_error("Les matrices shareX et shareY ne sont pas de la même taille") ;
+ 	}
 	PnlMat* corrMatrix = pnl_mat_create(shareX->size, 2);
 	pnl_mat_set_col (corrMatrix, shareX, 0);
 	pnl_mat_set_col (corrMatrix, shareY, 1);
