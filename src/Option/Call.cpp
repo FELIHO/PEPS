@@ -40,6 +40,7 @@ Call::Call(double T, double strike){
   	strike_ = strike;
 }
 
+
 Call* Call::clone() {
 	return (new Call(*this));
 }

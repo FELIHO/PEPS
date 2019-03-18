@@ -11,6 +11,7 @@
 #include "pnl/pnl_cdf.h"
 #include "Basket.hpp"
 #include <cmath>
+#include "../AssetModel/BlackScholesModel.hpp"
 
 class Call : public Basket
 {
@@ -42,6 +43,8 @@ public:
 	* Constructor with parameters
 	*/
 		Call(double T, double strike_);
+
+	double price_formuleBS( BlackScholesModel *bc,double T, double strike,double r,double sigma);
 
 	virtual Call* clone();
 
