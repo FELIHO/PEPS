@@ -5,6 +5,7 @@
 
 
 #include "Option.hpp"
+#include "BlackScholesModel.hpp"
 
 /** \class Basket
  * \brief Option Vanille
@@ -65,6 +66,19 @@ Basket(double T, int nbTimeSteps, int size, double strike, PnlVect *weights);
  * @return phi(trajectoire)
  */
   virtual double payoff(const PnlMat *path);
+
+
+/**
+ * \brief Calcule la valeur d un call selon la formule de B&S fermé
+ *
+ * @param[in] model B&S
+ * @param[in] maturité T
+ * @param[in] Strike K
+ * @param[in] Taux d'intérêt r
+ * @param[in] volatilité sigma
+ * @return le prix du call selon la formule de B&S
+ */
+  double price_formuleBS( BlackScholesModel *bc,double T, double K,double r,double sigma);
 
 virtual Basket* clone();
 

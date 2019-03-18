@@ -1,6 +1,5 @@
 #include "ParameterEstimation.hpp"
 
-
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
 	PnlVect* rendement = pnl_vect_new();
@@ -17,7 +16,7 @@ PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 				if ((rendementI < 0.001) || (rendementJ < 0.001)){
 					pnl_vect_set(logRendement, i, 0.0);
 				} else {
-					pnl_vect_set(logRendement, i, log(rendementJ/rendementI));
+					pnl_vect_set(logRendement, i, log(rendementJ/rendementI)/sqrt(1./260));
 				}
 			}
 			pnl_mat_set_row(logRendementMatrix, logRendement, j);
@@ -28,6 +27,7 @@ PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	pnl_vect_free(&Nextrendement);
 	return logRendementMatrix;
 }
+
 
 PnlMat* ParameterEstimation::getCovarianceMatrix(const PnlMat *past) {
 	PnlMat* logRendement = getLogRendementMatrix(past);
