@@ -74,6 +74,7 @@ add_test(test_delta_kozei test_delta_kozei)
 
 
 
+
 # My Tests
 
 add_executable (test_pnl test_pnl.cpp)
@@ -157,3 +158,16 @@ add_test(test_mem_delta_ti test_mem_delta_ti)
 add_executable (test_mem_Kozei test_mem_Kozei.cpp)
 target_link_libraries(test_mem_Kozei ${LIBS})
 add_test(test_mem_Kozei test_mem_Kozei)
+
+add_executable (test_vanilla_price test_vanilla_price.cpp)
+target_link_libraries(test_vanilla_price ${LIBS})
+add_test(test_vanilla_price test_vanilla_price)
+
+add_executable (test_validation_PNL test_validation_PNL.cpp)
+target_link_libraries(test_validation_PNL ${LIBS})
+add_test(test_validation_PNL test_validation_PNL)
+
+
+add_executable (test_validation_estimation test_validation_estimation.cpp)
+target_link_libraries(test_validation_estimation ${LIBS})
+add_test(test_validation_estimation test_validation_estimation)
