@@ -24,6 +24,32 @@ target_link_libraries(tools ${LIBS} ${GTEST_LIBRARIES} pthread)
 add_executable(resize memory_test/resize.cpp)
 target_link_libraries(resize ${LIBS})
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########## ancien #####################
 #add_executable (test_kozei test_kozei.cpp)
 #add_test(test_kozei test_kozei)
