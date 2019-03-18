@@ -17,7 +17,7 @@ int main(int argc,char **argv){
   double inv_init = 100;
   size_t n_samples = 50000;
   double fdStep = 0.1;
-  int nbRebalancementPerStep = 26;
+  int nbRebalancementPerStep = 6;
 
   // Initialisaton du Kozei
   Kozei *K = new Kozei(inv_init);

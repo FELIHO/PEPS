@@ -43,6 +43,10 @@ else (OPENMP_FOUND)
     message(STATUS "OpenMP not found.")
 endif (OPENMP_FOUND)
 
+# Detect GTest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 
 # Add math lib
 set(LIBS ${LIBS} m Pricer Options)
@@ -81,7 +85,7 @@ include_directories(include include/AssetModel include/Delta include/Hedge inclu
 
 
 # Adding our own libraries
-add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp include/Rnd/RandomGen.hpp src/Rnd/PnlRnd.cpp include/Rnd/PnlRnd.hpp src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp include/DataProvider/DataProvider.hpp src/DataProvider/SimulatedDataProvider.cpp include/DataProvider/SimulatedDataProvider.hpp src/DataProvider/SemiHistoricalDataProvider.cpp include/DataProvider/SemiHistoricalDataProvider.hpp  src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp src/Hedge/DataSelecter.cpp include/Hedge/DataSelecter.hpp)
+add_library(Pricer src/AssetModel/BlackScholesModel.cpp include/AssetModel/BlackScholesModel.hpp src/MonteCarlo/MonteCarlo.cpp include/MonteCarlo/MonteCarlo.hpp src/Hedge/HedgePortfolio.cpp include/Hedge/HedgePortfolio.hpp include/Rnd/RandomGen.hpp src/Rnd/PnlRnd.cpp include/Rnd/PnlRnd.hpp src/Rnd/FakeRnd.cpp include/Rnd/FakeRnd.hpp src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp include/DataProvider/DataProvider.hpp src/DataProvider/SimulatedDataProvider.cpp include/DataProvider/SimulatedDataProvider.hpp src/DataProvider/SemiHistoricalDataProvider.cpp include/DataProvider/SemiHistoricalDataProvider.hpp  src/DataProvider/HistoricalDataProvider.cpp include/DataProvider/HistoricalDataProvider.hpp  src/Hedge/ParameterEstimation.cpp include/Hedge/ParameterEstimation.hpp src/DataProvider/DataSelecter.cpp include/DataProvider/DataSelecter.hpp)
 add_library(Options include/Option/Option.hpp src/Option/Call.cpp include/Option/Call.hpp src/Option/Basket.cpp include/Option/Basket.hpp src/Option/Asian.cpp include/Option/Asian.hpp src/Option/Performance.cpp include/Option/Performance.hpp src/Option/Kozei.cpp include/Option/Kozei.hpp)
 
 # src/AssetModel/BlackScholesMertonModel.cpp include/AssetModel/BlackScholesMertonModel.hpp src/Delta/Delta.cpp include/Delta/Delta.hpp src/Delta/DeltaDF.cpp include/Delta/DeltaDF.hpp src/Delta/DeltaLH.cpp include/Delta/DeltaLH.hpp src/Delta/DeltaPW.cpp include/Delta/DeltaPW.hpp )
@@ -91,6 +95,6 @@ add_library(Options include/Option/Option.hpp src/Option/Call.cpp include/Option
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(Test)
-# add_subdirectory(doc)
+add_subdirectory(doc)
 enable_testing()
 

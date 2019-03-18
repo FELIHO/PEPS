@@ -8,4 +8,5 @@ NativeProject/NativeProject/x64/Debug/NativeProject.tlog/unsuccessfulbuild
 NativeProject/WindowsFormProject/obj/Release/
 Documentation/*
 src/Hedge/ForwardTest.cpp
-build/CMakeCache.txt
+DataFeeds/Daily
+DataFeeds/ExchangeRates

@@ -6,13 +6,12 @@ Created on Sat Dec 29 19:40:02 2018
 """
 
 import urllib.request
-from matplotlib import style
 import time
 
 Namelist = ["AWK","A","DHR","ECL","FLS","PNR","SEV.PAR","SVT.LON","UUGRY","WEIR.LON","AGCO","CNI","CF","BRFS3.SAO","K","MOS","MDLZ","DSM.AMS","DE","6326.TOK","9020.TOK","SGO.PAR","SU","ABBN.VSX","AA9.BER","CSX","LR.PAR","NSC","PHIA.AMS","SIE.FRK"]
 
 
-style.use('fivethirtyeight')
+
 api_key= "FIF2L2BXUMM7RYWV"
 
 '''
@@ -21,14 +20,13 @@ USD	JPY	GBP	EUR	CHF	BRL
 '''
 
 
-'''
+
 for nameStock in Namelist:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={stock}&apikey={key}&datatype=csv&outputsize=full'.format(stock=nameStock, key=api_key)
     urllib.request.urlretrieve(url, "./Daily/Csv/{}.csv".format(nameStock))
     print(nameStock+", done.")
     time.sleep(21)
 
-'''
 
 ExchangesRateList = ["USD", "JPY", "GBP", "CHF", "BRL"]
 

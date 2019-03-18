@@ -35,13 +35,13 @@ set(LIBS ${LIBS} Pricer Options)
 #add_test(test_getVolatilies test_getVolatilies)
 
 
-add_executable (test_taux_change test_taux_change.cpp)
-target_link_libraries(test_taux_change ${LIBS})
-add_test(test_taux_change test_taux_change)
+#add_executable (test_taux_change test_taux_change.cpp)
+#target_link_libraries(test_taux_change ${LIBS})
+#add_test(test_taux_change test_taux_change)
 
-add_executable (test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei.cpp)
-target_link_libraries(test_hedgePortfolio_Kozei ${LIBS})
-add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
+#add_executable (test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei.cpp)
+#target_link_libraries(test_hedgePortfolio_Kozei ${LIBS})
+#add_test(test_hedgePortfolio_Kozei test_hedgePortfolio_Kozei)
 
 add_executable (test_Kozei_payoff test_Kozei_payoff.cpp)
 target_link_libraries(test_Kozei_payoff ${LIBS})
@@ -56,9 +56,9 @@ add_test(test_Kozei_payoff test_Kozei_payoff)
 #target_link_libraries(test_SimulatedDataProvider ${LIBS})
 #add_test(test_SimulatedDataProvider test_SimulatedDataProvider)
 
-add_executable (test_delta_kozei test_delta_kozei.cpp)
-target_link_libraries(test_delta_kozei ${LIBS})
-add_test(test_delta_kozei test_delta_kozei)
+#add_executable (test_delta_kozei test_delta_kozei.cpp)
+#target_link_libraries(test_delta_kozei ${LIBS})
+#add_test(test_delta_kozei test_delta_kozei)
 
 #add_executable (test_BackWardTest test_BackWardTest.cpp)
 #target_link_libraries(test_BackWardTest ${LIBS})
@@ -81,9 +81,9 @@ add_executable (test_pnl test_pnl.cpp)
 target_link_libraries(test_pnl ${LIBS})
 add_test (test_pnl test_pnl)
 
-add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
-target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
-add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
+#add_executable (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx.cpp)
+#target_link_libraries(test_hedgePortfolio_Kozei_ratesEx ${LIBS})
+#add_test (test_hedgePortfolio_Kozei_ratesEx test_hedgePortfolio_Kozei_ratesEx)
 
 
 #test unitaire avec des assertions
@@ -159,6 +159,7 @@ add_executable (test_mem_Kozei test_mem_Kozei.cpp)
 target_link_libraries(test_mem_Kozei ${LIBS})
 add_test(test_mem_Kozei test_mem_Kozei)
 
+<<<<<<< HEAD
 add_executable (test_vanilla_price test_vanilla_price.cpp)
 target_link_libraries(test_vanilla_price ${LIBS})
 add_test(test_vanilla_price test_vanilla_price)
@@ -171,3 +172,7 @@ add_test(test_validation_PNL test_validation_PNL)
 add_executable (test_validation_estimation test_validation_estimation.cpp)
 target_link_libraries(test_validation_estimation ${LIBS})
 add_test(test_validation_estimation test_validation_estimation)
+=======
+add_executable(unit_test unit_test/test1.cpp)
+target_link_libraries(unit_test ${GTEST_LIBRARIES} pthread)
+>>>>>>> 9c19148efe99f3e31f3975509b9ed73743f5c63d

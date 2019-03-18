@@ -11,7 +11,7 @@ MonteCarlo::MonteCarlo(){
 	opt_ = new Call();
   fdStep_ = 0;
   nbSamples_= 0;
- }
+}
 
 MonteCarlo::MonteCarlo(const MonteCarlo &MC){
   mod_ = new BlackScholesModel(*MC.mod_);
