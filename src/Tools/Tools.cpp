@@ -24,3 +24,11 @@ void Tools::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *
 
   pnl_vect_free(&currentRow);
 }
+
+std::vector<int> Tools::Divisors ( int number ) {
+   std::vector<int> divisors ;
+   for ( int i = 1 ; i < number + 1 ; i++ )
+      if ( number % i == 0 )
+	 divisors.push_back( i ) ;
+   return divisors ;
+}
