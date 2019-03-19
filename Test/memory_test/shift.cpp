@@ -26,15 +26,10 @@ int main(int argc, char **argv)
     PnlMat* shift_path = pnl_mat_new();
     PnlMat* path = pnl_mat_create_from_scalar(nbTimeSteps+1, size, 1);
 
-    int t = 1; //date à laquelle je shift
+    double t = 1; //date à laquelle je shift
     int d = 1; //l'actif à shifter
     int h = 100;
-    blackScholesModel->shiftAsset(shift_path, path, d, h, t, nbTimeSteps);
-
-    // cout << "path" << endl;
-    // pnl_mat_print(path);
-    // cout << "shift_path" << endl;
-    // pnl_mat_print(shift_path);
+    blackScholesModel->shiftAsset(shift_path, path, d, h, t, T/nbTimeSteps);
 
     pnl_mat_free(&path);
     pnl_mat_free(&shift_path);

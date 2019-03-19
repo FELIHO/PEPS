@@ -5,28 +5,11 @@ include_directories (${CMAKE_SOURCE_DIR}/src)
 
 set(LIBS ${LIBS} Pricer Options)
 
+include_directories(.)
 
-#############################################
-################## PEPS  ####################
-#############################################
-
-############ test unitaire ##############
-
-add_executable(test1 unit_test/test1.cpp)
-target_link_libraries(test1 ${GTEST_LIBRARIES} pthread)
-
-add_executable(tools unit_test/tools.cpp)
-target_link_libraries(tools ${LIBS} ${GTEST_LIBRARIES} pthread)
-
-
-############ test de mémoire ##############
-
-add_executable(resize memory_test/resize.cpp)
-target_link_libraries(resize ${LIBS})
-
-
-
-
+add_subdirectory(memory_test)
+add_subdirectory(unit_test)
+add_subdirectory(validation_test)
 
 
 
@@ -157,48 +140,7 @@ target_link_libraries(resize ${LIBS})
 #target_link_libraries(test_unit_deltas ${LIBS})
 #add_test(test_unit_deltas test_unit_deltas)
 
-
-#test unitaire de mémoire à utiliser avec valgrind
-
-#add_executable (test_mem_asset_t0 test_mem_asset_t0.cpp)
-#target_link_libraries(test_mem_asset_t0 ${LIBS})
-#add_test(test_mem_asset_t0 test_mem_asset_t0)
-
-#add_executable (test_mem_asset_t test_mem_asset_t.cpp)
-#target_link_libraries(test_mem_asset_t ${LIBS})
-#add_test(test_mem_asset_t test_mem_asset_t)
-
-#add_executable (test_mem_asset_ti test_mem_asset_ti.cpp)
-#target_link_libraries(test_mem_asset_ti ${LIBS})
-#add_test(test_mem_asset_ti test_mem_asset_ti)
-
-#add_executable (test_mem_shift test_mem_shift.cpp)
-#target_link_libraries(test_mem_shift ${LIBS})
-#add_test(test_mem_shift test_mem_shift)
-
-#add_executable (test_mem_price_t0 test_mem_price_t0.cpp)
-#target_link_libraries(test_mem_price_t0 ${LIBS})
-#add_test(test_mem_price_t0 test_mem_price_t0)
-
-#add_executable (test_mem_price_t test_mem_price_t.cpp)
-#target_link_libraries(test_mem_price_t ${LIBS})
-#add_test(test_mem_price_t test_mem_price_t)
-
-#add_executable (test_mem_price_ti test_mem_price_ti.cpp)
-#target_link_libraries(test_mem_price_ti ${LIBS})
-#add_test(test_mem_price_ti test_mem_price_ti)
-
-#add_executable (test_mem_delta_t test_mem_delta_t.cpp)
-#target_link_libraries(test_mem_delta_t ${LIBS})
-#add_test(test_mem_delta_t test_mem_delta_t)
-
-#add_executable (test_mem_delta_ti test_mem_delta_ti.cpp)
-#target_link_libraries(test_mem_delta_ti ${LIBS})
-#add_test(test_mem_delta_ti test_mem_delta_ti)
-
-#add_executable (test_mem_Kozei test_mem_Kozei.cpp)
-#target_link_libraries(test_mem_Kozei ${LIBS})
-#add_test(test_mem_Kozei test_mem_Kozei)
+###
 
 
 #add_executable (test_vanilla_price test_vanilla_price.cpp)

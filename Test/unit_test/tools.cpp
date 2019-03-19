@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "pnl/pnl_matrix.h"
 #include "Tools.hpp"
 
 using namespace std;
@@ -19,12 +18,12 @@ TEST(Concatenation,equal) {
 
 TEST(Concatenation,incompatible_size_m) {
     PnlMat *res = pnl_mat_create_from_zero(16, 10);
-    ASSERT_ANY_THROW(Tools::concatenationMatrice(res, mat1, mat2));
+    ASSERT_THROW(Tools::concatenationMatrice(res, mat1, mat2),length_error);
 }
 
 TEST(Concatenation,incompatible_size_n) {
     PnlMat *res = pnl_mat_create_from_zero(17, 9);
-    ASSERT_ANY_THROW(Tools::concatenationMatrice(res, mat1, mat2));
+    ASSERT_THROW(Tools::concatenationMatrice(res, mat1, mat2),length_error);
 }
  
 int main(int argc, char **argv) {

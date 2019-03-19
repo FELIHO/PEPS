@@ -52,10 +52,10 @@ include_directories(${GTEST_INCLUDE_DIRS})
 set(LIBS ${LIBS} m Pricer Options)
 
 # Add jlparser
-#set(CMAKE_CXX_STANDARD 11)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_EXTENSIONS OFF)
-#add_subdirectory(3rdparty/jlparser)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+add_subdirectory(3rdparty/jlparser)
 
 #set(CMAKE_CXX_FLAGS "-g -Wall -fdeclspec" )
 

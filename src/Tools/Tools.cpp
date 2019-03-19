@@ -5,10 +5,10 @@ void Tools::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *
   //assert(mat1->n == mat2->n && mat2->n == res->n);
   //assert(res->m == mat1->m + mat2->m);
   if(mat1->n != mat2->n || mat2->n != res->n){
-    throw new length_error("la concatenation n'est pas possible: les matrices sont incompatibles") ;
+    throw length_error("la concatenation n'est pas possible: les matrices sont incompatibles") ;
   }
   if(res->m != mat1->m + mat2->m){
-    throw new length_error("la concatenation n'est pas possible: les matrices sont incompatibles") ;
+    throw length_error("la concatenation n'est pas possible: les matrices sont incompatibles") ;
   }
   int nbRows= res->m;
   int nbColumns = res->n;

@@ -29,8 +29,8 @@ CMAKE_BUILD_TYPE:STRING=Release
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
-//CXX compiler
-CMAKE_CXX_COMPILER:STRING=/usr/bin/clang++
+//No help, variable specified on the command line.
+CMAKE_CXX_COMPILER:UNINITIALIZED=clang++
 
 //LLVM archiver
 CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/llvm-ar-6.0
@@ -181,6 +181,22 @@ GTEST_MAIN_LIBRARY:FILEPATH=/usr/lib/libgtest_main.a
 //Path to a library.
 GTEST_MAIN_LIBRARY_DEBUG:FILEPATH=GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND
 
+//Value Computed by CMake
+JLParser_BINARY_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/build/3rdparty/jlparser
+
+//Value Computed by CMake
+JLParser_SOURCE_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/3rdparty/jlparser
+
+//Semicolon-separated list of tests to build.      Possible values
+// are `mpark`, and `libc++`.
+MPARK_VARIANT_INCLUDE_TESTS:STRING=
+
+//Value Computed by CMake
+MPark.Variant_BINARY_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/build/3rdparty/jlparser/3rdparty/variant
+
+//Value Computed by CMake
+MPark.Variant_SOURCE_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/3rdparty/jlparser/3rdparty/variant
+
 //CXX compiler flags for OpenMP parallelization
 OpenMP_CXX_FLAGS:STRING=-fopenmp=libomp
 
@@ -297,7 +313,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -347,9 +363,9 @@ FIND_PACKAGE_MESSAGE_DETAILS_Doxygen:INTERNAL=[/usr/bin/doxygen][cfound componen
 //Details about finding GTest
 FIND_PACKAGE_MESSAGE_DETAILS_GTest:INTERNAL=[/usr/lib/libgtest.a][/usr/include][/usr/lib/libgtest_main.a][v()]
 //Details about finding OpenMP
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][c ][v3.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][c ][v()]
 //Details about finding OpenMP_CXX
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp][/usr/lib/x86_64-linux-gnu/libomp.so][/usr/lib/x86_64-linux-gnu/libpthread.so][v3.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp][/usr/lib/x86_64-linux-gnu/libomp.so][/usr/lib/x86_64-linux-gnu/libpthread.so][v()]
 //Details about finding Pnl
 FIND_PACKAGE_MESSAGE_DETAILS_Pnl:INTERNAL=[/home/jmari/ENSIMAG/3A/pnl/lib/libpnl.so][/home/jmari/ENSIMAG/3A/pnl/include][v()]
 //ADVANCED property for variable: GTEST_INCLUDE_DIR
