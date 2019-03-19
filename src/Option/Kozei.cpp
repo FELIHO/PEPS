@@ -3,6 +3,7 @@
 #include "pnl/pnl_matrix.h"
 #include <algorithm>
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 
@@ -103,6 +104,131 @@ double Kozei::payoff(const PnlMat *path) {
 	//pnl_mat_print(Performance_t);
 	//pnl_mat_free(&Performance_t);
 	pnl_vect_free(&niveaux_initaux);
+	pnl_vect_free(&PerformancePanier);
+
+
+	return inv_init_ * (0.9 + Perfmoyenne);
+}
+
+
+double Kozei::payoff_with_ExR(const PnlMat *path) {
+
+	PnlMat* assets_path = pnl_mat_create(size_,path->n);
+
+	pnl_mat_extract_subblock (assets_path, path, 0,path->m, 0,size_);
+
+	PnlVect *niveaux_initaux_assets = pnl_vect_new();
+	pnl_mat_get_row(niveaux_initaux_assets, assets_path, 0);
+
+	PnlMat* ExR_path = pnl_mat_create(5,path->n);
+	pnl_mat_extract_subblock (ExR_path, path, 0,path->m, size_+1,path->n);
+
+	PnlVect *niveaux_initaux_ExR = pnl_vect_new();
+	pnl_mat_get_row(niveaux_initaux_ExR, ExR_path, 0);
+
+	//PnlMat* Performance_t = pnl_mat_create_from_double(nbTimeSteps_+1,size_,0.0);
+	PnlVect* PerformancePanier = pnl_vect_create_from_double(nbTimeSteps_+1,0.0);
+	double Perfmoyenne;
+    double S_0 ,S_t,B_0X_0,B_tX_t,B_t,B_0;
+	double Perf_Panier_t = 0.0;
+	double Perf_acti = 0.0;
+
+	/*
+	L ordre des actifs dans la matrice Path
+	USD	JPY	GBP	EUR	CHF	BRL
+	17	2	2	7	1	1
+	*/
+
+	for (int t = 1; t < nbTimeSteps_+1; t++) {
+
+		// Calcule de Performance des actifs en USD
+		for (int act = 0; act < 17; act++) {
+			B_0 = exp(-r_USD*T_);
+			B_t = exp(-r_USD*(T_-t));
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,0);
+			B_tX_t = pnl_mat_get(ExR_path, t , 0);
+			Perf_acti = (S_t *B_0X_0*B_t) / (S_0*B_tX_t*B_0);
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+		// Calcule de Performance des actifs en JPY
+		for (int act = 17; act < 19 ; act++) {
+			B_0 = exp(-r_JPY*T_);
+			B_t = exp(-r_JPY*(T_-t));
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,1);
+			B_tX_t = pnl_mat_get(ExR_path, t , 1);
+			Perf_acti = (S_t *B_0X_0*B_t) / (S_0*B_tX_t*B_0)-1;
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+
+		// Calcule de Performance des actifs en GBP
+		for (int act = 19; act < 21  ; act++) {
+			B_0 = exp(-r_GBP*T_);
+			B_t = exp(-r_GBP*(T_-t));
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,2);
+			B_tX_t = pnl_mat_get(ExR_path, t , 2);
+			Perf_acti = (S_t *B_0X_0*B_t) / (S_0*B_tX_t*B_0) -1;
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+
+		// Calcule de Performance des actifs en EUR
+		for (int act = 21; act < 28  ; act++) {
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,2);
+			B_tX_t = pnl_mat_get(ExR_path, t , 2);
+			Perf_acti = (S_t )/ (S_0) - 1;
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+
+		// Calcule de Performance des actifs en CHF
+		for (int act = 28; act < 29  ; act++) {
+			B_0 = exp(-r_CHF*T_);
+			B_t = exp(-r_CHF*(T_-t));
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,3);
+			B_tX_t = pnl_mat_get(ExR_path, t , 3);
+			Perf_acti = (S_t *B_0X_0*B_t) / (S_0*B_tX_t*B_0) -1;
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+
+		// Calcule de Performance des actifs en BRL
+		for (int act = 29; act < 30  ; act++) {
+			B_0 = exp(-r_BRL*T_);
+			B_t = exp(-r_BRL*(T_-t));
+			S_0 = pnl_vect_get(niveaux_initaux_assets, act);
+			S_t = pnl_mat_get(assets_path, t , act);
+			B_0X_0 = pnl_vect_get(niveaux_initaux_ExR,4);
+			B_tX_t = pnl_mat_get(ExR_path, t , 4);
+			Perf_acti = (S_t *B_0X_0*B_t) / (S_0*B_tX_t*B_0) -1;
+			//pnl_mat_set(Performance_t, t, act, Perf_acti);
+			Perf_Panier_t += Perf_acti;
+		}
+
+        Perf_Panier_t = Perf_Panier_t / size_;
+        pnl_vect_set(PerformancePanier, t, std::max(Perf_Panier_t, 0.0) );
+
+    }
+
+	Perfmoyenne = pnl_vect_sum(PerformancePanier)/16;
+
+	//pnl_mat_print(Performance_t);
+	//pnl_mat_free(&Performance_t);
+	pnl_mat_free(&assets_path);
+	pnl_mat_free(&ExR_path);	
+	pnl_vect_free(&niveaux_initaux_assets);
+	pnl_vect_free(&niveaux_initaux_ExR);
 	pnl_vect_free(&PerformancePanier);
 
 
