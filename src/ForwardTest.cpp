@@ -32,7 +32,7 @@ int main(int argc,char **argv){
 
 
   // Initialisation du simulateur de données de marché
-  SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng,  spot, r , rho , sigmaValue);
+  SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
 
   PnlMat* marketData = Simulator->getMarketData(K->T_, K->nbTimeSteps_, nbRebalancementPerStep);
 

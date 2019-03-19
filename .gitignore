@@ -10,3 +10,4 @@ Documentation/*
 src/Hedge/ForwardTest.cpp
 DataFeeds/Daily
 DataFeeds/ExchangeRates
+build/CMakeCache.txt

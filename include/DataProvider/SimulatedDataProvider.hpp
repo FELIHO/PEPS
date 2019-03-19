@@ -22,8 +22,8 @@ public:
 	SimulatedDataProvider& operator=(const SimulatedDataProvider &DP);
 	~SimulatedDataProvider();
 
-	SimulatedDataProvider(RandomGen *rng, PnlVect* spot, double r , double rho, double sigma);
-	SimulatedDataProvider(RandomGen *rng, PnlVect* spot, PnlVect* trend , PnlMat* rho ,PnlVect* sigma, PnlVect* dividend);
+	SimulatedDataProvider(RandomGen *rng, double r , double rho, PnlVect* sigma, PnlVect* spot);
+	SimulatedDataProvider(RandomGen *rng, PnlVect* trend , PnlMat* rho ,PnlVect* sigma, PnlVect* spot, PnlVect* dividend);
 
 	PnlMat* getMarketData(double T, int nbTimeSteps, int nbRebalancementPerStep);
 	PnlMat* getDailyMarketData(double T);
