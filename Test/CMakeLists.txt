@@ -159,7 +159,6 @@ add_executable (test_mem_Kozei test_mem_Kozei.cpp)
 target_link_libraries(test_mem_Kozei ${LIBS})
 add_test(test_mem_Kozei test_mem_Kozei)
 
-<<<<<<< HEAD
 add_executable (test_vanilla_price test_vanilla_price.cpp)
 target_link_libraries(test_vanilla_price ${LIBS})
 add_test(test_vanilla_price test_vanilla_price)
@@ -172,7 +171,8 @@ add_test(test_validation_PNL test_validation_PNL)
 add_executable (test_validation_estimation test_validation_estimation.cpp)
 target_link_libraries(test_validation_estimation ${LIBS})
 add_test(test_validation_estimation test_validation_estimation)
-=======
-add_executable(unit_test unit_test/test1.cpp)
-target_link_libraries(unit_test ${GTEST_LIBRARIES} pthread)
->>>>>>> 9c19148efe99f3e31f3975509b9ed73743f5c63d
+
+
+add_executable (test_multiple_pnls test_multiple_pnls.cpp)
+target_link_libraries(test_multiple_pnls ${LIBS})
+add_test(test_multiple_pnls test_multiple_pnls)
