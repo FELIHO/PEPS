@@ -102,7 +102,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 	  double moyennePayoff = sommePayoff/nbSamples_;
 	  double moyennePayoffCarre = sommePayoffCarre/nbSamples_;
 
-  double ksiCarreM = exp(-2*mod_->r_*opt_->T_)*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
+  double ksiCarreM = exp(-2*mod_->r_*(opt_->T_-t))*(moyennePayoffCarre-moyennePayoff*moyennePayoff);
 
   ic = 1.96*sqrt(ksiCarreM/nbSamples_)*2;
 
@@ -113,6 +113,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
   pnl_vect_resize(delta, opt_->size_);
+  pnl_vect_set_all(delta,0.0);
 	#pragma omp parallel
 	{
 	  PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_+1, opt_->size_);
@@ -168,7 +169,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic_delta) {
   pnl_vect_resize(delta, opt_->size_);
+  pnl_vect_set_all(delta,0.0);
   pnl_vect_resize(ic_delta, opt_->size_);
+  pnl_vect_set_all(ic_delta,0.0);
   
 
   PnlVect *delta_carre = pnl_vect_create_from_scalar(opt_->size_,0);

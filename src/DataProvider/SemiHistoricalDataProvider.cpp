@@ -1,7 +1,5 @@
 #include "SemiHistoricalDataProvider.hpp"
 
-
-
 SemiHistoricalDataProvider::SemiHistoricalDataProvider() {
   mod_ = new BlackScholesModel();
   rng_ = new FakeRnd(0.1);
@@ -68,7 +66,7 @@ PnlMat* SemiHistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int
 	//simule avec le trend
 	mod_->simulateAsset(SimData, T/H, H - nbAvailableHistData +1 , rng_, mod_->trend_);
 
-	mod_->concatenationMatrice( marketData , HistData, SimData );
+	Tools::concatenationMatrice( marketData , HistData, SimData );
 	pnl_mat_free(&Data);
 	pnl_mat_free(&HistData);
 	pnl_mat_free(&SimData);
@@ -96,7 +94,7 @@ PnlMat* SemiHistoricalDataProvider::getDailyMarketData(double T){
 	PnlMat* subHistData = pnl_mat_new();
     pnl_mat_extract_subblock(subHistData, HistData, 0, HistData->m-1, 0, HistData->n);
 
-	mod_->concatenationMatrice( marketData , subHistData, SimData );
+	Tools::concatenationMatrice( marketData , subHistData, SimData );
 
 	pnl_mat_free(&subHistData);
 	pnl_mat_free(&HistData);

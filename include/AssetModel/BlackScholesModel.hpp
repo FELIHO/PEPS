@@ -9,7 +9,6 @@
 #include "pnl/pnl_matrix.h"
 
 #include <math.h>
-#include <assert.h>
 #include <sstream>
 #include <string>
 #include <fstream>
@@ -21,6 +20,7 @@
 #include "RandomGen.hpp"
 #include "FakeRnd.hpp"
 #include "PnlRnd.hpp"
+#include "Tools.hpp"
 
 /** \class BlackScholesModel
  * \brief Modèle de Black Scholes
@@ -177,15 +177,6 @@ public:
    * @param[in] H nombre de dates d'observation
    */
   void simul_market(PnlMat* market, double T, int H, RandomGen *rng);
-
-  /**
-  * Concatène deux PnlMat
-  * @param[out] res matrice résultat de la concaténation
-  * @param[in] mat1 1ere matrice à concaténer
-  * @param[in] mat2 1ere matrice à concaténer
-  *
-  */
-  void concatenationMatrice(PnlMat* res,const PnlMat *mat1, const PnlMat *mat2);
 
   /**
   * Simule les cours des sous-jacents selon le modèle de Black-Scholes
