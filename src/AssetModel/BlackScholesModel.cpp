@@ -1,8 +1,6 @@
-
 #include "BlackScholesModel.hpp"
 
 using namespace std;
-
 
 
 BlackScholesModel::BlackScholesModel()
@@ -144,28 +142,13 @@ BlackScholesModel::BlackScholesModel(int size, double r, PnlMat *rho, PnlVect *s
   trend_ = pnl_vect_copy(trend);
 }
 
-void BlackScholesModel::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
-  assert(mat1->n == mat2->n && mat2->n == res->n);
-  assert(res->m == mat1->m + mat2->m);
-  int nbRows= res->m;
-  int nbColumns = res->n;
-  PnlVect* currentRow = pnl_vect_create(nbColumns);
-  for (int i = 0; i < mat1->m; i++) {
-    pnl_mat_get_row(currentRow, mat1, i);
-    pnl_mat_set_row(res, currentRow, i);
-  }
-  for (int i = mat1->m; i < nbRows; i++) {
-    pnl_mat_get_row(currentRow, mat2, i - mat1->m);
-    pnl_mat_set_row(res, currentRow, i);
-  }
-
-  pnl_vect_free(&currentRow);
-}
-
 
 
 void BlackScholesModel::simulateAsset(PnlMat *path, double timestep, int nbTimeSteps, RandomGen *rng, PnlVect *r){
-  assert(path->m == nbTimeSteps + 1);
+  //assert(path->m == nbTimeSteps + 1);
+  if(path->m != nbTimeSteps + 1){
+    throw length_error("La matrice path est de mauvaise taille") ;
+  }
   PnlVect* S_previous = pnl_vect_new();
   pnl_mat_get_row(S_previous, path, 0); // S_0
   // premierTerme = (r - sigma^²/2) * ( t_(i+1) - t_(i) )
@@ -220,7 +203,10 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, RandomGen
 
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, RandomGen *rng, const PnlMat *past)
 {
-  assert(path->m == nbTimeSteps+1 && path->n == size_);
+  //assert(path->m == nbTimeSteps+1 && path->n == size_);
+  if (!(path->m == nbTimeSteps+1 && path->n == size_)) {
+    pnl_mat_resize(path, nbTimeSteps + 1, size_);
+  }
   PnlVect* r = pnl_vect_create_from_scalar(size_,r_);
   double timestep = T/nbTimeSteps;
   int nbRowsPast = past->m;
@@ -228,7 +214,10 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
   PnlMat* future = pnl_mat_create(nbTimeStepsResidual+1, size_);
   PnlVect* s_t = pnl_vect_new();
   pnl_mat_get_row(s_t, past, nbRowsPast-1);
-  assert(nbRowsPast == ceil(t/timestep)+1);
+  //assert(nbRowsPast == ceil(t/timestep)+1);
+  if(nbRowsPast != ceil(t/timestep)+1){
+    throw length_error("La matrice past ne correspond pas à l'instant t indiqué") ;
+  }
   if (nbRowsPast-1 == t/timestep){
     pnl_mat_set_row(future, s_t, 0);
   }
@@ -254,7 +243,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
   else{
     PnlMat* subPast = pnl_mat_new();
     pnl_mat_extract_subblock(subPast, past, 0, nbRowsPast-1, 0, size_);
-    concatenationMatrice( path , subPast, future );
+    Tools::concatenationMatrice( path , subPast, future );
     pnl_mat_free(&subPast);
   }
 

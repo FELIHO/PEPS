@@ -106,7 +106,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //No help, variable specified on the command line.
-CMAKE_PREFIX_PATH:UNINITIALIZED=/home/jmari/ENSIMAG/3A/pnl
+CMAKE_PREFIX_PATH:UNINITIALIZED=/home/jmari/ENSIMAG/3A/pnl/
 
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=mc-pricer
@@ -180,6 +180,22 @@ GTEST_MAIN_LIBRARY:FILEPATH=/usr/lib/libgtest_main.a
 
 //Path to a library.
 GTEST_MAIN_LIBRARY_DEBUG:FILEPATH=GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND
+
+//Value Computed by CMake
+JLParser_BINARY_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/build/3rdparty/jlparser
+
+//Value Computed by CMake
+JLParser_SOURCE_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/3rdparty/jlparser
+
+//Semicolon-separated list of tests to build.      Possible values
+// are `mpark`, and `libc++`.
+MPARK_VARIANT_INCLUDE_TESTS:STRING=
+
+//Value Computed by CMake
+MPark.Variant_BINARY_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/build/3rdparty/jlparser/3rdparty/variant
+
+//Value Computed by CMake
+MPark.Variant_SOURCE_DIR:STATIC=/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/3rdparty/jlparser/3rdparty/variant
 
 //CXX compiler flags for OpenMP parallelization
 OpenMP_CXX_FLAGS:STRING=-fopenmp=libomp
@@ -297,7 +313,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

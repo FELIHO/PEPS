@@ -1,8 +1,4 @@
 #include "ParameterEstimation.hpp"
-#include <math.h>
-#include <algorithm>
-#include <iostream>
-#include <assert.h>
 
 PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	PnlMat* logRendementMatrix = pnl_mat_create(past->m - 1, past-> n);
@@ -20,7 +16,7 @@ PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 				if ((rendementI < 0.001) || (rendementJ < 0.001)){
 					pnl_vect_set(logRendement, i, 0.0);
 				} else {
-					pnl_vect_set(logRendement, i, log(rendementJ/rendementI));
+					pnl_vect_set(logRendement, i, log(rendementJ/rendementI)/sqrt(1./260));
 				}
 			}
 			pnl_mat_set_row(logRendementMatrix, logRendement, j);
@@ -31,6 +27,7 @@ PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 	pnl_vect_free(&Nextrendement);
 	return logRendementMatrix;
 }
+
 
 PnlMat* ParameterEstimation::getCovarianceMatrix(const PnlMat *past) {
 	PnlMat* logRendement = getLogRendementMatrix(past);
@@ -88,7 +85,10 @@ double ParameterEstimation::getSigmaCorreled(const double Sigma_X, const double 
 }
 
 double ParameterEstimation::getCorrelation(const PnlVect* shareX, const PnlVect* shareY) {
-	assert(shareX->size == shareY->size);
+	//assert(shareX->size == shareY->size);
+	if(shareX->size != shareY->size){
+    	throw new length_error("Les matrices shareX et shareY ne sont pas de la même taille") ;
+ 	}
 	PnlMat* corrMatrix = pnl_mat_create(shareX->size, 2);
 	pnl_mat_set_col (corrMatrix, shareX, 0);
 	pnl_mat_set_col (corrMatrix, shareY, 1);
