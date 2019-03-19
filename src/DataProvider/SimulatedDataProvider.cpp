@@ -24,14 +24,12 @@ SimulatedDataProvider::~SimulatedDataProvider(){
 	delete(rng_);
 }
 
-SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, PnlVect* spot, double r , double rho, double sigma){
-	PnlVect* vectSigma = pnl_vect_create_from_scalar(spot->size, sigma);
-	mod_ =  new BlackScholesModel(spot->size, r , rho, vectSigma, spot);
+SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, double r , double rho, PnlVect* sigma, PnlVect* spot){
+	mod_ =  new BlackScholesModel(spot->size, r , rho, sigma, spot);
 	rng_ = rng->clone();
-	pnl_vect_free(&vectSigma);
 }
 
-SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, PnlVect* spot,  PnlVect* trend , PnlMat *rho, PnlVect* sigma, PnlVect* dividend)
+SimulatedDataProvider::SimulatedDataProvider(RandomGen *rng, PnlVect* trend , PnlMat *rho, PnlVect* sigma, PnlVect* spot, PnlVect* dividend)
 {
 	mod_ =  new BlackScholesModel(spot->size, pnl_vect_sum(trend)/(trend->size) , rho, sigma, spot, trend, dividend );
 	rng_ = rng->clone();

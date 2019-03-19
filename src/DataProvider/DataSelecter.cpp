@@ -35,7 +35,7 @@ PnlMat* DataSelecter::getData(double T, int H){
 	PnlMat* marketData = pnl_mat_create(H+1,dailyData_->n);
   PnlVect* V = pnl_vect_new();
   for(int i=0; i<H+1; i++){
-    pnl_mat_get_row(V,dailyData_,i*daysPerStep);
+    pnl_mat_get_row(V,dailyData_,firstDateIndex_ + i*daysPerStep);
     pnl_mat_set_row(marketData, V ,i);
   }
   pnl_vect_free(&V);
@@ -47,6 +47,20 @@ PnlMat* DataSelecter::getData(double T, int nbTimeSteps, int nbRebalancementPerS
   return getData(T,H);
 }
 
+PnlMat* DataSelecter::getPast(PnlMat* marketData, double T, double t, int nbTimeStep){
+  int H = marketData->m;
+  int nbRowsPast = ceil(t*nbTimeStep/T)+1;
+  PnlMat* past = pnl_mat_create(nbRowsPast,marketData->n);
+  PnlVect* V = pnl_vect_new();
+  for(int i=0; i<nbRowsPast-1; i++){
+    pnl_mat_get_row(V,marketData, i*H/nbTimeStep);
+    pnl_mat_set_row(past,V,i);
+  }
+  pnl_mat_get_row(V,marketData,(int) t*H/T);
+  pnl_mat_set_row(past,V,nbRowsPast-1);
+  return past;
+}
+
 PnlMat* DataSelecter::getEstimationWindow(double t, int nbDays){
   int currentIndex = t*260 + firstDateIndex_;
   PnlMat* estimationWindow = pnl_mat_create(nbDays,dailyData_->n);
@@ -56,6 +70,12 @@ PnlMat* DataSelecter::getEstimationWindow(double t, int nbDays){
     pnl_mat_set_row(estimationWindow, V ,i);
   }
   pnl_vect_free(&V);
+  return estimationWindow;
+}
+
+PnlMat* DataSelecter::getHistoricalEstimationWindow(){
+  PnlMat* estimationWindow = pnl_mat_create(firstDateIndex_,dailyData_->n);
+  pnl_mat_extract_subblock (estimationWindow, dailyData_, 0 , firstDateIndex_ , 0, dailyData_->n);
   return estimationWindow;
 }
 

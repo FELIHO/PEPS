@@ -1,130 +1,79 @@
-#include "HedgePortfolio.hpp"
-#include "Option.hpp"
-#include "Kozei.hpp"
-#include "SimulatedDataProvider.hpp"
-#include <ctime>
-#include <omp.h>
-
 #include "ForwardTest.hpp"
 
 using namespace std;
 
 
-ForwardTest::ForwardTest(Option* opt, RandomGen* rng, PnlVect* spot, double r, double rho, double sigmaValue, double spotValue, int n_samples, double fdStep){
+ForwardTest::ForwardTest(Option* opt, double r, double rho, double sigmaValue, double spotValue, int n_samples, double fdStep){
 
-      Simulator_ = new SimulatedDataProvider(rng,  spot, r , rho , sigmaValue);
+        PnlVect *spot = pnl_vect_create_from_scalar(opt->size_, spotValue);
+        PnlVect *sigma = pnl_vect_create_from_scalar(opt->size_, sigmaValue);
+        BlackScholesModel *bs_model = new BlackScholesModel(opt->size_, r, rho, sigma, spot);
+        monteCarlo_ = new MonteCarlo(bs_model, opt, fdStep, n_samples);
 
-      PnlVect *spot = pnl_vect_create_from_scalar(opt->size_, spotValue);
-      PnlVect *sigma = pnl_vect_create_from_scalar(opt->size_, sigmaValue);
-      BlackScholesModel *bs_model = new BlackScholesModel(opt->size_, r, rho, sigma, spot);
+        PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
+        pnl_rng_sseed(pnlRng, time(NULL));
+        RandomGen* rng = new PnlRnd(pnlRng);
+        SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
+        marketData_ = Simulator->getDailyMarketData(opt->T_);
 
-      monteCarlo_ = new MonteCarlo(bs_model, opt, fdStep, n_samples);
-      
-      marketData_ = pnl_mat_new();
+        DS_ = new DataSelecter(marketData_);
+
+        pnl_vect_free(&spot);
+        pnl_vect_free(&sigma);
+        pnl_rng_free(&pnlRng);
+        delete(rng);
+        delete(Simulator);
+        delete(bs_model);
 }
 
-void ForwardTest::simutaleMarket(int nbRebalancementPerStep) {
-    marketData_ = Simulator_->getMarketData(monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_, nbRebalancementPerStep);
+ForwardTest::ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlVect *spot, int n_samples, double fdStep){
+
+        BlackScholesModel *bs_model = new BlackScholesModel(opt->size_, r, rho, sigma, spot);
+        monteCarlo_ = new MonteCarlo(bs_model, opt, fdStep, n_samples);
+
+        PnlRng* pnlRng = pnl_rng_create(PNL_RNG_MERSENNE);
+        pnl_rng_sseed(pnlRng, time(NULL));
+        RandomGen* rng = new PnlRnd(pnlRng);
+        SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
+        marketData_ = Simulator->getDailyMarketData(opt->T_);
+
+        DS_ = new DataSelecter(marketData_);
+
+
+        pnl_rng_free(&pnlRng);
+        delete(rng);
+        delete(Simulator);
+        delete(bs_model);
 }
 
-void ForwardTest::simutaleDailyMarket() {
-    marketData_ = Simulator_->getDailyMarketData(monteCarlo_->opt_->T_);
+void ForwardTest::setRebalancementFrequence(int nbRebalancementPerStep) {
+    marketData_ = DS_->getData(monteCarlo_->opt_->T_,monteCarlo_->opt_->nbTimeSteps_, nbRebalancementPerStep); 
 }
 
-void ForwardTest::simutaleWeeklyMarket() {
-    marketData_ = Simulator_->getWeeklyMarketData(monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
+double ForwardTest::price(double t){
+    double prix,ic;
+    if (t==0){
+        monteCarlo_->price(prix,ic);
+    }
+    else{
+        PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+        monteCarlo_->price(past,t,prix,ic);
+        pnl_mat_free(&past);
+    }
+    return prix;
 }
 
-void ForwardTest::simutaleMonthlyMarket() {
-    marketData_ = Simulator_->getMonthlyMarketData(monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
+PnlVect* ForwardTest::delta(double t){
+    PnlVect *delta = pnl_vect_create_from_scalar(monteCarlo_->opt_->size_,0);
+    PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+    monteCarlo_->delta(past,t,delta);
+    pnl_mat_free(&past);
+    return delta;
 }
 
-void ForwardTest::simutaleMonthlyMarket() {
-    marketData_ = Simulator_->getMonthlyMarketData(monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
-}
-
-
-int main(int argc,char **argv){
-
-
-  // Matrix
-  PnlMat *path = pnl_mat_create(K->nbTimeSteps_ + 1, K->size_);
-
-
-
-  // Initializing Variables to contain the test results
-  double prix;
-  double ic;
-
-  float time;
-  clock_t t0,tf;
-
-  t0 = omp_get_wtime();
-
-
-  mc_pricer->price(prix,ic);
-
-  // Variables temporaires
-  PnlVect *delta = pnl_vect_create_from_scalar(K->size_,0);
-  PnlMat* past = pnl_mat_create_from_scalar(1,K->size_ , 100) ;
-
-  mc_pricer->delta(past,0.0,delta);
-
-  tf = omp_get_wtime();
-
-  cout << endl;
-  cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
-  cout << "#####################" << endl << endl;
-  cout << endl;
-  cout << "###############" << endl;
-  cout << "# DELTA à t=0 #   =   "<< endl << endl;
-  pnl_vect_print(delta);
-  cout << "###############" << endl << endl;
-
-  cout << "##########################" << endl;
-  cout << "# PRIX DE L'OPTION À t=0 #   =   "<< prix << endl;
-  cout << "##########################" << endl << endl;
-
-  cout << "###########################" << endl;
-  cout << "# INTERVALLE DE CONFIANCE #   =   "<< ic << endl;
-  cout << "###########################" << endl << endl;
-
-
-
-  t0 = omp_get_wtime();
-
-  HedgePortfolio hedgePortfolio = HedgePortfolio(marketData, mc_pricer);
-  double PL = hedgePortfolio.HedgeError(marketData);
-
-  tf = omp_get_wtime();
-
-  cout << endl;
-  cout << "#################" << endl;
-  cout << "# PROFIT & LOSS #   =   "<< PL << endl;
-  cout << "#################" << endl;
-
-  cout << endl;
-  cout << "#####################" << endl;
-  cout << "# TEMPS D'EXECUTION #   =   " << tf - t0 << endl;
-  cout << "#####################" << endl << endl;
-
-
-
-
-
-  delete(K);
-  delete(rng);
-  pnl_rng_free(&pnlRng);
-  pnl_vect_free(&spot);
-  pnl_vect_free(&sigma);
-  delete(Simulator);
-  pnl_mat_free(&marketData);
-  delete(bs_model);
-  delete(mc_pricer);
-  pnl_mat_free(&path);
-  pnl_vect_free(&delta);
-  pnl_mat_free(&past);
-
-  return 0;
+double ForwardTest::ProfitAndLoss(){
+    HedgePortfolio* hedgePortfolio =new HedgePortfolio(marketData_, monteCarlo_);
+    double PL = hedgePortfolio->HedgeError(marketData_);
+    delete(hedgePortfolio);
+    return PL;
 }

@@ -112,7 +112,9 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic)
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta) {
-  pnl_vect_resize(delta, opt_->size_);
+  if(delta->size != opt_->size_){
+    pnl_vect_resize(delta, opt_->size_);
+  }
   pnl_vect_set_all(delta,0.0);
 	#pragma omp parallel
 	{

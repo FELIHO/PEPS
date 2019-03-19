@@ -5,6 +5,7 @@
 
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include <math.h>
 
 
 class DataSelecter
@@ -25,6 +26,8 @@ public:
     PnlMat* getData(double T, int H);
 	PnlMat* getData(double T,int nbTimeSteps, int nbRebalancementPerStep);
     PnlMat* getEstimationWindow(double t, int nbDays);
+    PnlMat* getHistoricalEstimationWindow();
+    PnlMat* getPast(PnlMat* marketData, double T, double t, int nbTimeStep);
 };
 
 #endif
