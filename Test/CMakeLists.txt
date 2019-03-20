@@ -170,3 +170,7 @@ add_test(test_validation_estimation test_validation_estimation)
 add_executable (test_multiple_pnls test_multiple_pnls.cpp)
 target_link_libraries(test_multiple_pnls ${LIBS})
 add_test(test_multiple_pnls test_multiple_pnls)
+
+add_executable (test_validation_corralation test_validation_corralation.cpp)
+target_link_libraries(test_validation_corralation ${LIBS})
+add_test(test_validation_corralation test_validation_corralation)
