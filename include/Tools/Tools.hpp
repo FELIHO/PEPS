@@ -5,6 +5,7 @@
 
 #include "pnl/pnl_matrix.h"
 #include <stdexcept>
+#include <vector>
 
 using namespace std;
 
@@ -19,6 +20,8 @@ struct Tools
     static const int NumberOfDaysPerWeek = 5;
 
     static void concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2);
+
+    static vector<int> Divisors ( int number );
 };
 
 

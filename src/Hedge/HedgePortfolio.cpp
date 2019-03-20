@@ -102,7 +102,6 @@ double HedgePortfolio::HedgeError(PnlMat * marketData){
     currentRebalancingIndex_ += 1;
   }
   double payoff = monteCarlo_->opt_->payoff(past_);
-
   double PL = investTauxSansRisque_ + pnl_vect_scalar_prod(delta_, S_current)-payoff;
   return PL;
 }

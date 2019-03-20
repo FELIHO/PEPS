@@ -10,7 +10,6 @@
 #include "HedgePortfolio.hpp"
 #include "Option.hpp"
 #include "DataSelecter.hpp"
-#include "Kozei.hpp"
 
 /** \class HedgePortfolio
  * \brief Portefeuille de Couverture

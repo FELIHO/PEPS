@@ -39,7 +39,6 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlV
 
         DS_ = new DataSelecter(marketData_);
 
-
         pnl_rng_free(&pnlRng);
         delete(rng);
         delete(Simulator);

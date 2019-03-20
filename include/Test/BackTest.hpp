@@ -9,7 +9,6 @@
 #include "HedgePortfolio.hpp"
 #include "Option.hpp"
 #include "DataSelecter.hpp"
-#include "Kozei.hpp"
 #include "ParameterEstimation.hpp"
 
 class BackTest
