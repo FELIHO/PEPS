@@ -1,4 +1,4 @@
-directory <- "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/DataFeeds/Daily/Csv/"
+directory <- "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Kozei_DataFeeds/Stocks/"
 
 file <- paste(directory,"AWK", sep= "")
 file <- paste(file,".csv", sep= "")
@@ -16,6 +16,11 @@ for (name in NameList) {
   MyData <- merge(MyData, dataCurrent, by="timestamp", all=TRUE)
 }
 
+
+### USD	JPY	GBP	EUR	CHF	BRL
+### 17	2	2	7	1	1
+
+
 rm(dataCurrent)
 
 
@@ -24,7 +29,7 @@ rm(dataCurrent)
 #################################
 #Reorder Data
 MyData$timestamp <- as.numeric(as.POSIXct(MyData$timestamp, format="%Y-%m-%d"))
-#MyData <- MyData[which(as.Date(MyData$timestamp) > as.Date.character("2009-12-31")),]
+MyData <- MyData[which(MyData$timestamp >= 1230768000),]
 MyData <-MyData[order(MyData[,1],decreasing=F),]
 rownames(MyData) <- seq( 1,nrow(MyData) ,by=1)
 
@@ -78,10 +83,10 @@ for (j in seq(2, 31, by=1)){
 }
 
 
-write.table(MyData[,-1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
-write.table(as.numeric(format(as.Date(as.POSIXct(MyData[,1], origin="1970-01-01")),"%Y%m%d")), file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(MyData[,-1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Kozei_DataFeeds/kozei_dataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
+write.table(t(as.numeric(format(as.Date(as.POSIXct(MyData[,1], origin="1970-01-01")),"%Y%m%d"))), file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Kozei_DataFeeds/kozei_IndexdataFeed.dat", sep = " ",row.names = FALSE,col.names = FALSE)
 
 ### Write the Data into a json
 library(rjson)
-write(toJSON(unname(split(MyData, 1:nrow(MyData))))[1][1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/DataFeeds/kozei_dataFeed.json")
+write(toJSON(unname(split(MyData, 1:nrow(MyData))))[1][1], file = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Kozei_DataFeeds/kozei_dataFeed.json")
 

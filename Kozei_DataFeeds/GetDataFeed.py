@@ -23,7 +23,7 @@ USD	JPY	GBP	EUR	CHF	BRL
 
 for nameStock in Namelist:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={stock}&apikey={key}&datatype=csv&outputsize=full'.format(stock=nameStock, key=api_key)
-    urllib.request.urlretrieve(url, "./Daily/Csv/{}.csv".format(nameStock))
+    urllib.request.urlretrieve(url, "./Stocks/{}.csv".format(nameStock))
     print(nameStock+", done.")
     time.sleep(21)
 
