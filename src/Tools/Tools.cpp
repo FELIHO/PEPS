@@ -25,6 +25,11 @@ void Tools::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *
   pnl_vect_free(&currentRow);
 }
 
+double Tools::normalCDF(double value)
+{
+   return 0.5 * erfc(-value * M_SQRT1_2);
+}
+
 std::vector<int> Tools::Divisors ( int number ) {
    std::vector<int> divisors ;
    for ( int i = 1 ; i < number + 1 ; i++ )

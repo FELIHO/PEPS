@@ -28,6 +28,8 @@ class ForwardTest
 
     ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlVect *spot, int n_samples, double fdStep);
 
+    ~ForwardTest();
+
     void setRebalancementFrequence(int nbRebalancementPerStep);
 
     double price(double t);

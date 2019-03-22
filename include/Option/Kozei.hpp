@@ -7,6 +7,10 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "Option.hpp"
+#include "Tools.hpp"
+#include <algorithm>
+#include <iostream>
+#include <math.h>
 
 
 class Kozei : public Option {
@@ -22,10 +26,11 @@ public:
 	Kozei(const Kozei &K);
 	Kozei& operator=(const Kozei &K);
 	~Kozei();
+	Kozei* clone();
 	PnlVect* Foreign_ZC(int number_of_dates,double rate);
 	PnlMat* return_path_matrix(PnlMat *const assets_path,const PnlMat* ExR_path);
 	double payoff(const PnlMat *path);
-	virtual Kozei* clone();
+	double payoff_without_ExR(const PnlMat *path);
 	double payoff_with_ExR(const PnlMat *path);
 };
 

@@ -1,10 +1,6 @@
 #include "Kozei.hpp"
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include "Tools.hpp"
-#include <algorithm>
-#include <iostream>
-#include <math.h>
+
+
 using namespace std;
 
 
@@ -75,7 +71,20 @@ Kozei::Kozei( double inv_init)  {
 
 // }
 
-double Kozei::payoff(const PnlMat *path) {
+
+double Kozei::payoff(const PnlMat *path){
+	if (path->n == size_){
+		return payoff_without_ExR(path);
+	}
+	else if (path->n == size_ +6){
+		return payoff_with_ExR(path);
+	}
+	else {
+		throw invalid_argument("la matrice passée en paramétre n'est pas compatible");
+	}
+}
+
+double Kozei::payoff_without_ExR(const PnlMat *path) {
 
 	PnlVect *niveaux_initaux = pnl_vect_new();
 	pnl_mat_get_row(niveaux_initaux, path, 0);

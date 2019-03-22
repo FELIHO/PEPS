@@ -71,14 +71,13 @@ Basket(double T, int nbTimeSteps, int size, double strike, PnlVect *weights);
 /**
  * \brief Calcule la valeur d un call selon la formule de B&S fermé
  *
- * @param[in] model B&S
- * @param[in] maturité T
- * @param[in] Strike K
+ * @param[in] Spot
+ * @param[in] date t
  * @param[in] Taux d'intérêt r
  * @param[in] volatilité sigma
- * @return le prix du call selon la formule de B&S
+ * @return le prix du call à la date t selon la formule de B&S 
  */
-  double price_formuleBS( BlackScholesModel *bc,double T, double K,double r,double sigma);
+  double price_Call_formuleBS(double Spot, double t, double r, double sigma);
 
 virtual Basket* clone();
 
