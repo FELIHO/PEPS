@@ -8,17 +8,23 @@ BackTest::BackTest(Option* opt, double r, char const *fileData, int firstDateInd
         if(firstDateIndex<30){
             throw invalid_argument("les données sont insuffisantes pour estimer les paramètres: minimum 30 jours");
         }
+
         PnlMat* dailyData = pnl_mat_create_from_file(fileData);
+
+        if(dailyData->m-firstDateIndex < opt->T_*Tools::NumberOfDaysPerYear){
+            throw length_error("les données sont insuffisantes pour effectuer un backTest");
+        }
+        
         DS_ = new DataSelecter(dailyData,firstDateIndex);
 
-        marketData_ = DS_->getData(opt->T_,opt->T_*Tools::NumberOfWeeksPerYear);
+        marketData_ = DS_->getData(opt->T_,opt->T_*Tools::NumberOfDaysPerYear);
 
         PnlMat* historicalEstimationWindow = DS_->getHistoricalEstimationWindow();
         ParameterEstimation pe ;
         PnlVect* sigma = pe.getVolatilitiesVector(historicalEstimationWindow);
         PnlMat* rho = pe.getCorrelationMatrix(historicalEstimationWindow);
 
-        PnlVect *spot;
+        PnlVect *spot= pnl_vect_new();
         pnl_mat_get_row(spot,marketData_,0);
 
         BlackScholesModel *bs_model = new BlackScholesModel(opt->size_, r, rho, sigma, spot);

@@ -1,7 +1,5 @@
 
 #include "Basket.hpp"
-#include "BlackScholesModel.hpp"
-#include "math.h"
 
 using namespace std;
 
@@ -88,15 +86,10 @@ double Basket::payoff(const PnlMat *path)
 
 }
 
-double normalCDF(double value)
-{
-   return 0.5 * erfc(-value * M_SQRT1_2);
-}
-
-double Basket::price_formuleBS( BlackScholesModel *bc,double T, double K,double r,double sigma){
-	double price_call_BS ;
-	double d_plus = 1.0/(sigma*sqrt(T))*(log(pnl_vect_get (bc->spot_,0)/K)+(r+sigma*sigma/2)*T);
-	double d_minus = d_plus-sigma*sqrt(T);
-	price_call_BS = pnl_vect_get (bc->spot_,0)*normalCDF(d_plus)-K*exp(-r*T)*normalCDF(d_minus) ;
+double Basket::price_Call_formuleBS(double Spot, double t, double r, double sigma){
+  double s = T_ - t;
+	double d_plus = 1.0/(sigma*sqrt(s))*(log(Spot/strike_)+(r+sigma*sigma/2)*s);
+	double d_minus = d_plus-sigma*sqrt(s);
+	double price_call_BS = Spot*Tools::normalCDF(d_plus)-strike_*exp(-r*s)*Tools::normalCDF(d_minus) ;
 	return price_call_BS;
 }

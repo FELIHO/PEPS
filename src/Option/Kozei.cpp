@@ -1,9 +1,6 @@
 #include "Kozei.hpp"
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include <algorithm>
-#include <iostream>
-#include <math.h>
+
+
 using namespace std;
 
 
@@ -74,7 +71,20 @@ Kozei::Kozei( double inv_init)  {
 
 // }
 
-double Kozei::payoff(const PnlMat *path) {
+
+double Kozei::payoff(const PnlMat *path){
+	if (path->n == size_){
+		return payoff_without_ExR(path);
+	}
+	else if (path->n == size_ +6){
+		return payoff_with_ExR(path);
+	}
+	else {
+		throw invalid_argument("la matrice passée en paramétre n'est pas compatible");
+	}
+}
+
+double Kozei::payoff_without_ExR(const PnlMat *path) {
 
 	PnlVect *niveaux_initaux = pnl_vect_new();
 	pnl_mat_get_row(niveaux_initaux, path, 0);
@@ -235,4 +245,105 @@ double Kozei::payoff_with_ExR(const PnlMat *path) {
 	return inv_init_ * (0.9 + Perfmoyenne);
 }
 
+PnlVect* Kozei::Foreign_ZC(int number_of_dates,double rate){
+	PnlVect* Fr_ZC = pnl_vect_create(number_of_dates);
+	double t = 0; 
+	for(int i = 0 ;i<number_of_dates;i++){
+		pnl_vect_set(Fr_ZC,i,exp(-rate*(T_-t)));
+		t+=1./Tools::NumberOfDaysPerYear;
+	}
+	return Fr_ZC;
+}
+
+PnlMat* Kozei::return_path_matrix(PnlMat *const assets_path,const PnlMat* ExR_path){
+	/*
+	L ordre des actifs dans la matrice assets Path
+	USD	JPY	GBP	EUR	CHF	BRL
+	17	2	2	7	1	1
+	*/
+	/*
+	L ordre des taux de change dans la matrice ExR path
+	USD JPY GBP CHF BRL
+	*/
+	PnlVect* USD_ExR ;
+	PnlVect* JPY_ExR;
+	PnlVect* GBP_ExR;
+	PnlVect* CHF_ExR;
+	PnlVect* BRL_ExR;
+	PnlVect* asset;
+	if(assets_path-> m != ExR_path->m){
+		throw length_error("la matrice des actifs et celle des taux de changes doivent avoir le même nombre de lignes") ;
+	}
+	PnlMat* Path = pnl_mat_create (assets_path-> m,assets_path-> n + ExR_path-> n);
+	pnl_mat_get_col (USD_ExR, ExR_path, 0);
+	pnl_mat_get_col (JPY_ExR, ExR_path, 1);
+	pnl_mat_get_col (GBP_ExR, ExR_path, 2);
+	pnl_mat_get_col (CHF_ExR, ExR_path, 3);
+	pnl_mat_get_col (BRL_ExR, ExR_path, 4);
+	
+	for(int i = 0; i<assets_path-> n + ExR_path-> n;i++){
+		if(i>=0 && i<17){
+			pnl_mat_get_col (asset, assets_path, i);
+			pnl_vect_mult_vect_term (asset, USD_ExR);
+			pnl_mat_set_col (Path, asset,i);
+		}
+		if(i>=17 && i<19){
+			pnl_mat_get_col (asset, assets_path, i);
+			pnl_vect_mult_vect_term (asset, JPY_ExR);
+			pnl_mat_set_col (Path, asset,i);
+		}
+		if(i>=19 && i<21){
+			pnl_mat_get_col (asset, assets_path, i);
+			pnl_vect_mult_vect_term (asset, GBP_ExR);
+			pnl_mat_set_col (Path, asset,i);
+		}
+		if(i==28){
+			pnl_mat_get_col (asset, assets_path, i);
+			pnl_vect_mult_vect_term (asset, CHF_ExR);
+			pnl_mat_set_col (Path, asset,i);
+		}
+		if(i==29){
+			pnl_mat_get_col (asset, assets_path, i);
+			pnl_vect_mult_vect_term (asset, BRL_ExR);
+			pnl_mat_set_col (Path, asset,i);
+		}
+		// X_USD*B_USD(t,T)
+		if(i == 30){
+			pnl_mat_get_col (asset, ExR_path, 0);
+			pnl_vect_mult_vect_term (asset,Foreign_ZC(ExR_path->m,r_USD));
+			pnl_mat_set_col (Path, asset,i);		
+		}
+		// X_JPY*B_JPY(t,T)
+		if(i == 31){
+			pnl_mat_get_col (asset, ExR_path, 1);
+			pnl_vect_mult_vect_term (asset,Foreign_ZC(ExR_path->m,r_JPY));
+			pnl_mat_set_col (Path, asset,i);		
+		}
+		// X_GBP*B_GBP(t,T)
+		if(i == 32){
+			pnl_mat_get_col (asset, ExR_path, 2);
+			pnl_vect_mult_vect_term (asset,Foreign_ZC(ExR_path->m,r_GBP));
+			pnl_mat_set_col (Path, asset,i);		
+		}
+		// X_CHF*B_CHF(t,T)
+		if(i == 33){
+			pnl_mat_get_col (asset, ExR_path, 3);
+			pnl_vect_mult_vect_term (asset,Foreign_ZC(ExR_path->m,r_CHF));
+			pnl_mat_set_col (Path, asset,i);		
+		}
+		// X_BRL*B_BRL(t,T)
+		if(i == 34){
+			pnl_mat_get_col (asset, ExR_path, 4);
+			pnl_vect_mult_vect_term (asset,Foreign_ZC(ExR_path->m,r_BRL));
+			pnl_mat_set_col (Path, asset,i);		
+		}
+	}
+		pnl_vect_free(&USD_ExR);
+		pnl_vect_free(&JPY_ExR);
+		pnl_vect_free(&GBP_ExR);
+		pnl_vect_free(&CHF_ExR);
+		pnl_vect_free(&BRL_ExR);
+		pnl_vect_free(&asset);
+
+}
 

@@ -10,7 +10,6 @@
 #include "HedgePortfolio.hpp"
 #include "Option.hpp"
 #include "DataSelecter.hpp"
-#include "Kozei.hpp"
 
 /** \class HedgePortfolio
  * \brief Portefeuille de Couverture
@@ -28,6 +27,8 @@ class ForwardTest
     ForwardTest(Option* opt, double r, double rho, double sigmaValue, double spotValue, int n_samples, double fdStep);
 
     ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlVect *spot, int n_samples, double fdStep);
+
+    ~ForwardTest();
 
     void setRebalancementFrequence(int nbRebalancementPerStep);
 

@@ -39,11 +39,16 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlV
 
         DS_ = new DataSelecter(marketData_);
 
-
         pnl_rng_free(&pnlRng);
         delete(rng);
         delete(Simulator);
         delete(bs_model);
+}
+
+ForwardTest::~ForwardTest() {
+  delete(DS_); 
+  delete(monteCarlo_);
+  pnl_mat_free(&marketData_);
 }
 
 void ForwardTest::setRebalancementFrequence(int nbRebalancementPerStep) {
