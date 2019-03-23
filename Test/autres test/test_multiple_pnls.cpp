@@ -33,7 +33,7 @@ int main(){
 
     PnlMat* Dailydata = pnl_mat_new();
     //Simuler le marché pour huit ans,la matrice Data contiendra les prix des actifs journalières pour 8 ans 
-    BMS->asset(Dailydata, T, 8*260, rng);
+    BMS->asset(Dailydata, T, 8*Tools::NumberOfDaysPerYear, rng);
 
     DataSelecter *DS = new DataSelecter(Dailydata); 
 

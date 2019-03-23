@@ -47,9 +47,12 @@ HedgePortfolio::HedgePortfolio(PnlMat* marketData, MonteCarlo* monteCarlo){
   H_ = marketData->m;
   double prix_0;
   double ic;
+  
+  if ( typeid(monteCarlo_->opt_) == typeid(Kozei()) ){
+    ((Kozei*) (monteCarlo_->opt_))->SetNivauxInitiaux(marketData);
+  }
 
   past_ = pnl_mat_create(monteCarlo_->opt_->nbTimeSteps_+1,monteCarlo_->opt_->size_);
-
   updatePast(marketData,0,0);
 
   PnlMat pastTronq = pnl_mat_wrap_mat_rows(past_,0,0);

@@ -44,9 +44,9 @@ PnlMat* SimulatedDataProvider::getMarketData(double T, int nbTimeSteps, int nbRe
 }
 
 PnlMat* SimulatedDataProvider::getDailyMarketData(double T){
-	int H = T*260;
+	int H = T*Tools::NumberOfDaysPerYear;
 	PnlMat* marketData = pnl_mat_new();
-	mod_->simul_market(marketData, T, T*260, rng_);
+	mod_->simul_market(marketData, T, T*Tools::NumberOfDaysPerYear, rng_);
 	return marketData;
 }
 

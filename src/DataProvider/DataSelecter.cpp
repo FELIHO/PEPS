@@ -31,7 +31,7 @@ DataSelecter::DataSelecter(PnlMat* dailyData, int firstDateIndex) {
 }
 
 PnlMat* DataSelecter::getData(double T, int H){
-  float daysPerStep = (T*260)/H; // nbr de jours entre deux rebalancement
+  float daysPerStep = (T*Tools::NumberOfDaysPerYear)/H; // nbr de jours entre deux rebalancement
 	PnlMat* marketData = pnl_mat_create(H+1,dailyData_->n);
   PnlVect* V = pnl_vect_new();
   for(int i=0; i<H+1; i++){
@@ -62,7 +62,7 @@ PnlMat* DataSelecter::getPast(PnlMat* marketData, double T, double t, int nbTime
 }
 
 PnlMat* DataSelecter::getEstimationWindow(double t, int nbDays){
-  int currentIndex = t*260 + firstDateIndex_;
+  int currentIndex = t*Tools::NumberOfDaysPerYear + firstDateIndex_;
   PnlMat* estimationWindow = pnl_mat_create(nbDays,dailyData_->n);
   PnlVect* V = pnl_vect_new();
   for(int i=0; i<nbDays; i++){

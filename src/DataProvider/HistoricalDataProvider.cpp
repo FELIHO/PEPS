@@ -40,7 +40,7 @@ PnlMat* HistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int nbR
 
 PnlMat* HistoricalDataProvider::getDailyMarketData(double T){
 	PnlMat* Data = pnl_mat_create_from_file(fileData_);
-	int H = T*260;
+	int H = T*Tools::NumberOfDaysPerYear;
 	DataSelecter* DS = new DataSelecter(Data,firstDateIndex_);
 	PnlMat* marketData = DS->getData(T,H);
 	delete(DS);
@@ -50,7 +50,7 @@ PnlMat* HistoricalDataProvider::getDailyMarketData(double T){
 
 
 PnlMat* HistoricalDataProvider::getWeeklyMarketData(double T, int nbTimeSteps){
-	int nbRebalancementPerStep = (T*52)/nbTimeSteps;
+	int nbRebalancementPerStep = (T*Tools::NumberOfWeeksPerYear)/nbTimeSteps;
 	return getMarketData(T, nbTimeSteps, nbRebalancementPerStep);
 }
 

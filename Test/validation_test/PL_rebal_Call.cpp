@@ -20,7 +20,7 @@ double sigmaValue = 0.2;
 double spotValue = 10;
 ForwardTest* forwardTest = new ForwardTest(call,r,rho,sigmaValue,spotValue,nbSamples,fdStep);
 
-int step = T*260/nbTimeSteps;
+int step = T*Tools::NumberOfDaysPerYear/nbTimeSteps;
 
 vector<int> V = Tools::Divisors(step);
 

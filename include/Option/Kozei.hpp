@@ -16,18 +16,26 @@
 class Kozei : public Option {
 public:
 	double inv_init_; //investissement initial
+	PnlVect* niveauxInitiaux_;
 	double r_CHF = 0.1;
 	double r_USD = 0.4;
 	double r_JPY = 0.2;
 	double r_GBP = 0.3;
 	double r_BRL = 0.5;
+
 	Kozei();
-	Kozei(double inv_init);
 	Kozei(const Kozei &K);
 	Kozei& operator=(const Kozei &K);
 	~Kozei();
 	Kozei* clone();
-	PnlVect* Foreign_ZC(int number_of_dates,double rate);
+
+	Kozei(double inv_init);
+	Kozei(double inv_init, PnlVect* niveauxInitiaux);
+	Kozei(double inv_init, PnlMat* marketData);
+
+	void SetNivauxInitiaux(PnlMat* marketData);
+
+	PnlVect* ZeroCoupon(int number_of_dates,double rate);
 	PnlMat* return_path_matrix(PnlMat *const assets_path,const PnlMat* ExR_path);
 	double payoff(const PnlMat *path);
 	double payoff_without_ExR(const PnlMat *path);

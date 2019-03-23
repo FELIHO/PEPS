@@ -11,7 +11,7 @@ int main(){
     size = 30; 
     rho = 0;
     T = 8;
-    nb_timestep = T * 260;
+    nb_timestep = T * Tools::NumberOfDaysPerYear;
     PnlVect* difference_abs = pnl_vect_create_from_double(size,0.0);
     PnlVect* moy_difference_abs = pnl_vect_create_from_double(60,0.0); 
     PnlVect* sigma = pnl_vect_create_from_scalar(size,0.2);

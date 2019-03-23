@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "Tools.hpp"
 
 using namespace std;
 

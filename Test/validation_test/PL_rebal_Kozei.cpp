@@ -14,7 +14,7 @@ double sigmaValue = 0.2;
 double spotValue = 10;
 ForwardTest* forwardTest = new ForwardTest(kozei,r,rho,sigmaValue,spotValue,nbSamples,fdStep);
 
-int step = kozei->T_*260/kozei->nbTimeSteps_;
+int step = kozei->T_*Tools::NumberOfDaysPerYear/kozei->nbTimeSteps_;
 
 vector<int> V = Tools::Divisors(step);
 

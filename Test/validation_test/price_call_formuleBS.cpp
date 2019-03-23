@@ -78,7 +78,7 @@ int main(){
     ForwardTest* FT = new ForwardTest(call, r, 0.0 , sigmaValue, spotValue, n_samples, fdStep);
     ofstream Theta;
     Theta.open ("../Test/validation_test/price_call_formuleBS_output/Theta.dat");
-    for(double t = 0; t<call->T_; t+=1.0/260){
+    for(double t = 0; t<call->T_; t+=1.0/Tools::NumberOfDaysPerYear){
         price = FT->price(t);
         bs_price = call->price_Call_formuleBS(spotValue,t,r,sigmaValue);
         Theta << price << " " << bs_price << "\n";

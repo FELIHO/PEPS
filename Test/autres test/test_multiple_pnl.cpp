@@ -33,7 +33,7 @@ int main(){
 
     PnlMat* Dailydata = pnl_mat_new();
     //Simuler le marché pour huit ans,la matrice Data contiendra les prix des actifs journalières pour 8 ans
-    BMS->asset(Dailydata, T, 8*260, rng);
+    BMS->asset(Dailydata, T, 8*Tools::NumberOfDaysPerYear, rng);
 
     DataSelecter *DS = new DataSelecter(Dailydata);
 
@@ -68,7 +68,7 @@ int main(){
     cout << "P&L = " << PL << endl;
 
     //Rebalancement journalière
-    nbRebalancementPerStep = 260/2;
+    nbRebalancementPerStep = Tools::NumberOfDaysPerYear/2;
     Data = DS->getData(T,nbTimeSteps, nbRebalancementPerStep);
     cout << "test Rebalancement journalière" << endl;
     cout<<" T : "<<T <<"nbTimeSteps : " << nbTimeSteps<< "nbRebalancementPerStep : "<<nbRebalancementPerStep<<endl;

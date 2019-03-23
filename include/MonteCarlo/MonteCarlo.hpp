@@ -5,6 +5,7 @@
 
 #include "Option.hpp"
 #include "Call.hpp"
+#include "Kozei.hpp"
 #include "BlackScholesModel.hpp"
 #include <omp.h>
 

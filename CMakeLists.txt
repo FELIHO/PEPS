@@ -63,14 +63,6 @@ add_subdirectory(3rdparty/jlparser)
 #add_executable(pricer src/pricer.cpp)
 #target_link_libraries(pricer jl_parser ${LIBS})
 
-# Executable Product
-add_executable(forwardTest src/ForwardTest.cpp)
-target_link_libraries(forwardTest ${LIBS})
-
-# Executable Product
-add_executable(backwardTest src/BackwardTest.cpp)
-target_link_libraries(backwardTest ${LIBS})
-
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
 message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")

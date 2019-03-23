@@ -16,7 +16,7 @@ PnlMat* ParameterEstimation::getLogRendementMatrix(const PnlMat *past) {
 				if ((rendementI < 0.001) || (rendementJ < 0.001)){
 					pnl_vect_set(logRendement, i, 0.0);
 				} else {
-					pnl_vect_set(logRendement, i, log(rendementJ/rendementI)/sqrt(1./260));
+					pnl_vect_set(logRendement, i, log(rendementJ/rendementI)/sqrt(1./Tools::NumberOfDaysPerYear));
 				}
 			}
 			pnl_mat_set_row(logRendementMatrix, logRendement, j);
