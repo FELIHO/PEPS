@@ -30,6 +30,15 @@ double Tools::normalCDF(double value)
    return 0.5 * erfc(-value * M_SQRT1_2);
 }
 
+int Tools::find(PnlVect* V, int v, int startIndexHint = 0)
+{
+  for(int i=startIndexHint; i< V->size ; i++){
+    if(v == pnl_vect_get(V,i)){
+      return i;
+    }
+  }
+}
+
 std::vector<int> Tools::Divisors ( int number ) {
    std::vector<int> divisors ;
    for ( int i = 1 ; i < number + 1 ; i++ )

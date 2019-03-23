@@ -39,7 +39,6 @@ void Computations::calleuro(double &ic, double &prix, int nb_samples, double T,
 void Computations::getPriceKozeiNative(double &ic, double &prix, int n_samples,
 	double h, int date, double inv_init, int numberDateEstimation, double r)
 {
-
 	string str3;
 	string str4;
 	string str5;

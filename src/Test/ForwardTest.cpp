@@ -61,7 +61,7 @@ double ForwardTest::price(double t){
         monteCarlo_->price(prix,ic);
     }
     else{
-        PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+        PnlMat* past = DS_->getPast(t, monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
         monteCarlo_->price(past,t,prix,ic);
         pnl_mat_free(&past);
     }
@@ -70,7 +70,7 @@ double ForwardTest::price(double t){
 
 PnlVect* ForwardTest::delta(double t){
     PnlVect *delta = pnl_vect_create_from_scalar(monteCarlo_->opt_->size_,0);
-    PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+    PnlMat* past = DS_->getPast(t, monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
     monteCarlo_->delta(past,t,delta);
     pnl_mat_free(&past);
     return delta;

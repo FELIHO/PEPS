@@ -37,17 +37,13 @@ BackTest::BackTest(Option* opt, double r, char const *fileData, int firstDateInd
         delete(bs_model);
 }
 
-void BackTest::setRebalancementFrequence(int nbRebalancementPerStep) {
-    marketData_ = DS_->getData(monteCarlo_->opt_->T_,monteCarlo_->opt_->nbTimeSteps_, nbRebalancementPerStep); 
-}
-
 double BackTest::price(double t){
     double prix,ic;
     if (t==0){
         monteCarlo_->price(prix,ic);
     }
     else{
-        PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+        PnlMat* past = DS_->getPast(t, monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
         monteCarlo_->price(past,t,prix,ic);
         pnl_mat_free(&past);
     }
@@ -56,10 +52,14 @@ double BackTest::price(double t){
 
 PnlVect* BackTest::delta(double t){
     PnlVect *delta = pnl_vect_create_from_scalar(monteCarlo_->opt_->size_,0);
-    PnlMat* past = DS_->getPast(marketData_, monteCarlo_->opt_->T_, t , monteCarlo_->opt_->nbTimeSteps_);
+    PnlMat* past = DS_->getPast(t, monteCarlo_->opt_->T_, monteCarlo_->opt_->nbTimeSteps_);
     monteCarlo_->delta(past,t,delta);
     pnl_mat_free(&past);
     return delta;
+}
+
+void BackTest::setRebalancementFrequence(int nbRebalancementPerStep) {
+    marketData_ = DS_->getData(monteCarlo_->opt_->T_,monteCarlo_->opt_->nbTimeSteps_, nbRebalancementPerStep); 
 }
 
 double BackTest::ProfitAndLoss(){

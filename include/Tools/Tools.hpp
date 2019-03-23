@@ -25,6 +25,8 @@ struct Tools
     //Cumulative Normal Distribution Function
     static double normalCDF(double value);
 
+    static int find(PnlVect* V, int v, int startIndexHint);
+
     static vector<int> Divisors ( int number );
 };
 

@@ -7,6 +7,7 @@
 #include "pnl/pnl_matrix.h"
 #include <math.h>
 #include "Tools.hpp"
+#include "Kozei.hpp"
 
 
 class DataSelecter
@@ -28,7 +29,7 @@ public:
 	PnlMat* getData(double T,int nbTimeSteps, int nbRebalancementPerStep);
     PnlMat* getEstimationWindow(double t, int nbDays);
     PnlMat* getHistoricalEstimationWindow();
-    PnlMat* getPast(PnlMat* marketData, double T, double t, int nbTimeStep);
+    PnlMat* getPast(double t, double T, int nbTimeStep);
 };
 
 #endif

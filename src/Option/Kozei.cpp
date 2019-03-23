@@ -7,6 +7,8 @@ using namespace std;
 Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 	niveauxInitiaux_ = pnl_vect_new();
+	constationDates_ = pnl_vect_new();
+	constationDates_ = pnl_vect_new();
 }
 
 Kozei::Kozei(const Kozei &K) {
@@ -14,6 +16,9 @@ Kozei::Kozei(const Kozei &K) {
 	nbTimeSteps_ = K.nbTimeSteps_;
 	size_ = K.size_;
 	inv_init_ = K.inv_init_;
+	niveauxInitiaux_ = pnl_vect_copy(K.niveauxInitiaux_);
+	constationDates_ = pnl_vect_copy(K.constationDates_);
+	constationLapses_ = pnl_vect_copy(K.constationLapses_);
 }
 
 Kozei& Kozei::operator=(const Kozei&K) {
@@ -21,11 +26,16 @@ Kozei& Kozei::operator=(const Kozei&K) {
 	nbTimeSteps_ = K.nbTimeSteps_;
 	size_ = K.size_;
 	inv_init_ = K.inv_init_;
+	niveauxInitiaux_ = K.niveauxInitiaux_;
+	constationDates_ = K.constationDates_;
+	constationLapses_ = K.constationLapses_;
 	return *this;
 }
 
 Kozei::~Kozei() {
 	pnl_vect_free(&niveauxInitiaux_);
+	pnl_vect_free(&constationDates_);
+	pnl_vect_free(&constationLapses_);
 }
 
 Kozei* Kozei::clone() {
@@ -37,6 +47,9 @@ Kozei::Kozei(double inv_init)  {
 	nbTimeSteps_ = 16;
 	size_ = 30;
 	inv_init_ = inv_init;
+	niveauxInitiaux_ = pnl_vect_new();
+	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
+	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
 }
 
 Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
@@ -45,26 +58,32 @@ Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
 	size_ = 30;
 	inv_init_ = inv_init;
 	niveauxInitiaux_ = pnl_vect_copy(niveauxInitiaux);
+	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
+	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
+
 }
 
-Kozei::Kozei(double inv_init, PnlMat* marketData)  {
+Kozei::Kozei(double inv_init, PnlMat* marketData, int firstDateIndex)  {
 	T_ = (double) 2080.0/Tools::NumberOfDaysPerYear;
 	nbTimeSteps_ = 16;
 	size_ = 30;
 	inv_init_ = inv_init;
 	niveauxInitiaux_ = pnl_vect_new();
-	SetNivauxInitiaux(marketData);
+	SetNivauxInitiaux(marketData, firstDateIndex);
+	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
+	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
 }
 
-void Kozei::SetNivauxInitiaux(PnlMat* marketData){
-	if(marketData->m < 3 || marketData->n < size_){
+
+void Kozei::SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex){
+	if(marketData->m - firstDateIndex < 3 || marketData->n < size_){
 		throw invalid_argument("la matrice en argument ne permet pas de définir les niveaux initiaux pour l'option kozei");
 	}
-	pnl_mat_get_row(niveauxInitiaux_,marketData,0);
+	pnl_mat_get_row(niveauxInitiaux_,marketData,firstDateIndex);
 	PnlVect* V = pnl_vect_new();
-	pnl_mat_get_row(V,marketData,1);
+	pnl_mat_get_row(V,marketData,firstDateIndex+1);
 	pnl_vect_plus_vect(niveauxInitiaux_,V);
-	pnl_mat_get_row(V,marketData,2);
+	pnl_mat_get_row(V,marketData,firstDateIndex+2);
 	pnl_vect_plus_vect(niveauxInitiaux_,V);
 	pnl_vect_mult_scalar(niveauxInitiaux_,1.0/3.0);
 }
@@ -244,7 +263,7 @@ PnlVect* Kozei::ZeroCoupon(int number_of_dates, double rate){
 
 
 
-PnlMat* Kozei::return_path_matrix(PnlMat *const assets_path, const PnlMat* ExR_path){
+PnlMat* Kozei::path_matrix(const PnlMat* assets_path, const PnlMat* ExR_path){
 	/*
 	L ordre des actifs dans la matrice assets Path
 	USD	JPY	GBP	EUR	CHF	BRL
