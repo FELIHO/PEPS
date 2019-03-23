@@ -4,7 +4,7 @@
 
 using namespace std;
 
-double T = 8;
+double T = 1;
 int nbTimeSteps = 1;
 int size = 1;
 double strike = 10;
@@ -27,9 +27,14 @@ vector<int> V = Tools::Divisors(step);
 int main(int argc, char const *argv[])
 {
     for (int nbRebalancementPerStep : V){
-        forwardTest->setRebalancementFrequence(nbRebalancementPerStep);
-        double PL = forwardTest->ProfitAndLoss();
-        cout << "nbr de rebalancement :    " << nbRebalancementPerStep*nbTimeSteps << "      PL: "<< PL << endl;
+        cout << nbRebalancementPerStep << " ";
+        for(int i =0; i<1; i++){
+            forwardTest->setRebalancementFrequence(nbRebalancementPerStep);
+            double PL = forwardTest->ProfitAndLoss();
+            cout << PL << " ";
+        }
+        cout << endl;
+        
     }
     return 0;
 }
