@@ -25,6 +25,7 @@ void Tools::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *
 
 double Tools::normalCDF(double value)
 {
+   double M_SQRT1_2 = 0.707106781186547524401;
    return 0.5 * erfc(-value * M_SQRT1_2);
 }
 

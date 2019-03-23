@@ -32,7 +32,7 @@ SemiHistoricalDataProvider::SemiHistoricalDataProvider(RandomGen *rng, char cons
 	ParameterEstimation pe ;
 	PnlVect* sigma = pe.getVolatilitiesVector(Data);
 	PnlMat* rho = pe.getCorrelationMatrix(Data);
-	PnlVect* spot = pnl_vect_create_from_double(Data->n, 100);
+	PnlVect* spot = pnl_vect_create_from_scalar(Data->n, 100);
 	PnlVect* trend = pe.getTrend(Data);
 	
 	mod_ =  new BlackScholesModel(spot->size, pnl_vect_sum(trend)/(trend->size) , rho, sigma, spot, trend);
@@ -71,9 +71,7 @@ PnlMat* SemiHistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int
 	pnl_mat_free(&HistData);
 	pnl_mat_free(&SimData);
 
-	PnlMat* marketDataEuro = multiplyChangeRate(marketData);
-	pnl_mat_free(&marketData);
-	return marketDataEuro;
+	return marketData;
 }
 
 
