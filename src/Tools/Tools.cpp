@@ -30,12 +30,11 @@ double Tools::normalCDF(double value)
 
 int Tools::find(PnlVect* V, int v, int startIndexHint )
 {
-  for(int i=startIndexHint; i< V->size ; i++){
-    if(v == pnl_vect_get(V,i)){
-      return i;
-    }
+  int i = startIndexHint;
+  while( (i< V->size-1) && (v > pnl_vect_get(V,i) ) ) {
+    i++;
   }
-  return -1;
+  return i;
 }
 
 std::vector<int> Tools::Divisors ( int number ) {

@@ -71,9 +71,7 @@ PnlMat* SemiHistoricalDataProvider::getMarketData(double T, int nbTimeSteps, int
 	pnl_mat_free(&HistData);
 	pnl_mat_free(&SimData);
 
-	PnlMat* marketDataEuro = multiplyChangeRate(marketData);
-	pnl_mat_free(&marketData);
-	return marketDataEuro;
+	return marketData;
 }
 
 
