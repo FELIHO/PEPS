@@ -18,7 +18,6 @@ public:
 	double inv_init_; //investissement initial
 	PnlVect* niveauxInitiaux_;
 	PnlVect* constationDates_;
-	PnlVect* constationLapses_;
 	double r_CHF = 0.1;
 	double r_USD = 0.4;
 	double r_JPY = 0.2;

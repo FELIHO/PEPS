@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "formuleBS",
+            "name": "Computations",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Test/validation_test/price_call_formuleBS",
+            "program": "${workspaceFolder}/build/Test/unit_test/Computations",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
             "environment": [],
-            "externalConsole": true,
+            "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
                 {
@@ -24,10 +24,10 @@
             ]
         },
         {
-            "name": "(gdb) Launch",
+            "name": "formuleBS",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/backwardTest",
+            "program": "${workspaceFolder}/build/Test/validation_test/price_call_formuleBS",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",

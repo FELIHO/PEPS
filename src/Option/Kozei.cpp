@@ -8,7 +8,6 @@ Kozei::Kozei() : Option(){
  	inv_init_ = 0.0;
 	niveauxInitiaux_ = pnl_vect_new();
 	constationDates_ = pnl_vect_new();
-	constationDates_ = pnl_vect_new();
 }
 
 Kozei::Kozei(const Kozei &K) {
@@ -18,7 +17,6 @@ Kozei::Kozei(const Kozei &K) {
 	inv_init_ = K.inv_init_;
 	niveauxInitiaux_ = pnl_vect_copy(K.niveauxInitiaux_);
 	constationDates_ = pnl_vect_copy(K.constationDates_);
-	constationLapses_ = pnl_vect_copy(K.constationLapses_);
 }
 
 Kozei& Kozei::operator=(const Kozei&K) {
@@ -28,14 +26,12 @@ Kozei& Kozei::operator=(const Kozei&K) {
 	inv_init_ = K.inv_init_;
 	niveauxInitiaux_ = K.niveauxInitiaux_;
 	constationDates_ = K.constationDates_;
-	constationLapses_ = K.constationLapses_;
 	return *this;
 }
 
 Kozei::~Kozei() {
 	pnl_vect_free(&niveauxInitiaux_);
 	pnl_vect_free(&constationDates_);
-	pnl_vect_free(&constationLapses_);
 }
 
 Kozei* Kozei::clone() {
@@ -49,7 +45,6 @@ Kozei::Kozei(double inv_init)  {
 	inv_init_ = inv_init;
 	niveauxInitiaux_ = pnl_vect_new();
 	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
-	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
 }
 
 Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
@@ -59,8 +54,6 @@ Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
 	inv_init_ = inv_init;
 	niveauxInitiaux_ = pnl_vect_copy(niveauxInitiaux);
 	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
-	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
-
 }
 
 Kozei::Kozei(double inv_init, PnlMat* marketData, int firstDateIndex)  {
@@ -71,7 +64,6 @@ Kozei::Kozei(double inv_init, PnlMat* marketData, int firstDateIndex)  {
 	niveauxInitiaux_ = pnl_vect_new();
 	SetNivauxInitiaux(marketData, firstDateIndex);
 	constationDates_ = pnl_vect_create_from_list(17, 20140411, 20141013, 20150413, 20151012, 20160411, 20161011, 20170411, 20171011, 20180411, 20181011, 20190411, 20191011, 20200414, 20201012, 20210412, 20211011, 20220419);
-	constationLapses_ = pnl_vect_create_from_list(17, 0, 131, 261, 391, 521, 652, 782, 913, 1043, 1174, 1304, 1435, 1567, 1696, 1826, 1956, 2092);
 }
 
 
@@ -90,7 +82,7 @@ void Kozei::SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex){
 
 
 double Kozei::payoff(const PnlMat *path){
-	if(path->n != (nbTimeSteps_ + 1)){
+	if(path->m != (nbTimeSteps_ + 1)){
 		throw invalid_argument("la matrice passée en paramétre est de mauvaise taille");
 	}
 	if(niveauxInitiaux_->size != path->n){
@@ -273,30 +265,30 @@ PnlMat* Kozei::path_matrix(const PnlMat* assets_path, const PnlMat* ExR_path){
 	L ordre des taux de change dans la matrice ExR path
 	USD JPY GBP CHF BRL
 	*/
-	PnlVect* USD_ExR;
-	PnlVect* JPY_ExR;
-	PnlVect* GBP_ExR;
-	PnlVect* CHF_ExR;
-	PnlVect* BRL_ExR;
-	PnlVect* asset;
+	PnlVect* USD_ExR = pnl_vect_new();
+	PnlVect* JPY_ExR = pnl_vect_new();
+	PnlVect* GBP_ExR = pnl_vect_new();
+	PnlVect* CHF_ExR = pnl_vect_new();
+	PnlVect* BRL_ExR = pnl_vect_new();
+	PnlVect* asset = pnl_vect_new();
 	if(assets_path-> m != ExR_path->m){
 		throw length_error("la matrice des actifs et celle des taux de changes doivent avoir le même nombre de lignes") ;
 	}
 	PnlMat* Path = pnl_mat_create (assets_path-> m,assets_path-> n + ExR_path-> n);
-	pnl_mat_get_col (USD_ExR, ExR_path, 0);
-	pnl_mat_get_col (JPY_ExR, ExR_path, 1);
-	pnl_mat_get_col (GBP_ExR, ExR_path, 2);
-	pnl_mat_get_col (CHF_ExR, ExR_path, 3);
-	pnl_mat_get_col (BRL_ExR, ExR_path, 4);
+	pnl_mat_get_col(USD_ExR, ExR_path, 0);
+	pnl_mat_get_col(JPY_ExR, ExR_path, 1);
+	pnl_mat_get_col(GBP_ExR, ExR_path, 2);
+	pnl_mat_get_col(CHF_ExR, ExR_path, 3);
+	pnl_mat_get_col(BRL_ExR, ExR_path, 4);
 	
 	for(int i = 0; i<assets_path-> n + ExR_path-> n;i++){
 		if(i>=0 && i<17){
-			pnl_mat_get_col (asset, assets_path, i);
-			pnl_vect_mult_vect_term (asset, USD_ExR);
-			pnl_mat_set_col (Path, asset,i);
+			pnl_mat_get_col(asset, assets_path, i);
+			pnl_vect_mult_vect_term(asset, USD_ExR);
+			pnl_mat_set_col(Path, asset,i);
 		}
 		if(i>=17 && i<19){
-			pnl_mat_get_col (asset, assets_path, i);
+			pnl_mat_get_col(asset, assets_path, i);
 			pnl_vect_mult_vect_term (asset, JPY_ExR);
 			pnl_mat_set_col (Path, asset,i);
 		}

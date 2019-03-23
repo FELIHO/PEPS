@@ -2,8 +2,6 @@
 
 
 void Tools::concatenationMatrice(PnlMat* res, const PnlMat *mat1, const PnlMat *mat2){
-  //assert(mat1->n == mat2->n && mat2->n == res->n);
-  //assert(res->m == mat1->m + mat2->m);
   if(mat1->n != mat2->n || mat2->n != res->n){
     throw length_error("la concatenation n'est pas possible: les matrices sont incompatibles") ;
   }
@@ -37,6 +35,7 @@ int Tools::find(PnlVect* V, int v, int startIndexHint )
       return i;
     }
   }
+  return -1;
 }
 
 std::vector<int> Tools::Divisors ( int number ) {
