@@ -1,6 +1,14 @@
 #pragma once
 
 #include <string>
+#include <iostream>
+#include <time.h>
+#include "pnl/pnl_random.h"
+#include "MonteCarlo.hpp"
+#include "Kozei.hpp"
+#include "ParameterEstimation.hpp"
+#include "DataSelecter.hpp"
+#include <list>
 
 #define DLLEXP   __declspec( dllexport )
 namespace Computations {

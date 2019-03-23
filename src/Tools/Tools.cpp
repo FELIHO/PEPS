@@ -30,7 +30,7 @@ double Tools::normalCDF(double value)
    return 0.5 * erfc(-value * M_SQRT1_2);
 }
 
-int Tools::find(PnlVect* V, int v, int startIndexHint = 0)
+int Tools::find(PnlVect* V, int v, int startIndexHint )
 {
   for(int i=startIndexHint; i< V->size ; i++){
     if(v == pnl_vect_get(V,i)){
