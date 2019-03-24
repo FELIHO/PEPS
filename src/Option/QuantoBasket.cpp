@@ -1,4 +1,4 @@
-#include "Option/QuantoBasket.hpp"
+#include "QuantoBasket.hpp"
 
 
 
@@ -8,6 +8,7 @@ QuantoBasket::QuantoBasket() {
 	nbTimeSteps_ = 0;
 	size_ = 0;
 	strike_ = 0;
+	currency_ = pnl_vect_new();
 }
 
 QuantoBasket::QuantoBasket(const QuantoBasket &QB) {
@@ -16,6 +17,7 @@ QuantoBasket::QuantoBasket(const QuantoBasket &QB) {
 	nbTimeSteps_ = QB.nbTimeSteps_;
 	size_ = QB.size_;
 	weights_ = pnl_vect_copy(QB.weights_);
+	currency_ = pnl_vect_copy(QB.currency_);
 }
 
 QuantoBasket& QuantoBasket::operator=(const QuantoBasket &C) {
@@ -24,12 +26,14 @@ QuantoBasket& QuantoBasket::operator=(const QuantoBasket &C) {
 	nbTimeSteps_ = C.nbTimeSteps_;
 	size_ = C.size_;
 	weights_ = C.weights_;
+	currency_ = C.currency_;
 	return *this;
 }
 
 QuantoBasket::~QuantoBasket()
 {
 	pnl_vect_free(&weights_);
+	pnl_vect_free(&currency_);
 }
 
 QuantoBasket::QuantoBasket(double T, int nbTimeSteps, int size, double strike, PnlVect *weights) {
@@ -44,8 +48,16 @@ QuantoBasket* QuantoBasket::clone() {
 	return (new QuantoBasket(*this));
 }
 
-double QuantoBasket::payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect * currency) {
-    assert(size_==currency->size);
+void QuantoBasket::setCurrency(PnlVect * currency){
+	currency_ = pnl_vect_copy(currency);
+}
+
+double QuantoBasket::payoff(const PnlMat *path) {
+	PnlMat* assets_path = pnl_mat_create(path->m,size_);
+	pnl_mat_extract_subblock(assets_path, path, 0,path->m, 0,size_);
+
+	PnlMat* ExR_path = pnl_mat_create(path->m,path->n-size_);
+	pnl_mat_extract_subblock(ExR_path, path, 0,path->m, size_,path->n-size_);
 
 	double res = 0.0;
 
@@ -60,13 +72,13 @@ double QuantoBasket::payoff(const PnlMat *path, const PnlMat *pathChangeRate, co
 	PnlVect *last_date;
 	last_date = pnl_vect_create(size_);
     PnlVect *last_date_change_rate;
-	last_date_change_rate = pnl_vect_create(pathChangeRate->n);
+	last_date_change_rate = pnl_vect_create(ExR_path->n);
 
 	// Charging the last row
-	pnl_mat_get_row(last_date, path, nbTimeSteps_);
-    pnl_mat_get_row(last_date_change_rate, pathChangeRate, nbTimeSteps_);
+	pnl_mat_get_row(last_date, assets_path, nbTimeSteps_);
+    pnl_mat_get_row(last_date_change_rate, ExR_path, nbTimeSteps_);
     for(int i = 0; i < last_date->size; i++) {
-		res += pnl_vect_get(weights_, i)*pnl_vect_get(last_date, i)*pnl_vect_get(last_date_change_rate, pnl_vect_get(currency, i));
+		res += pnl_vect_get(weights_, i)*pnl_vect_get(last_date, i)*pnl_vect_get(last_date_change_rate, pnl_vect_get(currency_, i));
     }
 
 	res = sign*res - strike_;
