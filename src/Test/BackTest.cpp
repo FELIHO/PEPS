@@ -19,6 +19,11 @@ BackTest::BackTest(Option* opt, double r, char const *fileData, int firstDateInd
 
         marketData_ = DS_->getData(opt->T_,opt->T_*Tools::NumberOfDaysPerYear);
 
+        if (typeid(opt) == typeid(Kozei))
+        {
+            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+        }
+
         PnlMat* historicalEstimationWindow = DS_->getHistoricalEstimationWindow();
         ParameterEstimation pe ;
         PnlVect* sigma = pe.getVolatilitiesVector(historicalEstimationWindow);

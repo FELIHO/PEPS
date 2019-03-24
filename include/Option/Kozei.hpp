@@ -32,9 +32,9 @@ public:
 
 	Kozei(double inv_init);
 	Kozei(double inv_init, PnlVect* niveauxInitiaux);
-	Kozei(double inv_init, PnlMat* marketData, int firstDateIndex);
+	Kozei(double inv_init, PnlMat* marketData, int firstDateIndex=0);
 
-	void SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex);
+	void SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex=0);
 
 	PnlVect* ZeroCoupon(int number_of_dates,double rate);
 	PnlMat* path_matrix(const PnlMat* assets_path,const PnlMat* ExR_path);

@@ -16,6 +16,11 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, double sigmaValue, d
         SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
         marketData_ = Simulator->getDailyMarketData(opt->T_);
 
+        if (typeid(opt) == typeid(Kozei))
+        {
+            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+        }
+
         DS_ = new DataSelecter(marketData_);
 
         pnl_vect_free(&spot);
@@ -36,6 +41,11 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlV
         RandomGen* rng = new PnlRnd(pnlRng);
         SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
         marketData_ = Simulator->getDailyMarketData(opt->T_);
+
+        if (typeid(opt) == typeid(Kozei))
+        {
+            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+        }
 
         DS_ = new DataSelecter(marketData_);
 
