@@ -19,22 +19,11 @@ double sigmaValue = 0.2;
 double spotValue = 100;
 ForwardTest* forwardTest = new ForwardTest(asian,r,rho,sigmaValue,spotValue,nbSamples,fdStep);
 
-
-int step = T*Tools::NumberOfDaysPerYear/nbTimeSteps;
-
-vector<int> V = Tools::Divisors(step);
-
 int main(int argc, char const *argv[])
 {
-    for (int nbRebalancementPerStep : V){
-        cout << nbRebalancementPerStep << " ";
-        for(int i =0; i<100; i++){
-            forwardTest->setRebalancementFrequence(nbRebalancementPerStep);
-            double PL = forwardTest->ProfitAndLoss();
-            cout << PL << " ";
-        }
-        cout << endl;
-        
+    for(int i =0; i<1000; i++){
+        double PL = forwardTest->ProfitAndLoss();
+        cout << PL << endl;
     }
     return 0;
 }

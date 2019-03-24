@@ -3,7 +3,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_cdf.h"
-#include "Basket.hpp"
+#include "Option.hpp"
 #include <cmath>
 
 	class QuantoBasket : public Option
@@ -20,6 +20,8 @@
 		 * PnlVect *weights_ : vecteur des coefficients de pondération des actifs sous-jacents
 		 */
 		PnlVect *weights_; // vector containing the proportions of each one of the D underlying asset
+
+		PnlVect * currency_;
 
 		/**
 		Constructeur par défaut
@@ -43,6 +45,7 @@
 		*/
 		 ~QuantoBasket();
 
+
 	/**
 	*  \brief Constructeur de la classe QuantoBasket permettant de préciser les caractéristiques du produits
 	*  @param[in] T : Maturité de l'option
@@ -55,6 +58,8 @@
 
 	virtual QuantoBasket* clone();
 
-	virtual double payoff(const PnlMat *path, const PnlMat *pathChangeRate, const PnlVect * currency);
+	void setCurrency(PnlVect * currency);
+
+	virtual double payoff(const PnlMat *path);
 
 	};

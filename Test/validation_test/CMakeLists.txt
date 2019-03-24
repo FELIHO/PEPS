@@ -35,5 +35,14 @@ target_link_libraries(PL_rebal_Call ${LIBS})
 add_executable (PL_rebal_Asian PL_rebal_Asian.cpp)
 target_link_libraries(PL_rebal_Asian ${LIBS})
 
-#add_executable (PL_rebal_Kozei PL_rebal_Kozei.cpp)
-#target_link_libraries(PL_rebal_Kozei ${LIBS})
+add_executable (PL_rebal_Kozei PL_rebal_Kozei.cpp)
+target_link_libraries(PL_rebal_Kozei ${LIBS})
+
+add_executable (PL_histo_Call PL_histo_Call.cpp)
+target_link_libraries(PL_histo_Call ${LIBS})
+
+add_executable (PL_histo_Asian PL_histo_Asian.cpp)
+target_link_libraries(PL_histo_Asian ${LIBS})
+
+add_executable (PL_histo_Kozei PL_histo_Kozei.cpp)
+target_link_libraries(PL_histo_Kozei ${LIBS})
