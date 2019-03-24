@@ -4,8 +4,7 @@
 
 using namespace std;
 
-PnlVect* niveauxInitiaux =pnl_vect_create_from_double(30,100);
-Kozei *kozei = new Kozei(100,niveauxInitiaux);
+Kozei *kozei = new Kozei(100);
 
 double fdStep = 0.1;
 int nbSamples = 50000;
@@ -15,9 +14,10 @@ double sigmaValue = 0.2;
 double spotValue = 100;
 ForwardTest* forwardTest = new ForwardTest(kozei,r,rho,sigmaValue,spotValue,nbSamples,fdStep);
 
+
 int main(int argc, char const *argv[])
 {
-    forwardTest->setRebalancementFrequence(26);
+    forwardTest->setRebalancementFrequence(5);
     for(int i =0; i<100; i++){
         double PL = forwardTest->ProfitAndLoss();
         cout << PL << endl;

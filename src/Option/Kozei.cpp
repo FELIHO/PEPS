@@ -77,7 +77,7 @@ void Kozei::SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex){
 	pnl_vect_plus_vect(niveauxInitiaux_,V);
 	pnl_mat_get_row(V,marketData,firstDateIndex+2);
 	pnl_vect_plus_vect(niveauxInitiaux_,V);
-	pnl_vect_mult_scalar(niveauxInitiaux_,1.0/3.0);
+	pnl_vect_div_scalar(niveauxInitiaux_,3.0);
 }
 
 

@@ -19,9 +19,10 @@ BackTest::BackTest(Option* opt, double r, char const *fileData, int firstDateInd
 
         marketData_ = DS_->getData(opt->T_,opt->T_*Tools::NumberOfDaysPerYear);
 
-        if (typeid(opt) == typeid(Kozei))
+        if ( Kozei* k = dynamic_cast<Kozei*>(opt) )
         {
-            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+            k->SetNivauxInitiaux(marketData_);
+            dynamic_cast<Kozei*>(monteCarlo_->opt_)->niveauxInitiaux_ = pnl_vect_copy(k->niveauxInitiaux_);
         }
 
         PnlMat* historicalEstimationWindow = DS_->getHistoricalEstimationWindow();

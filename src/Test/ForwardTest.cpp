@@ -16,9 +16,10 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, double sigmaValue, d
         SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
         marketData_ = Simulator->getDailyMarketData(opt->T_);
 
-        if (typeid(opt) == typeid(Kozei))
+        if ( Kozei* k = dynamic_cast<Kozei*>(opt) )
         {
-            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+            k->SetNivauxInitiaux(marketData_);
+            dynamic_cast<Kozei*>(monteCarlo_->opt_)->niveauxInitiaux_ = pnl_vect_copy(k->niveauxInitiaux_);
         }
 
         DS_ = new DataSelecter(marketData_);
@@ -42,9 +43,10 @@ ForwardTest::ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlV
         SimulatedDataProvider* Simulator = new SimulatedDataProvider(rng, r , rho , sigma, spot);
         marketData_ = Simulator->getDailyMarketData(opt->T_);
 
-        if (typeid(opt) == typeid(Kozei))
+        if ( Kozei* k = dynamic_cast<Kozei*>(opt) )
         {
-            ( (Kozei*) opt)->SetNivauxInitiaux(marketData_);
+            k->SetNivauxInitiaux(marketData_);
+            dynamic_cast<Kozei*>(monteCarlo_->opt_)->niveauxInitiaux_ = pnl_vect_copy(k->niveauxInitiaux_);
         }
 
         DS_ = new DataSelecter(marketData_);
