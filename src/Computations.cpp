@@ -129,6 +129,9 @@ string Computations::getDeltaKozeiNative(int n_samples,
 
 	MonteCarlo *mc = new MonteCarlo(bs, K_, h, n_samples);
 
+	PnlVect* Assets_ZC_prices = pnl_vect_new();
+	pnl_mat_get_row(Assets_ZC_prices,kozeiPath,currentDateIndex);
+
 
 	PnlVect *deltaV = pnl_vect_create_from_scalar(past->n, 0.0);
 	mc->delta(past, t, deltaV);
@@ -199,6 +202,8 @@ string Computations::getDeltaKozeiNative(int n_samples,
 			temp += *iter;
 			temp += "\", \"delta\":";
 			temp += to_string(pnl_vect_get(deltaV, idx));
+			temp += ", price: ";
+			temp += to_string(pnl_vect_get(Assets_ZC_prices, idx));
 			temp += "}";
 			if (idx < past->n - 1) {
 				temp += ", ";
