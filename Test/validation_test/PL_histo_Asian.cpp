@@ -21,7 +21,7 @@ ForwardTest* forwardTest = new ForwardTest(asian,r,rho,sigmaValue,spotValue,nbSa
 
 int main(int argc, char const *argv[])
 {
-    for(int i =0; i<1; i++){
+    for(int i =0; i<1000; i++){
         double PL = forwardTest->ProfitAndLoss();
         cout << PL << endl;
     }
