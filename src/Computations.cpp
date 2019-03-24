@@ -1,14 +1,25 @@
 #include "Computations.hpp"
 
+#include "MonteCarlo.hpp"
+#include "Kozei.hpp"
+#include "ParameterEstimation.hpp"
+#include "DataSelecter.hpp"
+#include <list>
+#include "ForwardTest.hpp"
+#include "Kozei.hpp"
+#include <vector>
+#include <iostream>
+#include <time.h>
+
 void Computations::getPriceKozeiNative(double &ic, double &prix, int n_samples,
 	double h, int date, double inv_init, int numberDateEstimation, double r)
 {
 	string str3;
 	string str4;
 	string str5;
-	str3 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str4 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str5 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
+	str3 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
+	str4 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
+	str5 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
 
 	str3 = str3 + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
@@ -75,9 +86,9 @@ string Computations::getDeltaKozeiNative(int n_samples,
 	string str3;
 	string str4;
 	string str5;
-	str3 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str4 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str5 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
+	str3 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	str4 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	str5 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
 
 	str3 = str3 + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
@@ -169,11 +180,11 @@ string Computations::getDeltaKozeiNative(int n_samples,
 	Names.push_back("ABBN.VSX");
 	Names.push_back("BRFS3.SAO");
 	//USD JPY GBP CHF BRL
-	Names.push_back("USD/EUR");
-	Names.push_back("JPY/EUR");
-	Names.push_back("GBP/EUR");
-	Names.push_back("CHF/EUR");
-	Names.push_back("BRL/EUR");
+	Names.push_back("USD");
+	Names.push_back("JPY");
+	Names.push_back("GBP");
+	Names.push_back("CHF");
+	Names.push_back("BRL");
 
 	std::list<std::string>::iterator iter;
 	std::string findString = "AWK";
@@ -184,9 +195,9 @@ string Computations::getDeltaKozeiNative(int n_samples,
 	{
 		for (int idx = 0; idx < past->n; idx++)
 		{
-			temp = "{ name:\"";
+			temp = "{\"name\":\"";
 			temp += *iter;
-			temp += "\", delta:";
+			temp += "\", \"delta\":";
 			temp += to_string(pnl_vect_get(deltaV, idx));
 			temp += "}";
 			if (idx < past->n - 1) {
@@ -213,9 +224,9 @@ string Computations::getListPriceKozeiNative(int n_samples,
 	string str3;
 	string str4;
 	string str5;
-	str3 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str4 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
-	str5 = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
+	str3 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	str4 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	str5 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
 
 	str3 = str3 + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
@@ -265,9 +276,9 @@ string Computations::getListPriceKozeiNative(int n_samples,
 		past = ds->getPast(t, K->T_, K->nbTimeSteps_);
 		mc->price(past, t, prix, ic);
 
-		temp = "{ timestamp:";
+		temp = "{\"timestamp\":";
 		temp += to_string(currentDate);
-		temp += ", price:";
+		temp += ", \"price\":";
 		temp += to_string(prix);
 		temp += "}";
 		if (j < last_iteration - 1) {
@@ -300,6 +311,20 @@ string Computations::getListPriceKozeiNative(int n_samples,
 	return strDelta;
 }
 
+void Computations::getProfitAndLossForward(double &profitAndLoss, int n_samples,
+	double h, double inv_init, double r, int numberOfRebalancement, double rho, double sigma, double spot) {
+	Kozei *kozei = new Kozei(inv_init);
+	ForwardTest* forwardTest = new ForwardTest(kozei, r, rho, sigma, spot, n_samples, h);
+	int step = kozei->T_*Tools::NumberOfDaysPerYear / kozei->nbTimeSteps_;
+	forwardTest->setRebalancementFrequence(numberOfRebalancement);
+	profitAndLoss = forwardTest->ProfitAndLoss();
+}
+
+void Computations::getProfitAndLossBackward(double &profitAndLoss, int n_samples,
+	double h, double inv_init, int numberDateEstimation, double r, int numberOfRebalancement) {
+	profitAndLoss = 0.05;
+}
+
 
 void Computations::calleuro(double &ic, double &prix, int nb_samples, double T,
 	double S0, double K, double sigma, double r)
@@ -315,6 +340,29 @@ void Computations::calleuro(double &ic, double &prix, int nb_samples, double T,
 	{
 		payoff = S0 * exp(drift + sigma * sqrt_T * pnl_rng_normal(rng));
 		payoff = MAX(payoff - K, 0.);
+		sum += payoff;
+		var += payoff * payoff;
+	}
+	prix = exp(-r * T) * sum / nb_samples;
+	var = exp(-2.*r*T) * var / nb_samples - prix * prix;
+	ic = 1.96 * sqrt(var / nb_samples);
+	pnl_rng_free(&rng);
+}
+
+void Computations::puteuro(double &ic, double &prix, int nb_samples, double T,
+	double S0, double K, double sigma, double r)
+{
+	double drift = (r - sigma * sigma / 2.) * T;
+	double sqrt_T = sqrt(T);
+	double sum = 0;
+	double var = 0;
+	PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+	pnl_rng_sseed(rng, time(NULL));
+	double payoff;
+	for (int i = 0; i < nb_samples; i++)
+	{
+		payoff = S0 * exp(drift + sigma * sqrt_T * pnl_rng_normal(rng));
+		payoff = MAX(K - payoff, 0.);
 		sum += payoff;
 		var += payoff * payoff;
 	}
