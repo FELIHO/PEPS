@@ -27,7 +27,7 @@ vector<int> V = Tools::Divisors(step);
 int main(int argc, char const *argv[])
 {
     for (int nbRebalancementPerStep : V){
-        cout << nbRebalancementPerStep << " ";
+        cout << nbRebalancementPerStep*nbTimeSteps << " ";
         for(int i =0; i<100; i++){
             forwardTest->setRebalancementFrequence(nbRebalancementPerStep);
             double PL = forwardTest->ProfitAndLoss();
