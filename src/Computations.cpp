@@ -33,7 +33,7 @@ void Computations::getPriceKozeiNative(double &ic, double &prix, int n_samples,
 
 	Kozei *K_ = new Kozei(inv_init);
 
-	PnlMat* kozeiPath = K_->path_matrix(assetData, exchangeRates); // pnl_mat_copy(assetData);//
+	PnlMat* kozeiPath = K_->path_matrix(assetData, exchangeRates);
 	
 
 	int firstDateIndex = Tools::find(dateIndexes,20140411);
