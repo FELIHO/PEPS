@@ -202,8 +202,6 @@ string Computations::getDeltaKozeiNative(int n_samples,
 			temp += *iter;
 			temp += "\", \"delta\":";
 			temp += to_string(pnl_vect_get(deltaV, idx));
-			temp += ", price: ";
-			temp += to_string(pnl_vect_get(Assets_ZC_prices, idx));
 			temp += "}";
 			if (idx < past->n - 1) {
 				temp += ", ";
