@@ -17,25 +17,23 @@ void Computations::getPriceKozeiNative(double &ic, double &prix, int n_samples,
 	string str3;
 	string str4;
 	string str5;
-	str3 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
-	str4 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
-	str5 = "C:\\Users\\lione\\Desktop\\Ensimag\\PEPS\\NEWPEPS\\Hist_kozei\\";
+	string str = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
 
-	str3 = str3 + "kozei_dataFeed.dat";
+	str3 = str + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
 	PnlMat *assetData = pnl_mat_create_from_file(cstr);
 
-	str4 = str4 + "kozei_exchangeRates.dat";
+	str4 = str + "kozei_exchangeRates.dat";
 	const char *cstr2 = str4.c_str();
 	PnlMat *exchangeRates = pnl_mat_create_from_file(cstr2);
 	
-	str5 = str5 + "kozei_IndexdataFeed.dat";
+	str5 = str + "kozei_IndexdataFeed.dat";
 	const char *cstr3 = str5.c_str();
 	PnlVect *dateIndexes = pnl_vect_create_from_file(cstr3);
 
 	Kozei *K_ = new Kozei(inv_init);
 
-	PnlMat* kozeiPath = K_->path_matrix(assetData, exchangeRates);
+	PnlMat* kozeiPath = K_->path_matrix(assetData, exchangeRates); // pnl_mat_copy(assetData);//
 	
 
 	int firstDateIndex = Tools::find(dateIndexes,20140411);
@@ -86,19 +84,18 @@ string Computations::getDeltaKozeiNative(int n_samples,
 	string str3;
 	string str4;
 	string str5;
-	str3 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
-	str4 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
-	str5 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	string str = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
 
-	str3 = str3 + "kozei_dataFeed.dat";
+
+	str3 = str + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
 	PnlMat *assetData = pnl_mat_create_from_file(cstr);
 
-	str4 = str4 + "kozei_exchangeRates.dat";
+	str4 = str + "kozei_exchangeRates.dat";
 	const char *cstr2 = str4.c_str();
 	PnlMat *exchangeRates = pnl_mat_create_from_file(cstr2);
 	
-	str5 = str5 + "kozei_IndexdataFeed.dat";
+	str5 = str + "kozei_IndexdataFeed.dat";
 	const char *cstr3 = str5.c_str();
 	PnlVect *dateIndexes = pnl_vect_create_from_file(cstr3);
 
@@ -227,19 +224,18 @@ string Computations::getListPriceKozeiNative(int n_samples,
 	string str3;
 	string str4;
 	string str5;
-	str3 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
-	str4 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
-	str5 = "C:/Users/lione/Desktop/Ensimag/PEPS/NEWPEPS/Hist_kozei/";
+	string str = "/home/jmari/ENSIMAG/3A/PEPS/p.e.p.s/Hist_kozei/";
 
-	str3 = str3 + "kozei_dataFeed.dat";
+
+	str3 = str + "kozei_dataFeed.dat";
 	const char *cstr = str3.c_str();
 	PnlMat *assetData = pnl_mat_create_from_file(cstr);
 
-	str4 = str4 + "kozei_exchangeRates.dat";
+	str4 = str + "kozei_exchangeRates.dat";
 	const char *cstr2 = str4.c_str();
 	PnlMat *exchangeRates = pnl_mat_create_from_file(cstr2);
 	
-	str5 = str5 + "kozei_IndexdataFeed.dat";
+	str5 = str + "kozei_IndexdataFeed.dat";
 	const char *cstr3 = str5.c_str();
 	PnlVect *dateIndexes = pnl_vect_create_from_file(cstr3);
 

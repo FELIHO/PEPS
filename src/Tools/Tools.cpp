@@ -35,7 +35,12 @@ int Tools::find(PnlVect* V, int v, int startIndexHint )
   while( (i< V->size-1) && (v > pnl_vect_get(V,i) ) ) {
     i++;
   }
-  return i;
+  if(v == pnl_vect_get(V,i)){
+    return i;
+  }
+  else{
+    return i-1;
+  }
 }
 
 std::vector<int> Tools::Divisors ( int number ) {

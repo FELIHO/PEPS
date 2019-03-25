@@ -37,11 +37,11 @@ public:
 	/**
 	 * r_CHF,r_USD,r_JPY,r_GBP,r_BRL : les taux d'intérêt étranger pour chaque pays
 	*/
-	double r_CHF = 0.1;
-	double r_USD = 0.4;
-	double r_JPY = 0.2;
-	double r_GBP = 0.3;
-	double r_BRL = 0.5;
+	double r_CHF = 0.0005;
+	double r_USD = 0.025;
+	double r_JPY = 0.001;
+	double r_GBP = 0.0075;
+	double r_BRL = 0.065;
 	/**
 	Constructeur par défaut
 	*/
