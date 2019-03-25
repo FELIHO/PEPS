@@ -1,5 +1,7 @@
 #include "Computations.hpp"
 
+using namespace std;
+
 int main(int argc, char const *argv[])
 {
     double prix,ic;
