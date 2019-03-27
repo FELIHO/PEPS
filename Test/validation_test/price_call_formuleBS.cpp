@@ -74,6 +74,19 @@ int main(){
     }
     rho.close();
 
+    //Spread
+    bs = new BlackScholesModel(*original_bs);
+    ofstream delta;
+    delta.open ("../Test/validation_test/price_call_formuleBS_output/spread.dat");
+    for(int k = 50; k<161; k++){
+        call->strike_ = k;
+        mc = new MonteCarlo(bs,call,fdStep,n_samples);
+        mc->price(price,ic);
+        bs_price = call->price_Call_formuleBS(spotValue,0,r,sigmaValue);
+        delta << k << " " << price << " " << bs_price << "\n";
+    }
+    delta.close();
+
     // //Theta
     // ForwardTest* FT = new ForwardTest(call, r, 0.0 , sigmaValue, spotValue, n_samples, fdStep);
     // ofstream Theta;

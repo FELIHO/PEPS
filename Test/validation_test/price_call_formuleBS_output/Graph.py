@@ -26,6 +26,8 @@ with open(sys.argv[1], 'r') as rebal_data:
         plt.xlabel("Valeur de Sigma (volatilité)")
     elif ( sys.argv[1] == "rho.dat"):
         plt.xlabel("Taux sans risque r")
+    elif ( sys.argv[1] == "spread.dat"):
+        plt.xlabel("Strike k")
     elif ( sys.argv[1] == "Theta.dat"):
         plt.xlabel("date t de 0 à maturité")
         #plt.plot([], [], ' ', label="Niveaux initiaux ~ 100")
