@@ -39,7 +39,7 @@ Kozei* Kozei::clone() {
 }
 
 Kozei::Kozei(double inv_init)  {
-	T_ = (double) 2080.0/Tools::NumberOfDaysPerYear;
+	T_ = 8.0;
 	nbTimeSteps_ = 16;
 	size_ = 30;
 	inv_init_ = inv_init;
@@ -48,7 +48,7 @@ Kozei::Kozei(double inv_init)  {
 }
 
 Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
-	T_ = (double) 2080.0/Tools::NumberOfDaysPerYear;
+	T_ = 8.0;
 	nbTimeSteps_ = 16;
 	size_ = 30;
 	inv_init_ = inv_init;
@@ -57,7 +57,7 @@ Kozei::Kozei(double inv_init, PnlVect* niveauxInitiaux)  {
 }
 
 Kozei::Kozei(double inv_init, PnlMat* marketData, int firstDateIndex)  {
-	T_ = (double) 2080.0/Tools::NumberOfDaysPerYear;
+	T_ = 8.0;
 	nbTimeSteps_ = 16;
 	size_ = 30;
 	inv_init_ = inv_init;

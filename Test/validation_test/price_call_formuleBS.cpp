@@ -44,7 +44,7 @@ int main(){
         mc = new MonteCarlo(bs,call,fdStep,n_samples);
         mc->price(price,ic);
         bs_price = call->price_Call_formuleBS(s,0,r,sigmaValue);
-        delta << price << " " << bs_price << "\n";
+        delta << s << " " << price << " " << bs_price << "\n";
     }
     delta.close();
 
@@ -57,7 +57,7 @@ int main(){
         mc = new MonteCarlo(bs,call,fdStep,n_samples);
         mc->price(price,ic);
         bs_price = call->price_Call_formuleBS(spotValue,0,r,volatility);
-        vega << price << " " << bs_price << "\n";
+        vega << volatility << " " << price << " " << bs_price << "\n";
     }
     vega.close();
 
@@ -70,20 +70,21 @@ int main(){
         mc = new MonteCarlo(bs,call,fdStep,n_samples);
         mc->price(price,ic);
         bs_price = call->price_Call_formuleBS(spotValue,0,interestRate,sigmaValue);
-        rho << price << " " << bs_price << "\n";
+        rho << interestRate << " " << price << " " << bs_price << "\n";
     }
     rho.close();
 
-    //Theta
-    ForwardTest* FT = new ForwardTest(call, r, 0.0 , sigmaValue, spotValue, n_samples, fdStep);
-    ofstream Theta;
-    Theta.open ("../Test/validation_test/price_call_formuleBS_output/Theta.dat");
-    for(double t = 0; t<call->T_; t+=1.0/Tools::NumberOfDaysPerYear){
-        price = FT->price(t);
-        bs_price = call->price_Call_formuleBS(spotValue,t,r,sigmaValue);
-        Theta << price << " " << bs_price << "\n";
-    }
-    Theta.close();
+    // //Theta
+    // ForwardTest* FT = new ForwardTest(call, r, 0.0 , sigmaValue, spotValue, n_samples, fdStep);
+    // ofstream Theta;
+    // Theta.open ("../Test/validation_test/price_call_formuleBS_output/Theta.dat");
+    // for(double t = 0; t<call->T_; t+=1.0/Tools::NumberOfDaysPerYear){
+    //     price = FT->price(t);
+    //     bs_price = call->price_Call_formuleBS(spotValue,t,r,sigmaValue);
+    //     Theta << t << " " << price << " " << bs_price << "\n";
+    // }
+    // Theta.close();
+    //delete(FT);
 
 
     pnl_vect_free(&weights);
@@ -92,5 +93,4 @@ int main(){
     delete(original_bs);
     delete(bs);
     delete(mc);
-    delete(FT);
 }

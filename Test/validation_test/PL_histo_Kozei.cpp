@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 {
     for(int i =0; i<100; i++){
         forwardTest = new ForwardTest(kozei,r,rho,sigmaValue,spotValue,nbSamples,fdStep);
-        forwardTest->setRebalancementFrequence(13);
+        forwardTest->setRebalancementFrequence(26);
         double PL = forwardTest->ProfitAndLoss();
         cout << PL << endl;
     }
