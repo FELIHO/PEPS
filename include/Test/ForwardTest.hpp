@@ -3,13 +3,8 @@
 #ifndef FORWARDTEST_HPP
 #define FORWARDTEST_HPP
 
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include "MonteCarlo.hpp"
+#include "Test.hpp"
 #include "SimulatedDataProvider.hpp"
-#include "HedgePortfolio.hpp"
-#include "Option.hpp"
-#include "DataSelecter.hpp"
 
 /** \class HedgePortfolio
  * \brief Portefeuille de Couverture

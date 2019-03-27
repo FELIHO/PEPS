@@ -3,15 +3,10 @@
 #ifndef BACKTEST_HPP
 #define BACKTEST_HPP
 
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
-#include "MonteCarlo.hpp"
-#include "HedgePortfolio.hpp"
-#include "Option.hpp"
-#include "DataSelecter.hpp"
+#include "Test.hpp"
 #include "ParameterEstimation.hpp"
 
-class BackTest
+class BackTest : public Test
   {
   public:
 
