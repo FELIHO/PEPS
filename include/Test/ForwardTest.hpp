@@ -11,12 +11,6 @@ class ForwardTest : public Test
   {
   public:
 
-	  MonteCarlo *monteCarlo_;
-
-    DataSelecter* DS_;    
-
-    PnlMat *marketData_;
-
     ForwardTest(Option* opt, double r, double rho, double sigmaValue, double spotValue, int n_samples, double fdStep);
 
     ForwardTest(Option* opt, double r, double rho, PnlVect *sigma, PnlVect *spot, int n_samples, double fdStep);
