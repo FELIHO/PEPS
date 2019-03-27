@@ -10,8 +10,8 @@
 #include "Option.hpp"
 #include "DataSelecter.hpp"
 
-/** \class HedgePortfolio
- * \brief Portefeuille de Couverture
+/** \class Test
+ * \brief Classe abstraite mère des deux types de tests ForwardTest et BackTest
  */
 class Test
   {
