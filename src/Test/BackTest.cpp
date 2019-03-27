@@ -43,6 +43,12 @@ BackTest::BackTest(Option* opt, double r, char const *fileData, int firstDateInd
         delete(bs_model);
 }
 
+BackTest::~BackTest() {
+  delete(DS_); 
+  delete(monteCarlo_);
+  pnl_mat_free(&marketData_);
+}
+
 double BackTest::price(double t){
     double prix,ic;
     if (t==0){

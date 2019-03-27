@@ -12,6 +12,8 @@ class BackTest : public Test
 
     BackTest(Option* opt, double r, char const *fileData, int firstDateIndex, int n_samples, double fdStep);
 
+    ~BackTest();
+
     void setRebalancementFrequence(int nbRebalancementPerStep);
 
     double price(double t);
