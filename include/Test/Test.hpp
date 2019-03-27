@@ -25,7 +25,7 @@ class Test
 
     virtual ~Test() {};
 
-    virtual void setRebalancementFrequence(int nbRebalancementPerStep);
+    virtual void setRebalancementFrequence(int nbRebalancementPerStep) = 0;
 
     virtual double price(double t) = 0;
 

@@ -6,10 +6,8 @@
 #include "Test.hpp"
 #include "SimulatedDataProvider.hpp"
 
-/** \class HedgePortfolio
- * \brief Portefeuille de Couverture
- */
-class ForwardTest
+
+class ForwardTest : public Test
   {
   public:
 
