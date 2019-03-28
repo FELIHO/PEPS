@@ -85,6 +85,7 @@ public:
 	*  \brief Methode permetant d'insérer le vecteur des nivaux initiaux à la matrice marketData
 	*  @param[in] marketData : Une matrice contenant les prix des actifs 
 	*  @param[in] firstDateIndex : Représente l'index de la ligne correspondante à la date t = 0 dans la matrice marketData 
+	*/
 	void SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex=0);
 	/**
  	*  \brief Methode d'initialiser le vecteur contenant les valeurs du zero-coupon aux differents dates
