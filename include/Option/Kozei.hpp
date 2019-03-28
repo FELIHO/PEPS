@@ -77,15 +77,14 @@ public:
 	*  \brief Constructeur de la classe Kozei permettant de préciser les caractéristiques du produits
 	*  @param[in] inv_init : l'investissement initial
 	*  @param[in] marketData : Une matrice contenant les prix des actifs 
-	*  @param[in] firstDateIndex :  Représente l'index de la ligne correspondant  à la première date de constatation dans la matrice marketData 
+	*  @param[in] firstDateIndex :  Représente l'index de la ligne correspondante à la date t = 0 dans la matrice marketData 
 	*/
 
 	Kozei(double inv_init, PnlMat* marketData, int firstDateIndex=0);
 	/**
 	*  \brief Methode permetant d'insérer le vecteur des nivaux initiaux à la matrice marketData
 	*  @param[in] marketData : Une matrice contenant les prix des actifs 
-	*  @param[in] firstDateIndex : Représente l'index de la ligne correspondant  à la première date de constatation dans la matrice marketData
-	*/
+	*  @param[in] firstDateIndex : Représente l'index de la ligne correspondante à la date t = 0 dans la matrice marketData 
 	void SetNivauxInitiaux(PnlMat* marketData, int firstDateIndex=0);
 	/**
  	*  \brief Methode d'initialiser le vecteur contenant les valeurs du zero-coupon aux differents dates
